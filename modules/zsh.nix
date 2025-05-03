@@ -102,6 +102,62 @@
       compinit
       zstyle ':completion:*' menu select
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive tab completion
+
+      # Coreutils Enhancements
+
+      # Aliases for ls (use exa or ls with colors if available)
+      if command -v exa >/dev/null; then
+        alias ls='exa --color=auto --group-directories-first'
+        alias ll='exa -l --git'
+        alias la='exa -la --git'
+      else
+        alias ls='ls --color=auto -h'
+        alias ll='ls -lh'
+        alias la='ls -lha'
+      fi
+
+      # Aliases for grep (colorized output, recursive, line numbers)
+      alias grep='grep --color=auto'
+      alias rg='grep -r --line-number'
+
+      # Aliases for find (simplify common operations)
+      alias fd='find . -type f -name'
+      alias fdir='find . -type d -name'
+
+      # Aliases for file operations
+      alias cp='cp -iv'           # Interactive, verbose copy
+      alias mv='mv -iv'           # Interactive, verbose move
+      alias rm='rm -iv'           # Interactive, verbose remove
+      alias ln='ln -v'            # Verbose symbolic links
+
+      # Aliases for disk usage and file size
+      alias du='du -h --max-depth=1'
+      alias df='df -h'
+
+      # Aliases for text processing
+      alias sed='sed -E'          # Extended regex by default
+      alias awk='/usr/bin/awk'    # Ensure GNU awk (adjust path if needed)
+      alias cat='bat'             # Use bat if available, else fallback to cat
+      if ! command -v bat >/dev/null; then
+        alias cat='/bin/cat'
+      fi
+
+      # Environment variables for coreutils
+      export LESS='-R'            # Enable color in less
+      export GREP_OPTIONS='--color=auto'  # Persistent grep color
+      export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+
+      # Functions for common tasks
+      mkcd() { mkdir -p "$1" && cd "$1"; }  # Create and cd into directory
+      ftext() { find . -type f -exec grep -l "$1" {} +; }  # Find text in files
+
+      # Enable coreutils completions (if available)
+      autoload -Uz compinit && compinit
+
+      # Aliases for nix rebuild script (colorized output, recursive, line numbers)
+      chmod +x /Users/jacksonmiller/nix-config/scripts/rebuild.sh
+      alias nixrebuild='./Users/jacksonmiller/nix-config/scripts/rebuild.sh'
+      
     '';
 
     # Set environment variables
