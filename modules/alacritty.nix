@@ -9,7 +9,7 @@
           family = "FiraCode Nerd Font";
           style = "Regular";
         };
-        size = 12;
+        size = 24;
       };
       
       window = {
