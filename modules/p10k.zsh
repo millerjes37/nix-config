@@ -26,7 +26,7 @@
   typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true            # Prompt on new line
   typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true           # Add newline before prompt
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''  # No prefix for first line
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{230}╰─❯ ' # Cream prefix with icon
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{230}╰──' # Cream prefix with icon
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='─' # Horizontal line char
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND='29' # Dark green line
 
@@ -57,7 +57,7 @@
   typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_BACKGROUND='29'   # Dark green background
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_FOREGROUND='230' # Cream for error prompt
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_BACKGROUND='160' # Dark red background
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_CONTENT_EXPANSION='❯'      # Unicode prompt symbol
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_CONTENT_EXPANSION='-'      # Unicode prompt symbol
 
   # Icon styling - Unicode icons
   typeset -g POWERLEVEL9K_VCS_GIT_ICON='%F{230}⭠ '              # Cream Git icon
