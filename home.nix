@@ -8,6 +8,7 @@
     ./modules/skhd.nix
     ./modules/alacritty.nix
     ./modules/emacs.nix
+    ./modules/neovim.nix
   ];
 
   # Enable and configure each module

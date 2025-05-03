@@ -26,6 +26,8 @@
       
       # Custom aliases for Nix configuration
       alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
+      alias v="nvim"
+      alias vim="nvim"
 
       # Additional Zsh settings
       setopt AUTO_CD                # Automatically change directories without `cd`
@@ -71,6 +73,8 @@
       
       # Custom aliases for Nix configuration
       alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
+      alias v="nvim"
+      alias vim="nvim"
 
       # Additional Zsh options
       setopt AUTO_CD

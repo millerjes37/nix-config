@@ -6,9 +6,13 @@
     home-manager.url = "github:nix-community/home-manager";
     darwin.url = "github:LnL7/nix-darwin";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
-  outputs = { self, nixpkgs-unstable, home-manager, darwin, nix-homebrew, ... }:
+  outputs = { self, nixpkgs-unstable, home-manager, darwin, nix-homebrew, nixvim, ... }:
     let
       system = "aarch64-darwin";
       pkgs = nixpkgs-unstable.legacyPackages.${system};
@@ -33,7 +37,10 @@
       homeConfigurations = {
         "jacksonmiller" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = [ ./home.nix ];
+          modules = [ 
+            ./home.nix
+            nixvim.homeManagerModules.nixvim
+          ];
         };
       };
     };
