@@ -2,9 +2,8 @@
 
 {
   programs.nixvim = {
-    enable = true;
-    
     config = {
+      enable = true;
       # ---------- Global options ----------
       globals = {
         mapleader = " ";  # Use space as the leader key
