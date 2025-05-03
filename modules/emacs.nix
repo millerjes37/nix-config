@@ -51,15 +51,10 @@
     jq
   ];
 
-  # Set up the doom emacs installation
-  home.activation = {
-    installDoomEmacs = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      if [ ! -d "$HOME/.emacs.d" ]; then
-        $DRY_RUN_CMD git clone --depth 1 https://github.com/doomemacs/doomemacs $HOME/.emacs.d
-        $DRY_RUN_CMD $HOME/.emacs.d/bin/doom install --no-config --no-env --no-fonts
-      fi
-    '';
-  };
+  # Set up the doom emacs installation - manual step
+  # Note: Due to activation issues, please run these commands manually after installation:
+  #   git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
+  #   ~/.emacs.d/bin/doom install --no-config --no-env --no-fonts
 
   # Create necessary Doom Emacs configuration files
   home.file = {
