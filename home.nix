@@ -14,10 +14,7 @@
   programs.zsh.enable = true;
   programs.yabai.enable = true;
   programs.skhd.enable = true;
-  programs.alacritty = { 
-    enable = true;
-    # Using your custom module - no home-manager built-in settings
-  };
+  programs.alacritty.enable = true;  # Settings are in the alacritty module
   programs.emacs.enable = true;
 
   # Home-manager settings
