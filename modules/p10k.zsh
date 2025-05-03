@@ -1,7 +1,5 @@
-# Generated p10k configuration in bullet train style with teal/cyan colors
-# To customize, run `p10k configure` or edit ~/.p10k.zsh directly.
+# Configure powerlevel10k in Lean style with teal, dark green, cyan colors, white text, cream icons, arrows, and a horizontal line
 
-# Temporarily change options
 'builtin' 'local' '-a' 'p10k_config_opts'
 [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
 [[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
@@ -11,39 +9,73 @@
 () {
   emulate -L zsh -o extended_glob
 
-  # Define variables
+  # Left prompt segments
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     dir                     # current directory
     vcs                     # git status
-    newline                 # new line
-    prompt_char             # prompt symbol
+    # prompt_char           # prompt symbol
   )
 
+  # Right prompt segments
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     status                  # exit code of the last command
-    command_execution_time  # duration of the last command
-    background_jobs         # presence of background jobs
     time                    # current time
   )
 
-  # Basic style
-  typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='╰─ '
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='╰─ '
-  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-  
-  # Colors - teal and greens
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND='074'
-  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND='076'
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='172'
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_FOREGROUND='076'
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_FOREGROUND='196'
-  
-  # Prompt character
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_CONTENT_EXPANSION='❯'
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_CONTENT_EXPANSION='❯'
+  # Lean style configuration with arrows and line
+  typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true            # Prompt on new line
+  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true           # Add newline before prompt
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''  # No prefix for first line
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{230}╰─❯ ' # Cream prefix with icon
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='─' # Horizontal line char
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND='29' # Dark green line
+
+  # Arrows between segments
+  typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR='%F{37}%f'  # Teal arrow
+  typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR='%F{30}%f' # Cyan arrow
+  typeset -g POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=''              # No extra separator
+  typeset -g POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''             # No extra separator
+
+  # Colors: white text/icons, teal/dark green/cyan accents
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND='255'              # White text for directory
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND='37'               # Brighter teal background
+  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND='255'        # White text for clean VCS
+  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND='29'         # Dark green background
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='255'     # White text for modified VCS
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='30'      # Cyan background
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='255'    # White text for untracked VCS
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='37'     # Brighter teal background
+  typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND='255'        # White text for OK status
+  typeset -g POWERLEVEL9K_STATUS_OK_BACKGROUND='29'         # Dark green background
+  typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND='255'     # White text for error status
+  typeset -g POWERLEVEL9K_STATUS_ERROR_BACKGROUND='160'     # Dark red background
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND='255'             # White text for time
+  typeset -g POWERLEVEL9K_TIME_BACKGROUND='30'              # Cyan background
+
+  # Prompt symbol
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_FOREGROUND='230'  # Cream for OK prompt
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_BACKGROUND='29'   # Dark green background
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_FOREGROUND='230' # Cream for error prompt
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_BACKGROUND='160' # Dark red background
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_CONTENT_EXPANSION='❯'      # Unicode prompt symbol
+
+  # Icon styling - Unicode icons
+  typeset -g POWERLEVEL9K_VCS_GIT_ICON='%F{230}⭠ '              # Cream Git icon
+  typeset -g POWERLEVEL9K_VCS_STAGED_ICON='%F{230}✚'            # Cream staged icon
+  typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='%F{230}●'          # Cream unstaged icon
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='%F{230}…'         # Cream untracked icon
+
+  # Truncation and other settings
+  typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=2                  # Truncate directory to 2 segments
+  typeset -g POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"    # Truncate middle of path
+  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'            # Time format: HH:MM:SS
+  typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true               # Disable hot reload for stability
+  typeset -g ZLE_RPROMPT_INDENT=0                               # No extra space on right
+
+  # Ensure UTF-8 locale is set
+  typeset -g LC_ALL='en_US.UTF-8'
+  typeset -g LANG='en_US.UTF-8'
 }
 
-# Run powerlevel10k configuration
-(( ${+functions[p10k]} )) && p10k finalize
+# Initialize p10k
+(( ${+functions[p10k]} )) && p10k finalize || true

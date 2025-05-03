@@ -4,43 +4,104 @@
   # Enable and configure Zsh as the default shell
   programs.zsh = {
     enable = true;
+    
+    # Define shell aliases - these are more reliably loaded than aliases in initExtra
+    shellAliases = {
+      # Nix aliases
+      nixrebuild = "$HOME/nix-config/scripts/rebuild.sh";
+      
+      # File listing (eza)
+      ls = "eza --color=auto";
+      ll = "eza -l --icons --git --color=always";
+      la = "eza -a --icons --color=always";
+      lla = "eza -la --icons --git --color=always";
+      lt = "eza -T --icons --color=always"; # Tree view
+      lta = "eza -Ta --icons --color=always"; # Tree view with hidden files
+      
+      # File content viewing
+      cat = "bat --style=plain";
+      less = "bat --style=plain --paging=always";
+      
+      # Search tools
+      find = "fd";
+      grep = "rg --smart-case";
+      
+      # File navigation
+      cd = "z"; # Use zoxide for smart directory jumping
+      
+      # Git shortcuts
+      g = "git";
+      gs = "git status";
+      gl = "git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
+      
+      # Rust coreutils
+      du = "dust";
+      ps = "procs";
+      top = "btm";
+      
+      # Editors
+      v = "nvim";
+      vim = "nvim";
+      
+      # Helper aliases
+      help = "tldr"; # tealdeer command
+      diff = "difft"; # difftastic
+    };
 
     # Custom initialization script for `.zshrc`
     initExtra = ''
-      # Enable powerlevel10k instant prompt
-      if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      # Load powerlevel10k if it exists
+      if [[ -f ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme ]]; then
+        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       fi
+      
+      # Load p10k configuration if it exists
+      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
       # Custom PATH additions for macOS compatibility
       path+=(/usr/local/bin)         # Common macOS binary path
       path+=(/opt/homebrew/bin)      # Homebrew binary path (Apple Silicon)
       path+=(/opt/local/bin)         # MacPorts binary path
 
-      # Aliases for modern Rust-based tools
-      alias ls='eza'                # Modern ls replacement
-      alias ll='eza -l'             # Long listing
-      alias la='eza -a'             # Show hidden files
-      alias lla='eza -la'           # Long listing with hidden files
-      alias cat='bat'               # Syntax-highlighted cat
-      alias find='fd'               # Faster find alternative
-      alias grep='rg'               # Faster, user-friendly grep
-      
-      # Custom aliases for Nix configuration
-      alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
-      alias v="nvim"
-      alias vim="nvim"
+      # Aliases are defined in shellAliases
 
+      # Initialize zoxide (better cd)
+      if command -v zoxide > /dev/null; then
+        eval "$(zoxide init zsh)"
+      fi
+      
+      # Initialize fzf for better history search
+      if [ -n "$\{commands[fzf-share]}" ]; then
+        source "$(fzf-share)/key-bindings.zsh"
+        source "$(fzf-share)/completion.zsh"
+      fi
+      
+      # Configure bat (syntax highlighting for cat)
+      export BAT_THEME="Dracula"
+      export BAT_STYLE="plain"
+      
+      # Configure delta (better git diff)
+      export DELTA_FEATURES="+side-by-side"
+      
+      # Configure ripgrep
+      export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+      
       # Additional Zsh settings
       setopt AUTO_CD                # Automatically change directories without `cd`
       setopt HIST_IGNORE_DUPS       # Don't save duplicate commands in history
+      setopt HIST_IGNORE_SPACE      # Don't record commands starting with space
       setopt SHARE_HISTORY          # Share history across sessions
+      setopt EXTENDED_HISTORY       # Record timestamp in history
+      setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks from history
       export HISTFILE=~/.zsh_history # History file location
-      export HISTSIZE=10000         # Number of commands to keep in memory
-      export SAVEHIST=10000         # Number of commands to save to file
+      export HISTSIZE=50000         # Number of commands to keep in memory
+      export SAVEHIST=50000         # Number of commands to save to file
       
-      # Source powerlevel10k config
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+      # Improved tab completion
+      autoload -U compinit
+      compinit
+      zstyle ':completion:*' menu select
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive tab completion
     '';
 
     # Set environment variables
@@ -63,7 +124,6 @@
     # Enable oh-my-zsh for compatibility with some plugins
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell"; # Base theme - will be overridden by powerlevel10k
       plugins = [
         "git"
         "sudo" 
@@ -71,108 +131,40 @@
       ];
     };
   };
-
-  # Create p10k.zsh file with teal-focused configuration
-  home.file.".p10k.zsh".text = ''
-    # Generated p10k configuration
-    # Customized for teal/cyan colorway with bullet-train style
-    
-    # Temporarily change options
-    'builtin' 'local' '-a' 'p10k_config_opts'
-    [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
-    [[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
-    [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
-    'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
-    
-    function p10k-on-pre-prompt() {
-      # Show ruler only when at least 2 lines get displayed
-      local RULER_LEN=''${#RULER}
-      if (( LINES < RULER_LEN + 3 )); then
-        typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=' '
-      else
-        typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='─'
-      fi
-    }
-    
-    function p10k-on-post-prompt() {
-      # Show ruler only when at least 2 lines get displayed
-      if [[ -n "$P9K_COMMAND" ]]; then
-        RULER=
-      fi
-    }
-    
-    typeset -ga POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-      dir                     # current directory
-      vcs                     # git status
-      newline                 # \n
-      prompt_char             # prompt symbol
-    )
-    
-    typeset -ga POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-      status                  # exit code of the last command
-      command_execution_time  # duration of the last command
-      background_jobs         # presence of background jobs
-      time                    # current time
-    )
-    
-    # Customize connection
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=
-    typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX=
-    typeset -g POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=
-    typeset -g POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=
-    typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=
-    typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=
-    
-    # Prompt styles
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=076
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='❯'
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='❮'
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIVIS_CONTENT_EXPANSION='V'
-    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIOWR_CONTENT_EXPANSION='▶'
-    
-    # Directory
-    typeset -g POWERLEVEL9K_DIR_FOREGROUND=074
-    typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=072
-    typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=080
-    typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
-    
-    # Git colors
-    typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=076
-    typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=172
-    typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=208
-    
-    # Status/Command time
-    typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND=076
-    typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=196
-    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=244
-    
-    # Settings
-    typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always
-    typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
-    typeset -g POWERLEVEL9K_TIME_FORMAT="%D{%H:%M}"
-    typeset -g POWERLEVEL9K_BACKGROUND=
-
-    # Configure newline
-    typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-    typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='─'
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_BACKGROUND=
-    typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%F{008}╰─'
-    typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{008}╰─'
-  '';
   
+  # Create p10k.zsh in the user's home directory
+  # We'll use text directly since relative paths are tricky
+  home.file.".p10k.zsh".text = builtins.readFile ./p10k.zsh;
+  
+  # Add config for ripgrep
+  home.file.".ripgreprc".text = builtins.readFile ./ripgreprc;
+
   # Install required packages  
   home.packages = with pkgs; [
+    # Modern CLI tools (Rust-based)
     eza                  # Modern ls replacement (exa fork)
     bat                  # Syntax-highlighted cat
     fd                   # Faster find alternative
     ripgrep              # Faster grep replacement
+    du-dust              # Better du (disk usage)
+    procs                # Modern ps replacement 
+    bottom               # Modern top replacement
+    tealdeer             # Simplified man pages (tldr)
+    gitui                # Terminal UI for git
+    uutils-coreutils     # Rust implementation of GNU coreutils
+    sd                   # Intuitive find & replace (sed alternative)
+    choose               # Cut alternative with field selection
+    zoxide               # Smarter cd command
+    starship             # Alternative prompt (backup for powerlevel10k)
+    
+    # Development tools
     neovim               # Modern Vim fork
     zsh-powerlevel10k    # Powerlevel10k theme
+    fzf                  # Fuzzy finder
+    jq                   # JSON processor
+    yq                   # YAML processor (like jq)
+    difftastic           # Modern diff tool
+    delta                # Better git diffs
+    hyperfine            # Command-line benchmarking tool
   ];
 }
