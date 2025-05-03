@@ -20,38 +20,22 @@
     # Build tools
     gnumake
     cmake
-    libtool
-    
-    # Shell tools
-    shellcheck
-    shfmt
     
     # Core programming language support
     ## Rust
     rustup
-    rust-analyzer
     
     ## Python
     python3
-    python3Packages.pip
-    python3Packages.black
-    python3Packages.pyflakes
-    python3Packages.isort
-    python3Packages.pytest
-    nodePackages_latest.pyright
     
     ## Go
     go
-    gopls
-    delve
     
     # Markdown/Org support
     pandoc
     
     # Version control
-    gitAndTools.delta
-    gitAndTools.gh
-    gitAndTools.gitui
+    git
     
     # Fuzzy finding
     fzf
@@ -60,19 +44,11 @@
     aspell
     aspellDicts.en
     
-    # Code formatters
-    nodePackages_latest.prettier
-    
     # File navigation/search
     silver-searcher
     
     # JSON tools
     jq
-    
-    # LSP servers
-    nodePackages_latest.typescript-language-server
-    nodePackages_latest.bash-language-server
-    nodePackages_latest.yaml-language-server
   ];
 
   # Set up the doom emacs installation
