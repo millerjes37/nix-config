@@ -320,7 +320,7 @@
         incrementalSelection = {
           enable = true;
           keymaps = {
-            initSelection = "<CR>";
+            init = "<CR>";
             nodeIncremental = "<CR>";
             nodeDecremental = "<BS>";
             scopeIncremental = "<TAB>";
