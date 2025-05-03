@@ -18,7 +18,7 @@
   programs.emacs.enable = true;
 
   # Home-manager settings
-  home.stateVersion = "25.05-pre";  # Adjust to your home-manager version
+  home.stateVersion = "25.05";  # Adjust to your home-manager version
   home.username = "jacksonmiller";  # Replace with your username
   home.homeDirectory = "/Users/jacksonmiller";  # Replace with your home directory
 
