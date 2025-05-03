@@ -13,19 +13,16 @@
       path+=(/opt/local/bin)         # MacPorts binary path
 
       # Aliases for modern Rust-based tools
-      alias ls='exa'                # Modern ls replacement
-      alias ll='exa -l'             # Long listing
-      alias la='exa -a'             # Show hidden files
-      alias lla='exa -la'           # Long listing with hidden files
+      alias ls='eza'                # Modern ls replacement
+      alias ll='eza -l'             # Long listing
+      alias la='eza -a'             # Show hidden files
+      alias lla='eza -la'           # Long listing with hidden files
       alias cat='bat'               # Syntax-highlighted cat
       alias find='fd'               # Faster find alternative
       alias grep='rg'               # Faster, user-friendly grep
 
-      # Source the powerlevel10k theme
-      source ${pkgs.powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-
-      # Optional: Load powerlevel10k configuration if it exists
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+      # Use standard prompt (powerlevel10k removed to simplify)
+      PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
 
       # Additional Zsh settings
       setopt AUTO_CD                # Automatically change directories without `cd`
@@ -45,18 +42,7 @@
     };
 
     # Add Zsh plugins for enhanced functionality
-    plugins = [
-      {
-        name = "zsh-autosuggestions";
-        src = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
-        file = "zsh-autosuggestions.zsh";
-      }
-      {
-        name = "zsh-syntax-highlighting";
-        src = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
-        file = "zsh-syntax-highlighting.zsh";
-      }
-    ];
+    plugins = [];
   };
 
   # Explicitly define `.zshrc` to ensure it’s created
@@ -69,23 +55,16 @@
       path+=(/opt/local/bin)
 
       # Aliases for Rust-based tools
-      alias ls='exa'
-      alias ll='exa -l'
-      alias la='exa -a'
-      alias lla='exa -la'
+      alias ls='eza'
+      alias ll='eza -l'
+      alias la='eza -a'
+      alias lla='eza -la'
       alias cat='bat'
       alias find='fd'
       alias grep='rg'
 
-      # Source powerlevel10k theme
-      source ${pkgs.powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-
-      # Load powerlevel10k configuration if present
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
-      # Source Zsh plugins
-      source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-      source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      # Use standard prompt (powerlevel10k removed to simplify)
+      PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
 
       # Additional Zsh options
       setopt AUTO_CD
@@ -99,15 +78,12 @@
     '';
   };
 
-  # Install required packages
+  # Install required packages  
   home.packages = with pkgs; [
-    exa                  # Modern ls replacement
+    eza                  # Modern ls replacement (exa fork)
     bat                  # Syntax-highlighted cat
     fd                   # Faster find alternative
     ripgrep              # Faster grep replacement
     neovim               # Modern Vim fork
-    powerlevel10k        # Customizable Zsh prompt theme
-    zsh-autosuggestions  # Autosuggestions plugin
-    zsh-syntax-highlighting # Syntax highlighting plugin
   ];
 }
