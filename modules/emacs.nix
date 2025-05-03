@@ -38,7 +38,7 @@
     python3Packages.pyflakes
     python3Packages.isort
     python3Packages.pytest
-    nodePackages.pyright
+    nodePackages_latest.pyright
     
     ## Go
     go
@@ -61,7 +61,7 @@
     aspellDicts.en
     
     # Code formatters
-    nodePackages.prettier
+    nodePackages_latest.prettier
     
     # File navigation/search
     silver-searcher
@@ -70,9 +70,9 @@
     jq
     
     # LSP servers
-    nodePackages.typescript-language-server
-    nodePackages.bash-language-server
-    nodePackages.yaml-language-server
+    nodePackages_latest.typescript-language-server
+    nodePackages_latest.bash-language-server
+    nodePackages_latest.yaml-language-server
   ];
 
   # Set up the doom emacs installation
