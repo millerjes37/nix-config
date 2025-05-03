@@ -20,6 +20,7 @@
       };
       
       colors = {
+        # Enhanced Gruvbox dark theme with more teal/cyan emphasis
         primary = {
           background = "#282828";
           foreground = "#ebdbb2";
@@ -27,30 +28,30 @@
         normal = {
           black = "#282828";
           red = "#cc241d";
-          green = "#98971a";
+          green = "#8ec07c";  # More teal-green
           yellow = "#d79921";
           blue = "#458588";
           magenta = "#b16286";
-          cyan = "#689d6a";
+          cyan = "#689d6a";   # Standard gruvbox cyan
           white = "#a89984";
         };
         bright = {
           black = "#928374";
           red = "#fb4934";
-          green = "#b8bb26";
+          green = "#8ec07c";  # Brighter teal-green
           yellow = "#fabd2f";
-          blue = "#83a598";
+          blue = "#83a598";   # Blueish-teal
           magenta = "#d3869b";
-          cyan = "#8ec07c";
+          cyan = "#26a69a";   # More vibrant teal
           white = "#ebdbb2";
         };
         cursor = {
           text = "#282828";
-          cursor = "#b8bb26";
+          cursor = "#26a69a";  # Teal cursor
         };
         selection = {
           text = "#ebdbb2";
-          background = "#504945";
+          background = "#2c3a41";  # Dark teal background
         };
       };
       
