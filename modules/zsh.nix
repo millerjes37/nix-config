@@ -23,6 +23,9 @@
 
       # Use standard prompt (powerlevel10k removed to simplify)
       PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
+      
+      # Custom aliases for Nix configuration
+      alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
 
       # Additional Zsh settings
       setopt AUTO_CD                # Automatically change directories without `cd`
@@ -65,6 +68,9 @@
 
       # Use standard prompt (powerlevel10k removed to simplify)
       PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
+      
+      # Custom aliases for Nix configuration
+      alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
 
       # Additional Zsh options
       setopt AUTO_CD
