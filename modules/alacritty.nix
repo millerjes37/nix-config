@@ -51,10 +51,18 @@
         };
       };
       
-      key_bindings = [
-        { key = "C"; mods = "Control|Shift"; action = "Copy"; }
-        { key = "V"; mods = "Control|Shift"; action = "Paste"; }
-      ];
+      keyboard = {
+        bindings = [
+          { key = "C"; mods = "Command"; action = "Copy"; }
+          { key = "V"; mods = "Command"; action = "Paste"; }
+          { key = "N"; mods = "Command"; action = "SpawnNewInstance"; }
+          { key = "Q"; mods = "Command"; action = "Quit"; }
+          { key = "F"; mods = "Command|Control"; action = "ToggleFullscreen"; }
+          { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
+          { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
+          { key = "Minus"; mods = "Command"; action = "DecreaseFontSize"; }
+        ];
+      };
     };
   };
 }
