@@ -21,8 +21,7 @@
       alias find='fd'               # Faster find alternative
       alias grep='rg'               # Faster, user-friendly grep
 
-      # Use standard prompt (powerlevel10k removed to simplify)
-      PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
+      # Using bullet-train theme from oh-my-zsh
       
       # Custom aliases for Nix configuration
       alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"
@@ -48,6 +47,19 @@
 
     # Add Zsh plugins for enhanced functionality
     plugins = [];
+    
+    # Enable oh-my-zsh with agnoster theme (similar to bullet-train)
+    oh-my-zsh = {
+      enable = true;
+      theme = "agnoster";
+      plugins = [
+        "git"
+        "sudo"
+        "command-not-found"
+        "colored-man-pages"
+        "autojump"
+      ];
+    };
   };
 
   # Explicitly define `.zshrc` to ensure it’s created
@@ -68,8 +80,7 @@
       alias find='fd'
       alias grep='rg'
 
-      # Use standard prompt (powerlevel10k removed to simplify)
-      PS1='%B%F{green}%n@%m%f:%F{blue}%~%f%#%b '
+      # Using bullet-train theme from oh-my-zsh
       
       # Custom aliases for Nix configuration
       alias nixrebuild="$HOME/nix-config/scripts/rebuild.sh"

@@ -12,11 +12,11 @@
           family = "FiraCode Nerd Font";
           style = "Regular";
         };
-        size = 24;
+        size = 20;
       };
       
       window = {
-        opacity = 0.55;
+        opacity = 0.95;
       };
       
       colors = {
