@@ -13,6 +13,14 @@ This repository contains my personal Nix configuration for both macOS and Linux 
   - Email integration via mu4e
   - Git integration with magit
   - LSP support for all major languages
+- **Neovim**: Feature-rich editor configuration via NixVim
+  - Comprehensive LSP setup for multiple languages
+  - Tokyo Night theme with beautiful UI
+  - Git integration (Neogit, Gitsigns, Diffview)
+  - Harpoon for quick file navigation
+  - Terminal integration with Toggleterm
+  - Tree-sitter for better syntax highlighting
+  - See [neovim.md](modules/neovim.md) for details
 
 ## Usage
 
