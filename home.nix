@@ -7,8 +7,9 @@
     ./modules/yabai.nix
     ./modules/skhd.nix
     ./modules/alacritty.nix
+    # ./modules/quick_terminal.nix  # Temporarily disabled 
     ./modules/emacs.nix
-    ./modules/neovim.nix
+    # ./modules/neovim.nix  # Temporarily disabled
   ];
 
   # Enable and configure each module
@@ -25,7 +26,7 @@
 
   # Optional: Add additional packages
   home.packages = with pkgs; [
-    neovim  # Example package
+    # neovim  # Temporarily disabled
     ripgrep  # Example package
   ];
 }

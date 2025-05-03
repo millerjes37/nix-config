@@ -5,103 +5,112 @@ with lib;
 let
   cfg = config.programs.skhd;
   defaultConfig = ''
+    # Define hyper key as option(⌥) + command(⌘)
+    # On MacBook, option key is labeled as "⌥"
+    :: default : echo "Mode: default"
+    
     # -----------------------------------------------
     # Window Focus (Navigate with Precision)
     # -----------------------------------------------
-    hyper - h : yabai -m window --focus west || yabai -m display --focus west
-    hyper - j : yabai -m window --focus south || yabai -m display --focus south
-    hyper - k : yabai -m window --focus north || yabai -m display --focus north
-    hyper - l : yabai -m window --focus east || yabai -m display --focus east
+    alt + cmd - h : yabai -m window --focus west || yabai -m display --focus west
+    alt + cmd - j : yabai -m window --focus south || yabai -m display --focus south
+    alt + cmd - k : yabai -m window --focus north || yabai -m display --focus north
+    alt + cmd - l : yabai -m window --focus east || yabai -m display --focus east
 
     # Cycle through windows in current space
-    hyper - n : yabai -m window --focus next || yabai -m window --focus first
-    hyper - p : yabai -m window --focus prev || yabai -m window --focus last
+    alt + cmd - n : yabai -m window --focus next || yabai -m window --focus first
+    alt + cmd - p : yabai -m window --focus prev || yabai -m window --focus last
 
     # -----------------------------------------------
     # Window Movement (Warp Speed Relocation)
     # -----------------------------------------------
-    shift + hyper - h : yabai -m window --warp west || yabai -m window --space prev
-    shift + hyper - j : yabai -m window --warp south
-    shift + hyper - k : yabai -m window --warp north
-    shift + hyper - l : yabai -m window --warp east || yabai -m window --space next
+    shift + alt + cmd - h : yabai -m window --warp west || yabai -m window --space prev
+    shift + alt + cmd - j : yabai -m window --warp south
+    shift + alt + cmd - k : yabai -m window --warp north
+    shift + alt + cmd - l : yabai -m window --warp east || yabai -m window --space next
 
-    # Throw windows to adjacent displays
-    shift + hyper - left : yabai -m window --display west; yabai -m display --focus west
-    shift + hyper - right : yabai -m window --display east; yabai -m display --focus east
+    # Throw windows to adjacent displays (using [ and ] for display movement)
+    shift + alt + cmd - 0x21 : yabai -m window --display west; yabai -m display --focus west  # [ key
+    shift + alt + cmd - 0x1E : yabai -m window --display east; yabai -m display --focus east  # ] key
 
     # -----------------------------------------------
     # Window Resizing (Pixel-Perfect Control)
     # -----------------------------------------------
-    ctrl + hyper - h : yabai -m window --resize left:-75:0 || yabai -m window --resize right:-75:0
-    ctrl + hyper - j : yabai -m window --resize bottom:0:75 || yabai -m window --resize top:0:75
-    ctrl + hyper - k : yabai -m window --resize top:0:-75 || yabai -m window --resize bottom:0:-75
-    ctrl + hyper - l : yabai -m window --resize right:75:0 || yabai -m window --resize left:75:0
+    # Using arrow keys for resizing (easier to remember on laptop)
+    alt + cmd - left : yabai -m window --resize left:-75:0 || yabai -m window --resize right:-75:0
+    alt + cmd - down : yabai -m window --resize bottom:0:75 || yabai -m window --resize top:0:75
+    alt + cmd - up : yabai -m window --resize top:0:-75 || yabai -m window --resize bottom:0:-75
+    alt + cmd - right : yabai -m window --resize right:75:0 || yabai -m window --resize left:75:0
 
     # Fine-tune resizing (25px increments)
-    ctrl + shift + hyper - h : yabai -m window --resize left:-25:0
-    ctrl + shift + hyper - j : yabai -m window --resize bottom:0:25
-    ctrl + shift + hyper - k : yabai -m window --resize top:0:-25
-    ctrl + shift + hyper - l : yabai -m window --resize right:25:0
+    # Simplified to use shift for fine control (easier on laptop)
+    shift + alt + cmd - left : yabai -m window --resize left:-25:0
+    shift + alt + cmd - down : yabai -m window --resize bottom:0:25
+    shift + alt + cmd - up : yabai -m window --resize top:0:-25
+    shift + alt + cmd - right : yabai -m window --resize right:25:0
 
     # -----------------------------------------------
     # Window Properties (Toggle Like a Pro)
     # -----------------------------------------------
-    hyper - f : yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
-    hyper - z : yabai -m window --toggle zoom-fullscreen
-    hyper - s : yabai -m window --toggle split
-    hyper - m : yabai -m window --toggle native-fullscreen
-    hyper - t : yabai -m window --toggle sticky; yabai -m window --toggle topmost
+    alt + cmd - f : yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
+    alt + cmd - z : yabai -m window --toggle zoom-fullscreen
+    alt + cmd - s : yabai -m window --toggle split
+    alt + cmd - m : yabai -m window --toggle native-fullscreen
+    alt + cmd - t : yabai -m window --toggle sticky; yabai -m window --toggle topmost
 
     # -----------------------------------------------
     # Space Management (Mission Control Mastery)
     # -----------------------------------------------
-    hyper - 1 : yabai -m space --focus 1
-    hyper - 2 : yabai -m space --focus 2
-    hyper - 3 : yabai -m space --focus 3
-    hyper - 4 : yabai -m space --focus 4
-    hyper - 5 : yabai -m space --focus 5
-    hyper - 6 : yabai -m space --focus 6
-    hyper - 7 : yabai -m space --focus 7
-    hyper - 8 : yabai -m space --focus 8
-    hyper - 9 : yabai -m space --focus 9
+    alt + cmd - 1 : yabai -m space --focus 1
+    alt + cmd - 2 : yabai -m space --focus 2
+    alt + cmd - 3 : yabai -m space --focus 3
+    alt + cmd - 4 : yabai -m space --focus 4
+    alt + cmd - 5 : yabai -m space --focus 5
+    alt + cmd - 6 : yabai -m space --focus 6
 
     # Move windows to spaces
-    shift + hyper - 1 : yabai -m window --space 1; yabai -m space --focus 1
-    shift + hyper - 2 : yabai -m window --space 2; yabai -m space --focus 2
-    shift + hyper - 3 : yabai -m window --space 3; yabai -m space --focus 3
-    shift + hyper - 4 : yabai -m window --space 4; yabai -m space --focus 4
-    shift + hyper - 5 : yabai -m window --space 5; yabai -m space --focus 5
-    shift + hyper - 6 : yabai -m window --space 6; yabai -m space --focus 6
-    shift + hyper - 7 : yabai -m window --space 7; yabai -m space --focus 7
-    shift + hyper - 8 : yabai -m window --space 8; yabai -m space --focus 8
-    shift + hyper - 9 : yabai -m window --space 9; yabai -m space --focus 9
+    shift + alt + cmd - 1 : yabai -m window --space 1; yabai -m space --focus 1
+    shift + alt + cmd - 2 : yabai -m window --space 2; yabai -m space --focus 2
+    shift + alt + cmd - 3 : yabai -m window --space 3; yabai -m space --focus 3
+    shift + alt + cmd - 4 : yabai -m window --space 4; yabai -m space --focus 4
+    shift + alt + cmd - 5 : yabai -m window --space 5; yabai -m space --focus 5
+    shift + alt + cmd - 6 : yabai -m window --space 6; yabai -m space --focus 6
 
     # Rotate and balance spaces
-    hyper - r : yabai -m space --rotate 90
-    hyper - b : yabai -m space --balance
+    alt + cmd - r : yabai -m space --rotate 90
+    alt + cmd - b : yabai -m space --balance
 
     # -----------------------------------------------
     # Application Launchers (Instant Access)
     # -----------------------------------------------
-    hyper - return : open -a "Terminal"
-    hyper - e : open -a "Finder"
-    hyper - w : open -a "Safari"
-    hyper - c : open -a "Visual Studio Code"
+    alt + cmd - return : open -a "Alacritty"
+    alt + cmd - e : open -a "Finder"
+    alt + cmd - w : open -a "Safari"
+    alt + cmd - v : open -a "Visual Studio Code"  # 'v' for VSCode
 
     # -----------------------------------------------
     # System Commands (Power User Shortcuts)
     # -----------------------------------------------
-    hyper - q : yabai -m window --close
-    hyper - x : skhd -r # Restart skhd
-    hyper - lcmd : osascript -e 'tell app "System Events" to sleep' # Lock screen
-    hyper - escape : osascript -e 'tell app "System Events" to key code 53' # Simulate Escape globally
+    alt + cmd - q : yabai -m window --close
+    alt + cmd - x : skhd -r # Restart skhd
+    alt + cmd - lcmd : osascript -e 'tell app "System Events" to sleep' # Lock screen
+    alt + cmd - escape : osascript -e 'tell app "System Events" to key code 53' # Simulate Escape globally
 
     # -----------------------------------------------
     # Custom Layouts (Snap to Perfection)
     # -----------------------------------------------
-    hyper - g : yabai -m window --grid 6:6:1:1:4:4 # Center window (large)
-    hyper - v : yabai -m window --grid 1:2:0:0:1:1 # Left half
-    hyper - n : yabai -m window --grid 1:2:1:0:1:1 # Right half
+    # Center window (mid screen) - easily remembered as "middle"
+    alt + cmd - m : yabai -m window --grid 6:6:1:1:4:4
+    # Center window (smaller) - easily remembered as "center"
+    alt + cmd - c : yabai -m window --grid 4:4:1:1:2:2
+    # Side by side windows (using slash and period)
+    alt + cmd - 0x2F : yabai -m window --grid 1:2:0:0:1:1 # Left half (comma key)
+    alt + cmd - 0x2B : yabai -m window --grid 1:2:1:0:1:1 # Right half (period key)
+    
+    # Quick terminal (Option+Command+T for Terminal)
+    alt + cmd - t : open -na "Alacritty"
+    # Quick terminal full command when implemented (Option+Command+Return)
+    cmd + alt - 0x24 : open -na "Alacritty"
   '';
 in
 

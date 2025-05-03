@@ -13,6 +13,10 @@ let
     yabai -m config left_padding 10
     yabai -m config right_padding 10
     yabai -m config window_gap 10
+    
+    # Configure terminal window positioning (temporarily commented out)
+    # yabai -m rule --add title="quick_terminal" manage=off sticky=on layer=above
+    # yabai -m rule --add title="quick_terminal" grid=6:6:1:4:4:2
   '';
 in
 

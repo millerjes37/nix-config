@@ -3,6 +3,9 @@
 {
   # Use home-manager's built-in Alacritty module but with our custom settings
   programs.alacritty = {
+    enable = true;
+    
+    # Fixed settings to match current format of home-manager
     settings = {
       font = {
         normal = {
@@ -27,9 +30,9 @@
           green = "#98971a";
           yellow = "#d79921";
           blue = "#458588";
-          magenta = "#b16286";  # purple → magenta
-          cyan = "#689d6a";     # aqua → cyan
-          white = "#a89984";    # gray → white
+          magenta = "#b16286";
+          cyan = "#689d6a";
+          white = "#a89984";
         };
         bright = {
           black = "#928374";
@@ -37,9 +40,9 @@
           green = "#b8bb26";
           yellow = "#fabd2f";
           blue = "#83a598";
-          magenta = "#d3869b";  # purple → magenta
-          cyan = "#8ec07c";     # aqua → cyan
-          white = "#ebdbb2";    # gray → white
+          magenta = "#d3869b";
+          cyan = "#8ec07c";
+          white = "#ebdbb2";
         };
         cursor = {
           text = "#282828";
