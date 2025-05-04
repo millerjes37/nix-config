@@ -40,8 +40,14 @@ home-manager switch -b backup --flake .#jacksonmiller
 
 ### Rebuild Script
 
-A rebuild script is provided for easy configuration updates. 
-Once the configuration is applied, you can run:
+A rebuild script is provided for easy configuration updates. After installing the configuration for the first time, set up symlinks to make the commands available system-wide:
+
+```bash
+# Run once after initial setup
+~/nix-config/scripts/setup-symlinks.sh
+```
+
+Then you can run the rebuild command from anywhere:
 
 ```bash
 # From any directory
@@ -52,7 +58,8 @@ This will:
 1. Show a diff of your changes
 2. Offer to commit the changes with an auto-generated message
 3. Rebuild your configuration
-4. Offer to push changes to the remote repository
+4. Run post-rebuild hooks (including window manager setup)
+5. Offer to push changes to the remote repository
 
 ### Cross-Platform Support
 
@@ -62,13 +69,24 @@ The configuration is designed to work on both macOS and Linux with minimal adjus
 
 After the initial setup, you'll need to:
 
-1. Install Doom Emacs manually:
+1. Set up Window Managers (on macOS):
+   ```bash
+   # Run the window manager setup script
+   ~/nix-config/scripts/install-window-managers.sh
+   
+   # Grant necessary permissions:
+   # System Settings -> Privacy & Security -> Accessibility
+   # Add /run/current-system/sw/bin/yabai and /run/current-system/sw/bin/skhd
+   ```
+   See [README-WINDOW-MANAGERS.md](README-WINDOW-MANAGERS.md) for detailed instructions.
+
+2. Install Doom Emacs manually:
    ```bash
    git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
    ~/.emacs.d/bin/doom install --no-config --no-env --no-fonts
    ```
 
-2. Set up email (if using):
+3. Set up email (if using):
    ```bash
    # Create mail directory
    mkdir -p ~/.mail/jackson-civitas
@@ -91,8 +109,14 @@ After the initial setup, you'll need to:
 - `modules/`: Directory containing module-specific configurations
   - `alacritty.nix`: Terminal configuration
   - `emacs.nix`: Doom Emacs configuration
-  - `skhd.nix`: Keyboard shortcuts
-  - `yabai.nix`: Window manager configuration
+  - `skhd.nix`: Keyboard shortcuts definition (used as reference)
+  - `yabai.nix`: Window manager configuration (used as reference)
   - `zsh.nix`: Shell configuration
 - `scripts/`: Helper scripts
   - `rebuild.sh`: Script to update and rebuild configuration
+  - `post-rebuild-hooks.sh`: Post-rebuild automation
+  - `install-window-managers.sh`: Window manager setup script
+  - `yabairc`, `skhdrc`: Window manager configurations
+  - `skhd-cheatsheet.md`: Keyboard shortcut reference
+- `README-WINDOW-MANAGERS.md`: Detailed window manager setup guide
+- `WINDOW-MANAGER-INTEGRATION.md`: Technical details about the integration

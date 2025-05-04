@@ -14,8 +14,8 @@
 
   # Enable and configure each module
   programs.zsh.enable = true;
-  programs.yabai.enable = true;
-  programs.skhd.enable = true;
+  programs.yabai.enable = false; # Managed externally for better stability
+  programs.skhd.enable = false;  # Managed externally for better stability
   programs.alacritty.enable = true;  # Settings are in the alacritty module
   programs.emacs.enable = true;
 
@@ -24,9 +24,15 @@
   home.username = "jacksonmiller";  # Replace with your username
   home.homeDirectory = "/Users/jacksonmiller";  # Replace with your home directory
 
-  # Optional: Add additional packages
+  # Required packages for window management and terminal
   home.packages = with pkgs; [
-    # neovim  # Temporarily disabled
-    ripgrep  # Example package
+    # Window manager tools
+    yabai      # Tiling window manager
+    skhd       # Hotkey daemon
+    
+    # Terminal and tools
+    alacritty  # Terminal emulator
+    ripgrep    # Fast grep
+    jq         # JSON processor
   ];
 }

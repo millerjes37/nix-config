@@ -1,0 +1,115 @@
+# Define hyper key as option(⌥) + command(⌘)
+# On MacBook, option key is labeled as "⌥"
+:: default : echo "Mode: default"
+
+# -----------------------------------------------
+# IMPORTANT NOTE: SKHD doesn't support variables
+# Using full path for all yabai commands
+# -----------------------------------------------
+
+# -----------------------------------------------
+# Window Focus (Navigate with Precision)
+# -----------------------------------------------
+alt + cmd - h : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus west || /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus west
+alt + cmd - j : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus south || /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus south
+alt + cmd - k : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus north || /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus north
+alt + cmd - l : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus east || /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus east
+
+# Cycle through windows in current space
+alt + cmd - n : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus next || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus first
+alt + cmd - p : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus prev || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --focus last
+
+# -----------------------------------------------
+# Window Movement (Warp Speed Relocation)
+# -----------------------------------------------
+shift + alt + cmd - h : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --warp west || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space prev
+shift + alt + cmd - j : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --warp south
+shift + alt + cmd - k : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --warp north
+shift + alt + cmd - l : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --warp east || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space next
+
+# Throw windows to adjacent displays (using [ and ] for display movement)
+shift + alt + cmd - 0x21 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --display west; /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus west  # [ key
+shift + alt + cmd - 0x1E : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --display east; /Users/jacksonmiller/.nix-profile/bin/yabai -m display --focus east  # ] key
+
+# -----------------------------------------------
+# Window Resizing (Pixel-Perfect Control)
+# -----------------------------------------------
+# Using arrow keys for resizing (easier to remember on laptop)
+alt + cmd - left : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize left:-75:0 || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize right:-75:0
+alt + cmd - down : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize bottom:0:75 || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize top:0:75
+alt + cmd - up : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize top:0:-75 || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize bottom:0:-75
+alt + cmd - right : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize right:75:0 || /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize left:75:0
+
+# Fine-tune resizing (25px increments)
+# Simplified to use shift for fine control (easier on laptop)
+shift + alt + cmd - left : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize left:-25:0
+shift + alt + cmd - down : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize bottom:0:25
+shift + alt + cmd - up : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize top:0:-25
+shift + alt + cmd - right : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --resize right:25:0
+
+# -----------------------------------------------
+# Window Properties (Toggle Like a Pro)
+# -----------------------------------------------
+alt + cmd - f : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle float; /Users/jacksonmiller/.nix-profile/bin/yabai -m window --grid 4:4:1:1:2:2
+alt + cmd - z : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle zoom-fullscreen
+alt + cmd - s : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle split
+alt + cmd - m : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle native-fullscreen
+alt + cmd - t : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle sticky; /Users/jacksonmiller/.nix-profile/bin/yabai -m window --toggle topmost
+
+# -----------------------------------------------
+# Space Management (Mission Control Mastery)
+# -----------------------------------------------
+alt + cmd - 1 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 1
+alt + cmd - 2 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 2
+alt + cmd - 3 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 3
+alt + cmd - 4 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 4
+alt + cmd - 5 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 5
+alt + cmd - 6 : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 6
+
+# Move windows to spaces
+shift + alt + cmd - 1 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 1; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 1
+shift + alt + cmd - 2 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 2; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 2
+shift + alt + cmd - 3 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 3; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 3
+shift + alt + cmd - 4 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 4; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 4
+shift + alt + cmd - 5 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 5; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 5
+shift + alt + cmd - 6 : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --space 6; /Users/jacksonmiller/.nix-profile/bin/yabai -m space --focus 6
+
+# Rotate and balance spaces
+alt + cmd - r : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --rotate 90
+alt + cmd - b : /Users/jacksonmiller/.nix-profile/bin/yabai -m space --balance
+
+# -----------------------------------------------
+# Application Launchers (Instant Access)
+# -----------------------------------------------
+alt + cmd - return : open -a "Alacritty"
+alt + cmd - e : open -a "Finder"
+alt + cmd - w : open -a "Safari"
+alt + cmd - v : open -a "Visual Studio Code"  # 'v' for VSCode
+
+# -----------------------------------------------
+# System Commands (Power User Shortcuts)
+# -----------------------------------------------
+alt + cmd - q : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --close
+alt + cmd - x : skhd --reload
+# Restart SKHD service - shift+alt+cmd+x
+shift + alt + cmd - x : skhd --restart-service
+# Lock screen - alt+cmd+semicolon (since l is used for window focus)
+alt + cmd - semicolon : osascript -e 'tell app "System Events" to sleep'
+# Simulate Escape globally
+alt + cmd - escape : osascript -e 'tell app "System Events" to key code 53'
+
+# -----------------------------------------------
+# Custom Layouts (Snap to Perfection)
+# -----------------------------------------------
+# Center window (mid screen) - easily remembered as "middle"
+alt + cmd - m : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --grid 6:6:1:1:4:4
+# Center window (smaller) - easily remembered as "center"
+alt + cmd - c : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --grid 4:4:1:1:2:2
+# Side by side windows (using slash and period)
+alt + cmd - 0x2F : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --grid 1:2:0:0:1:1 # Left half (comma key)
+alt + cmd - 0x2B : /Users/jacksonmiller/.nix-profile/bin/yabai -m window --grid 1:2:1:0:1:1 # Right half (period key)
+
+# Quick terminal (Option+Command+T for Terminal)
+alt + cmd - t : open -na "Alacritty"
+# Quick terminal full command (Option+Command+Return)
+cmd + alt - return : open -na "Alacritty"
