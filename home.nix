@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, stdenv, ... }:
 
 {
   # Import all the modules we've created
