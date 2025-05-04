@@ -1,4 +1,4 @@
-{ config, lib, pkgs, stdenv, ... }:
+{ config, lib, pkgs, stdenv, isDarwin ? false, ... }:
 
 {
   # Import all the modules we've created
@@ -8,7 +8,7 @@
     ./modules/emacs.nix
     # ./modules/quick_terminal.nix  # Temporarily disabled
     # ./modules/neovim.nix  # Temporarily disabled
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals isDarwin [
     ./modules/yabai.nix
     ./modules/skhd.nix
   ];
@@ -17,18 +17,18 @@
   programs.zsh.enable = true;
   programs.alacritty.enable = true;  # Settings are in the alacritty module
   programs.emacs.enable = true;
-  programs.yabai.enable = lib.mkIf stdenv.isDarwin false; # Managed externally for better stability
-  programs.skhd.enable = lib.mkIf stdenv.isDarwin false;  # Managed externally for better stability
+  programs.yabai.enable = lib.mkIf isDarwin false; # Managed externally for better stability
+  programs.skhd.enable = lib.mkIf isDarwin false;  # Managed externally for better stability
 
   # Home-manager settings
   home.stateVersion = "25.05";  # Adjust to your home-manager version
   home.username = "jacksonmiller";  # Replace with your username
-  home.homeDirectory = if stdenv.isDarwin then "/Users/jacksonmiller" else "/home/jacksonmiller";
+  home.homeDirectory = if isDarwin then "/Users/jacksonmiller" else "/home/jacksonmiller";
 
   # Required packages for window management, terminal, and Civitas development
   home.packages = with pkgs; [
     # Window manager tools (macOS only)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals isDarwin [
     yabai      # Tiling window manager
     skhd       # Hotkey daemon
   ] ++ [
