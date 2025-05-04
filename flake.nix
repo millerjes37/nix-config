@@ -15,7 +15,7 @@
 
   outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, ... }:
     let
-      mkHomeConfig = { system, username, isDarwin, extraModules ? [] }:
+      mkHomeConfig = { system, username, extraImports ? [] }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.${system};
           modules = [
@@ -23,10 +23,10 @@
             nixvim.homeManagerModules.nixvim
             {
               home.username = username;
-              home.homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
-              _module.args.isDarwin = isDarwin;
+              home.homeDirectory = if system == "aarch64-darwin" then "/Users/${username}" else "/home/${username}";
+              _module.args.extraImports = extraImports;
             }
-          ] ++ extraModules;
+          ];
         };
 
       mkDarwinConfig = { system, username }:
@@ -56,12 +56,15 @@
         "jacksonmiller@mac" = mkHomeConfig {
           system = "aarch64-darwin";
           username = "jacksonmiller";
-          isDarwin = true;
+          extraImports = [
+            ./modules/yabai.nix
+            ./modules/skhd.nix
+          ];
         };
         "jacksonmiller@linux" = mkHomeConfig {
           system = "x86_64-linux";
           username = "jacksonmiller";
-          isDarwin = false;
+          extraImports = [];
         };
       };
     };
