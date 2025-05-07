@@ -31,13 +31,13 @@
     pandoc     # Document converter
     
     # Formatters and linters
-    prettier   # Code formatter
-    rustfmt    # Rust formatter
-    black      # Python formatter
-    pylint     # Python linter
+    nodePackages.prettier   # Code formatter
+    rustfmt                # Rust formatter
+    python311Packages.black # Python formatter
+    python311Packages.pylint # Python linter
     
     # Database tools
-    dbeaver    # Universal database tool
+    dbeaver-bin    # Universal database tool
   ];
   
   # Enable direnv for automatic environment switching
