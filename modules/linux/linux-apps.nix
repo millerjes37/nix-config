@@ -9,7 +9,7 @@
     
     # Office
     libreoffice
-    okular         # PDF viewer
+    kdePackages.okular  # PDF viewer
     
     # Media
     vlc            # Video player
