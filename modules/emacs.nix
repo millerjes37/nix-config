@@ -3,7 +3,7 @@
 {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-macport;  # Use macport for macOS (change to pkgs.emacs for Linux)
+    package = if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs;  # Platform-specific Emacs
   };
 
   # Install Doom Emacs and required packages
@@ -139,7 +139,7 @@
              upload                    ; map local to remote projects via ssh/ftp
 
              :os
-             macos                     ; MacOS-specific commands
+             ,(if (string-equal system-type "darwin") 'macos 'linux) ; OS-specific commands
              tty                       ; improve the terminal Emacs experience
 
              :lang
@@ -180,7 +180,7 @@
       ;; Theme Setup
       (setq doom-theme 'doom-one)
 
-      ;; Font Configuration
+      ;; Font Configuration - platform specific
       (setq doom-font (font-spec :family "JetBrains Mono" :size 14)
             doom-variable-pitch-font (font-spec :family "Overpass" :size 14)
             doom-big-font (font-spec :family "JetBrains Mono" :size 24))
@@ -299,10 +299,19 @@
       IMAPAccount jackson-civitas
       Host imap.gmail.com
       User jackson@civitas.ltd
-      PassCmd "security find-generic-password -s 'mbsync-gmail-jackson-civitas' -w"
+      # Platform-specific password command
+      PassCmd "${if pkgs.stdenv.isDarwin then
+                 "security find-generic-password -s 'mbsync-gmail-jackson-civitas' -w"
+               else
+                 "pass show email/jackson@civitas.ltd"
+               }"
       Port 993
       SSLType IMAPS
-      CertificateFile /etc/ssl/cert.pem
+      CertificateFile ${if pkgs.stdenv.isDarwin then
+                         "/etc/ssl/cert.pem"
+                       else
+                         "/etc/ssl/certs/ca-certificates.crt"
+                       }
 
       # Remote storage
       IMAPStore jackson-civitas-remote
