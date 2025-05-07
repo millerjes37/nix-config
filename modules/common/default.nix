@@ -60,48 +60,50 @@
   # Common home-manager settings for both platforms
   programs = {
     home-manager.enable = true;
-    
-    # Create directory for common shell scripts
-    home.file.".local/bin".source = ../scripts/common;
-    
-    # Common git configuration
-    git = {
-      enable = true;
-      userName = "Jackson Miller";
-      userEmail = "jackson@example.com";  # Replace with your email
-      
-      extraConfig = {
-        init.defaultBranch = "main";
-        pull.rebase = true;
-        core.editor = "nvim";
-        core.autocrlf = "input";
-      };
-      
-      delta = {
-        enable = true;
-        options = {
-          navigate = true;
-          light = false;
-          side-by-side = true;
-          line-numbers = true;
-          syntax-theme = "gruvbox-dark";
-        };
-      };
-    };
-    
-    # Configure commonly used editors
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-    };
-    
-    # Configure common shell tools
-    fzf.enable = true;
-    starship.enable = true;
-    direnv.enable = true;
-    zoxide.enable = true;
-    bat.enable = true;
   };
+  
+  # Create directory for common shell scripts
+  home.file.".local/bin" = lib.mkIf (builtins.pathExists ../scripts/common) {
+    source = ../scripts/common;
+  };
+  
+  # Common git configuration
+  programs.git = {
+    enable = true;
+    userName = "Jackson Miller";
+    userEmail = "jackson@example.com";  # Replace with your email
+    
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      core.editor = "nvim";
+      core.autocrlf = "input";
+    };
+    
+    delta = {
+      enable = true;
+      options = {
+        navigate = true;
+        light = false;
+        side-by-side = true;
+        line-numbers = true;
+        syntax-theme = "gruvbox-dark";
+      };
+    };
+  };
+    
+  # Configure commonly used editors
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+  
+  # Configure common shell tools
+  programs.fzf.enable = true;
+  programs.starship.enable = true;
+  programs.direnv.enable = true;
+  programs.zoxide.enable = true;
+  programs.bat.enable = true;
 }
