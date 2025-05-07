@@ -7,7 +7,7 @@ let
   defaultConfig = ''
     # On MacBook, option key is labeled as "⌥"
     :: default : echo "Mode: default"
-    
+
     # -----------------------------------------------
     # Window Focus with just Option key
     # -----------------------------------------------
@@ -108,6 +108,14 @@ in
       description = "Contents of the skhd configuration file.";
     };
   };
+
+  # Only enable on Darwin platforms, do nothing on Linux
+  assertions = lib.mkIf (!pkgs.stdenv.isDarwin) [
+    {
+      assertion = !cfg.enable;
+      message = "SKHD is only supported on macOS.";
+    }
+  ];
 
   config = mkIf cfg.enable {
     home.packages = [ pkgs.skhd ];

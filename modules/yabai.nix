@@ -13,7 +13,7 @@ let
     yabai -m config left_padding 10
     yabai -m config right_padding 10
     yabai -m config window_gap 10
-    
+
     # Configure terminal window positioning (temporarily commented out)
     # yabai -m rule --add title="quick_terminal" manage=off sticky=on layer=above
     # yabai -m rule --add title="quick_terminal" grid=6:6:1:4:4:2
@@ -29,6 +29,14 @@ in
       description = "Contents of the yabairc configuration file.";
     };
   };
+
+  # Only enable on Darwin platforms, do nothing on Linux
+  assertions = lib.mkIf (!pkgs.stdenv.isDarwin) [
+    {
+      assertion = !cfg.enable;
+      message = "Yabai is only supported on macOS.";
+    }
+  ];
 
   config = mkIf cfg.enable {
     home.packages = [ pkgs.yabai ];
