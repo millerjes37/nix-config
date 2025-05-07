@@ -32,7 +32,7 @@ in
 
   # We'll handle the platform check in home.nix
 
-  config = mkIf cfg.enable {
+  config = mkIf pkgs.stdenv.isDarwin {
     home.packages = [ pkgs.yabai ];
 
     home.file.".yabairc" = {

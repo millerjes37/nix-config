@@ -24,12 +24,7 @@ in
   programs.alacritty.enable = true;  # Settings are in the alacritty module
   programs.emacs.enable = true;
   
-  # Enable platform-specific window managers
-  programs = {
-    # macOS window managers, handled by conditional modules
-    yabai.enable = lib.mkIf isDarwin true;
-    skhd.enable = lib.mkIf isDarwin true;
-  };
+  # All conditionals are now handled within the imported modules
 
   # Home-manager settings
   home.stateVersion = "25.05";  # Adjust to your home-manager version
