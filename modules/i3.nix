@@ -3,8 +3,8 @@
 with lib;
 
 let
-  cfg = config.programs.i3;
-  defaultConfig = ''
+  cfg = config.xsession.windowManager.i3;
+  i3Config = ''
     # i3 config file (v4)
 
     # Set mod key (Mod1=Alt, Mod4=Super/Windows key)
@@ -196,20 +196,8 @@ let
     exec --no-startup-id dunst
   '';
 in
-
 {
-  options.programs.i3 = {
-    enable = mkEnableOption "i3 window manager";
-    config = mkOption {
-      type = types.lines;
-      default = defaultConfig;
-      description = "Contents of the i3 configuration file.";
-    };
-  };
-
-  # We'll handle the platform check in home.nix
-
-  config = mkIf cfg.enable {
+  config = mkIf pkgs.stdenv.isLinux {
     home.packages = with pkgs; [
       i3
       i3status
@@ -220,17 +208,30 @@ in
       dex
     ];
 
-    home.file.".config/i3/config" = {
-      text = cfg.config;
-    };
-
-    # Add xsession configuration for i3
     xsession = {
       enable = true;
       windowManager.i3 = {
         enable = true;
-        config = null; # We're using our own config, not the home-manager one
-        extraConfig = cfg.config;
+        config = {
+          window = {
+            border = 2;
+            titlebar = false;
+          };
+          gaps = {
+            inner = 10;
+            outer = 0;
+            smartGaps = true;
+          };
+          bars = [
+            {
+              position = "top";
+              statusCommand = "${pkgs.i3status}/bin/i3status";
+            }
+          ];
+          terminal = "alacritty";
+          modifier = "Mod1"; # Alt key
+        };
+        extraConfig = i3Config;
       };
     };
   };
