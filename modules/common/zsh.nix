@@ -189,7 +189,7 @@
     };
     
     # Enable history substring search
-    historySubstring = {
+    historySubstringSearch = {
       enable = true;
     };
     
