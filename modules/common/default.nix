@@ -6,6 +6,7 @@
     ./zsh.nix
     ./alacritty.nix
     ./emacs.nix
+    ./neovim
   ];
   
   # Common packages for both platforms
