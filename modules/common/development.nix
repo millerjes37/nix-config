@@ -58,7 +58,6 @@
       
       # Language support
       rust-lang.rust-analyzer       # Rust
-      matklad.rust-analyzer         # Rust
       ms-python.python              # Python
       golang.go                     # Go
       
