@@ -1,12 +1,5 @@
 { config, lib, pkgs, extraImports ? [], ... }:
 
-# Allow unfree packages like VSCode
-pkgs = import <nixpkgs> { 
-  config = { 
-    allowUnfree = true;
-  }; 
-};
-
 let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
