@@ -193,11 +193,8 @@
       enable = true;
     };
     
-    # Enable fast directory jumping
-    zsh-z = {
-      enable = true;
-      options = ["enhanced"];
-    };
+    # We use zoxide directly via initExtra instead
+    # of this option which doesn't exist
   };
 
   # Manage configuration files
