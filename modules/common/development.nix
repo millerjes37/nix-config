@@ -18,7 +18,7 @@
     # Language servers
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
-    nodePackages.pyright
+    python311Packages.python-lsp-server
     rust-analyzer
     gopls
     
