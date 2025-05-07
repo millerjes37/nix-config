@@ -88,12 +88,13 @@
         ${homeDir}/nix-config/scripts/rebuild.sh "$@"
       }
       
-      # Load utility functions
+      # Load utility functions and aliases
       [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+      [[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
       
-      # Initialize zoxide for better directory navigation
-      if command -v zoxide >/dev/null; then
-        eval "$(zoxide init zsh)"
+      # Initialize zoxide (with cd replacement)
+      if command -v zoxide &>/dev/null; then
+        eval "$(zoxide init zsh --cmd cd)"
       fi
 
       # Initialize fzf for fuzzy finding
@@ -207,6 +208,7 @@
   home.file.".p10k.zsh".source = ./data/p10k.zsh;
   home.file.".ripgreprc".source = ./data/ripgreprc;
   home.file.".zsh_functions".source = ./data/base.zsh;
+  home.file.".zsh_aliases".source = ./data/aliases.zsh;
 
   # Install packages
   home.packages = with pkgs; [

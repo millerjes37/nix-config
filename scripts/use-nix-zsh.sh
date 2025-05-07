@@ -34,6 +34,15 @@ fi
 
 # Load Zsh from Nix
 export PATH="$HOME/.nix-profile/bin:\$PATH"
+
+# Make sure all home-manager files are loaded
+if [ -e "$HOME/.zsh_aliases" ]; then
+  source "$HOME/.zsh_aliases"
+fi
+
+if [ -e "$HOME/.zsh_functions" ]; then
+  source "$HOME/.zsh_functions"
+fi
 EOF
 
 echo "✓ Created $ZSH_ENV"
