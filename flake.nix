@@ -56,8 +56,7 @@
         system = "aarch64-darwin";
         username = "jacksonmiller";
         extraImports = [
-          ./modules/yabai.nix
-          ./modules/skhd.nix
+          ./modules/darwin/default.nix # Main macOS configuration
         ];
       };
       
@@ -65,7 +64,7 @@
         system = "x86_64-linux";
         username = "jackson";
         extraImports = [
-          ./modules/i3.nix
+          ./modules/linux/default.nix  # Main Linux configuration
         ];
       };
     };
