@@ -27,7 +27,7 @@
     htop           # Process viewer
     neofetch       # System info
     arandr         # Display manager GUI
-    gnome.gnome-disk-utility # Disk management
+    gnome-disk-utility # Disk management
     
     # Security
     keepassxc      # Password manager
@@ -35,7 +35,7 @@
     # Utilities
     flameshot      # Screenshot tool
     redshift       # Blue light filter
-    gnome.gnome-calculator
+    gnome-calculator
     
     # Development tools
     insomnia       # API client
