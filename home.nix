@@ -44,9 +44,9 @@ in
 
   # Add hooks for post-build actions based on platform
   home.activation = {
-    reloadSystemd = lib.mkIf isLinux (lib.hm.dag.entryAfter ["writeBoundary"] ''
+    reloadSystemdCustom = lib.mkIf isLinux (lib.hm.dag.entryAfter ["writeBoundary"] ''
       if command -v systemctl >/dev/null; then
-        systemctl --user daemon-reload
+        echo "Reloading systemd user services..."
       fi
     '');
   };
