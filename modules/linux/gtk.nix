@@ -18,7 +18,7 @@
     
     cursorTheme = {
       name = "Breeze";
-      package = pkgs.breeze-icons;
+      package = pkgs.kdePackages.breeze-icons;
       size = 24;
     };
     
