@@ -3,9 +3,9 @@
 {
   # Import modules more directly to avoid recursion
   imports = [
-    ../zsh.nix
-    ../alacritty.nix
-    ../emacs.nix
+    ./zsh.nix
+    ./alacritty.nix
+    ./emacs.nix
   ];
   
   # Common packages for both platforms

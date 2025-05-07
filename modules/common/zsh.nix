@@ -159,8 +159,8 @@
   };
 
   # Manage configuration files
-  home.file.".p10k.zsh".text = builtins.readFile ../p10k.zsh;
-  home.file.".ripgreprc".text = builtins.readFile ../ripgreprc;
+  home.file.".p10k.zsh".text = builtins.readFile ./data/p10k.zsh;
+  home.file.".ripgreprc".text = builtins.readFile ./data/ripgreprc;
 
   # Install packages
   home.packages = with pkgs; [
