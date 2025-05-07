@@ -4,7 +4,7 @@
   # Import all Linux-specific modules
   imports = [
     ./i3.nix           # Window manager
-    ./gtk.nix          # GTK theming
+    # ./gtk.nix        # GTK theming - temporarily disabled
     ./rofi.nix         # Application launcher
     ./linux-apps.nix   # Linux-specific applications
   ];
