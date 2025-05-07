@@ -160,14 +160,13 @@
   # Install LSP servers and other tools
   home.packages = with pkgs; [
     # Language servers
-    nodePackages.pyright
     nodePackages.typescript-language-server
     gopls
     rust-analyzer
     
     # Formatting tools
     nodePackages.prettier
-    black
+    python311Packages.black
     
     # Linters
     nodePackages.eslint
