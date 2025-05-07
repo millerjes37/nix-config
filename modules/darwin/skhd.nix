@@ -89,30 +89,13 @@ let
     option - escape : osascript -e 'tell app "System Events" to key code 53' # Simulate Escape globally
 
     # -----------------------------------------------
-    # Grid Layout (Option + G)
+    # Custom Layouts (Quick window arrangements)
     # -----------------------------------------------
-    option - g : yabai -m window --grid 3:3:1:1:1:1
-    
-    # Grid presets for Option + T
-    # 0:0:1:1 = Full screen
-    # 2:2:0:0:2:2 = Centered large
-    # 4:4:1:1:2:2 = Centered medium
-    # 6:6:2:2:2:2 = Centered small
-    # 2:2:0:0:1:2 = Left vertical
-    # 2:2:1:0:1:2 = Right vertical
-    # 2:2:0:0:2:1 = Top horizontal
-    # 2:2:0:1:2:1 = Bottom horizontal
-    # 3:3:0:0:2:3 = Left two-thirds
-    # 3:3:2:0:1:3 = Right one-third
-    
-    # Common grid positions
-    option + shift - 1 : yabai -m window --grid 2:2:0:0:1:1
-    option + shift - 2 : yabai -m window --grid 2:2:1:0:1:1
-    option + shift - 3 : yabai -m window --grid 2:2:0:1:1:1
-    option + shift - 4 : yabai -m window --grid 2:2:1:1:1:1
-    option + shift - 5 : yabai -m window --grid 3:3:0:0:2:3
-    option + shift - 6 : yabai -m window --grid 3:3:2:0:1:3
-    option + shift - 0 : yabai -m window --grid 1:1:0:0:1:1
+    # Center window (mid screen)
+    option - m : yabai -m window --grid 6:6:1:1:4:4
+    # Side by side windows (using comma and period)
+    option - 0x2F : yabai -m window --grid 1:2:0:0:1:1 # Left half (comma key)
+    option - 0x2B : yabai -m window --grid 1:2:1:0:1:1 # Right half (period key)
   '';
 in
 
@@ -125,6 +108,8 @@ in
       description = "Contents of the skhd configuration file.";
     };
   };
+
+  # We'll handle the platform check in home.nix
 
   config = mkIf pkgs.stdenv.isDarwin {
     home.packages = [ pkgs.skhd ];

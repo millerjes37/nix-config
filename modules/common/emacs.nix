@@ -227,6 +227,37 @@
       ;; Org-Roam Configuration 
       (after! org-roam 
         (setq org-roam-directory "~/org/roam"))
+        
+      ;; Email Configuration (mu4e)
+      (after! mu4e
+        ;; Set up Gmail integration
+        (setq mu4e-get-mail-command "mbsync -a"
+              mu4e-update-interval 300
+              mu4e-compose-signature-auto-include t
+              mu4e-view-show-images t
+              mu4e-view-show-addresses t
+              mu4e-attachment-dir "~/Downloads"
+              mu4e-maildir "~/.mail"
+              mu4e-contexts
+              `(,(make-mu4e-context
+                  :name "work"
+                  :match-func (lambda (msg)
+                                (when msg
+                                  (string-prefix-p "/jackson-civitas" (mu4e-message-field msg :maildir))))
+                  :vars '((user-mail-address . "jackson@civitas.ltd")
+                          (user-full-name . "Jackson Miller")
+                          (mu4e-compose-signature . "Jackson Miller\nCivitas Ltd.")
+                          (mu4e-drafts-folder . "/jackson-civitas/[Gmail]/Drafts")
+                          (mu4e-sent-folder . "/jackson-civitas/[Gmail]/Sent Mail")
+                          (mu4e-trash-folder . "/jackson-civitas/[Gmail]/Trash")
+                          (mu4e-refile-folder . "/jackson-civitas/[Gmail]/All Mail")))))
+
+        ;; Configure Gmail-specific settings
+        (setq message-send-mail-function 'smtpmail-send-it
+              smtpmail-stream-type 'starttls
+              smtpmail-default-smtp-server "smtp.gmail.com"
+              smtpmail-smtp-server "smtp.gmail.com"
+              smtpmail-smtp-service 587))
     '';
 
     # Doom packages.el - additional packages to install

@@ -1,12 +1,65 @@
 #!/usr/bin/env bash
+# Cross-platform rebuild script for Nix configurations
+
 set -e
 
 # Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NIX_CONFIG_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Source common utilities
-source "$NIX_CONFIG_DIR/scripts/utils/common.sh"
+# Source common utilities if available
+if [ -f "$NIX_CONFIG_DIR/scripts/utils/common.sh" ]; then
+  source "$NIX_CONFIG_DIR/scripts/utils/common.sh"
+else
+  # Define basic utility functions if common.sh isn't available
+  function print_header() { echo -e "\033[1;34m==== $1 ====\033[0m"; }
+  function print_step() { echo -e "\033[1;36m→ $1\033[0m"; }
+  function print_success() { echo -e "\033[1;32m✓ $1\033[0m"; }
+  function print_warning() { echo -e "\033[1;33m⚠ $1\033[0m"; }
+  function print_error() { echo -e "\033[1;31m✗ $1\033[0m"; }
+fi
+
+# Platform detection
+if [[ "$(uname)" == "Darwin" ]]; then
+  PLATFORM="darwin"
+  if [[ "$USER" == "" ]]; then
+    USER="jacksonmiller"
+  fi
+  FLAKE_TARGET="$USER@mac"
+else
+  PLATFORM="linux"
+  if [[ "$USER" == "" ]]; then
+    USER="jackson"
+  fi
+  FLAKE_TARGET="$USER@linux"
+fi
+
+# Check for arguments
+VERBOSE=0
+DARWIN_REBUILD=0
+UPGRADE_LOCK=0
+SKIP_GIT=0
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -v|--verbose) VERBOSE=1; shift ;;
+    -d|--darwin) DARWIN_REBUILD=1; shift ;;
+    -u|--upgrade) UPGRADE_LOCK=1; shift ;;
+    -s|--skip-git) SKIP_GIT=1; shift ;;
+    -h|--help) 
+      echo "Usage: $0 [options]"
+      echo "Options:"
+      echo "  -v, --verbose     Enable verbose output"
+      echo "  -d, --darwin      Use darwin-rebuild instead of home-manager on macOS"
+      echo "  -u, --upgrade     Update flake lock file (upgrade all dependencies)"
+      echo "  -s, --skip-git    Skip git operations"
+      echo "  -h, --help        Show this help message"
+      exit 0
+      ;;
+    *) echo "Unknown parameter: $1"; exit 1 ;;
+  esac
+done
 
 function handle_git_changes() {
   print_header "GIT STATUS"
@@ -32,7 +85,13 @@ function handle_git_changes() {
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
       # Auto-generate commit message based on changed files
       commit_msg="Update configuration: "
-      mapfile -t changed_files < <(git diff --name-only)
+      
+      if command -v mapfile &> /dev/null; then
+        mapfile -t changed_files < <(git diff --name-only)
+      else
+        # Fallback for platforms without mapfile (older bash)
+        IFS=$'\n' read -d '' -ra changed_files < <(git diff --name-only)
+      fi
       
       if [[ ${#changed_files[@]} -eq 0 ]]; then
         print_warning "No files changed. Skipping commit."
@@ -73,21 +132,73 @@ function handle_git_changes() {
 }
 
 function run_post_rebuild() {
+  print_header "POST-REBUILD ACTIONS"
+  
+  if [[ "$PLATFORM" == "darwin" ]]; then
+    # macOS post-rebuild tasks
+    if command -v yabai &> /dev/null && [[ -f "$HOME/.config/yabai/yabairc" ]]; then
+      print_step "Restarting yabai..."
+      yabai --restart-service
+    fi
+    
+    if command -v skhd &> /dev/null && [[ -f "$HOME/.config/skhd/skhdrc" ]]; then
+      print_step "Restarting skhd..."
+      skhd --restart-service
+    fi
+  else
+    # Linux post-rebuild tasks
+    if command -v i3-msg &> /dev/null; then
+      print_step "Reloading i3..."
+      i3-msg reload > /dev/null
+    fi
+    
+    if command -v systemctl &> /dev/null; then
+      print_step "Reloading user services..."
+      systemctl --user daemon-reload
+    fi
+  fi
+  
   # Check if post-rebuild hook script exists and run it
   if [ -f "$SCRIPT_DIR/post-rebuild-hooks.sh" ]; then
     print_step "Running post-rebuild hooks..."
     "$SCRIPT_DIR/post-rebuild-hooks.sh"
-  else
-    print_warning "No post-rebuild hooks found."
   fi
 }
 
 function rebuild_configuration() {
   print_header "REBUILDING NIX CONFIGURATION"
   
-  # Rebuild nix configuration
-  print_step "Rebuilding Home Manager configuration..."
-  home-manager switch -b backup --flake "$NIX_CONFIG_DIR#jacksonmiller"
+  # Environment variables for allowing unfree packages
+  export NIXPKGS_ALLOW_UNFREE=1
+  export NIXPKGS_ALLOW_INSECURE=1
+  
+  # Determine command to run based on platform
+  if [[ "$PLATFORM" == "darwin" && "$DARWIN_REBUILD" -eq 1 ]]; then
+    print_step "Rebuilding macOS configuration with darwin-rebuild..."
+    CMD="darwin-rebuild switch --flake \"$NIX_CONFIG_DIR#macbook-air\""
+  else
+    print_step "Rebuilding with home-manager on $PLATFORM..."
+    CMD="home-manager switch --flake \"$NIX_CONFIG_DIR#$FLAKE_TARGET\""
+  fi
+  
+  # Add upgrade flag if requested
+  if [[ "$UPGRADE_LOCK" -eq 1 ]]; then
+    CMD="$CMD --recreate-lock-file"
+  fi
+  
+  # Add backup flag for home-manager
+  if [[ "$DARWIN_REBUILD" -eq 0 ]]; then
+    CMD="$CMD -b backup"
+  fi
+  
+  # Add verbosity if requested
+  if [[ "$VERBOSE" -eq 1 ]]; then
+    CMD="$CMD --verbose"
+  fi
+  
+  # Run the command
+  print_step "Running: $CMD"
+  eval "$CMD"
   
   print_success "Configuration successfully rebuilt!"
 }
@@ -108,14 +219,22 @@ function handle_git_push() {
 # Main function
 function main() {
   print_header "NIX CONFIG REBUILD SCRIPT"
+  print_step "Platform: $PLATFORM"
+  print_step "User: $USER"
+  print_step "Flake target: $FLAKE_TARGET"
   
   # Go to the nix-config directory
   cd "$NIX_CONFIG_DIR" || exit
   
-  # Handle git changes
-  if handle_git_changes; then
-    made_commits=true
+  # Handle git changes unless skipped
+  if [[ "$SKIP_GIT" -eq 0 ]]; then
+    if handle_git_changes; then
+      made_commits=true
+    else
+      made_commits=false
+    fi
   else
+    print_warning "Skipping git operations as requested."
     made_commits=false
   fi
   
@@ -132,6 +251,9 @@ function main() {
   
   print_header "REBUILD COMPLETE"
 }
+
+# Make the script executable
+chmod +x "$0"
 
 # Run the script
 main "$@"

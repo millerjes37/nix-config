@@ -21,6 +21,9 @@
           inherit system;
           config = {
             allowUnfree = true;
+            permittedInsecurePackages = [
+              "electron-25.9.0" # Required for some Electron apps
+            ];
           };
         };
         extraSpecialArgs = { inherit extraImports; };
@@ -30,6 +33,7 @@
           ({ pkgs, ... }: {
             home.username = username;
             home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+            nixpkgs.config.allowUnfree = true;
           })
         ];
       };
@@ -44,6 +48,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.${username} = import ./home.nix;
+            nixpkgs.config.allowUnfree = true;
           }
         ];
       };

@@ -3,10 +3,11 @@
 {
   # Import all Linux-specific modules
   imports = [
-    ./i3.nix           # Window manager
-    # ./gtk.nix        # GTK theming - temporarily disabled
-    ./rofi.nix         # Application launcher
-    ./linux-apps.nix   # Linux-specific applications
+    ../../modules/common/default.nix  # Common modules first
+    ./i3.nix                         # Window manager
+    ./rofi.nix                       # Application launcher
+    ./gtk.nix                        # GTK theming
+    ./linux-apps.nix                 # Linux-specific applications
   ];
   
   # Common Linux-specific packages

@@ -21,7 +21,9 @@ let
   
   # Platform-specific bindings
   macBindings = [];
-  linuxBindings = [];
+  linuxBindings = [
+    # Add Linux-specific shortcuts here if needed
+  ];
 in
 {
   # Use home-manager's built-in Alacritty module but with our custom settings
@@ -35,14 +37,6 @@ in
           # Use platform-specific fonts
           family = if isDarwin then "FiraCode Nerd Font" else "FiraMono Nerd Font Mono";
           style = "Regular";
-        };
-        bold = {
-          family = if isDarwin then "FiraCode Nerd Font" else "FiraMono Nerd Font Mono";
-          style = "Bold";
-        };
-        italic = {
-          family = if isDarwin then "FiraCode Nerd Font" else "FiraMono Nerd Font Mono";
-          style = "Italic";
         };
         # Use a slightly smaller font on Linux
         size = if isDarwin then 20 else 12;

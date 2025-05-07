@@ -3,6 +3,7 @@
 {
   # Import all macOS-specific modules
   imports = [
+    ../../modules/common/default.nix  # Common modules first
     ./yabai.nix       # Window manager
     ./skhd.nix        # Hotkey daemon
     ./apps.nix        # macOS applications
