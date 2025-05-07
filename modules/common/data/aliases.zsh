@@ -1,5 +1,26 @@
 # Common aliases for both platforms
 
+# Nix-specific commands
+# Rebuild the Nix configuration
+nixrebuild() {
+  $HOME/nix-config/scripts/rebuild.sh "$@"
+}
+
+# Run a short-lived Nix shell with specified packages
+nix-shell-with() {
+  nix-shell -p "$@" --run zsh
+}
+
+# Install a package with Nix
+nix-install() {
+  nix-env -iA "nixpkgs.$1"
+}
+
+# Search for a package in Nixpkgs
+nix-search() {
+  nix search nixpkgs "$@"
+}
+
 # File system navigation and listing
 alias ls='eza -lh --group-directories-first --icons'
 alias lsa='ls -a'
