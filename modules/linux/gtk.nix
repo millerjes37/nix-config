@@ -58,7 +58,7 @@
   # Additional cursor settings
   home.pointerCursor = {
     name = "Breeze";
-    package = pkgs.breeze-icons;
+    package = pkgs.kdePackages.breeze-icons;
     size = 24;
     gtk.enable = true;
     x11.enable = true;
@@ -68,7 +68,7 @@
   home.packages = with pkgs; [
     gruvbox-dark-gtk
     papirus-icon-theme
-    breeze-icons
+    kdePackages.breeze-icons
     adwaita-qt
     lxappearance # GTK theme switching tool
   ];
