@@ -207,13 +207,7 @@ in
     };
   };
 
-  # Only enable on Linux platforms, do nothing on Darwin
-  assertions = lib.mkIf (!pkgs.stdenv.isLinux) [
-    {
-      assertion = !cfg.enable;
-      message = "i3 is only supported on Linux.";
-    }
-  ];
+  # We'll handle the platform check in home.nix
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [

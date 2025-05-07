@@ -109,13 +109,7 @@ in
     };
   };
 
-  # Only enable on Darwin platforms, do nothing on Linux
-  assertions = lib.mkIf (!pkgs.stdenv.isDarwin) [
-    {
-      assertion = !cfg.enable;
-      message = "SKHD is only supported on macOS.";
-    }
-  ];
+  # We'll handle the platform check in home.nix
 
   config = mkIf cfg.enable {
     home.packages = [ pkgs.skhd ];
