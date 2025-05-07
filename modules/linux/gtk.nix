@@ -57,8 +57,8 @@
   
   # Additional cursor settings
   home.pointerCursor = {
-    name = "Breeze";
-    package = pkgs.kdePackages.breeze-icons;
+    name = "Vanilla-DMZ";
+    package = pkgs.vanilla-dmz;
     size = 24;
     gtk.enable = true;
     x11.enable = true;
@@ -68,7 +68,7 @@
   home.packages = with pkgs; [
     gruvbox-dark-gtk
     papirus-icon-theme
-    kdePackages.breeze-icons
+    vanilla-dmz
     adwaita-qt
     lxappearance # GTK theme switching tool
   ];
