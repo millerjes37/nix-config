@@ -61,9 +61,9 @@
         ];
       };
       
-      "jacksonmiller@linux" = mkHomeConfig {
+      "jackson@linux" = mkHomeConfig {
         system = "x86_64-linux";
-        username = "jacksonmiller";
+        username = "jackson";
         extraImports = [
           ./modules/i3.nix
         ];
