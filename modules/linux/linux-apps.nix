@@ -40,7 +40,7 @@
     # Development tools
     insomnia       # API client
     postman        # API client
-    dbeaver        # Database GUI
+    dbeaver-bin    # Database GUI
     pgadmin4       # PostgreSQL admin
     
     # Fonts
