@@ -138,10 +138,10 @@
       autoload -U compinit && compinit
       zstyle ':completion:*' menu select
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
-      zstyle ':completion:*' group-name ''
-      zstyle ':completion:*:descriptions' format '%F{green}%B-- %d --%b%f'
-      zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
+      zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+      zstyle ':completion:*' group-name "''"
+      zstyle ':completion:*:descriptions' format "'%F{green}%B-- %d --%b%f'"
+      zstyle ':completion:*:warnings' format "'%F{red}-- no matches found --%f'"
       
       # Key bindings
       bindkey '^[[A' history-substring-search-up
