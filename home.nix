@@ -9,7 +9,9 @@ let
 in
 {
   # Import all modules directly - platform-specific modules come via extraImports
-  imports = extraImports;
+  imports = [ 
+    ./modules/common/default.nix  # Add direct import to common modules
+  ] ++ extraImports;
   
   # Enable font discovery for all platforms
   fonts.fontconfig.enable = true;

@@ -23,7 +23,7 @@
     
     # Core programming language support
     ## Rust
-    rustup
+    # rustup removed to avoid collision with rust-analyzer
     
     ## Python
     python3

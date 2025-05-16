@@ -7,7 +7,7 @@
     nodejs_20  # LTS Node.js
     deno       # JavaScript/TypeScript runtime
     go         # Go language
-    rustup     # Rust language
+    # rustup removed to avoid collision with rust-analyzer
     python311  # Python 3.11
     
     # Build tools
@@ -32,7 +32,7 @@
     
     # Formatters and linters
     nodePackages.prettier   # Code formatter
-    rustfmt                # Rust formatter
+    # rustfmt removed to avoid collision with rustup
     python311Packages.black # Python formatter
     python311Packages.pylint # Python linter
     

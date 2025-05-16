@@ -1,0 +1,51 @@
+# Common aliases for both platforms
+
+# Nix-specific commands
+# Rebuild the Nix configuration
+nixrebuild() {
+  $HOME/nix-config/scripts/rebuild.sh "$@"
+}
+
+# Run a short-lived Nix shell with specified packages
+nix-shell-with() {
+  nix-shell -p "$@" --run zsh
+}
+
+# Install a package with Nix
+nix-install() {
+  nix-env -iA "nixpkgs.$1"
+}
+
+# Search for a package in Nixpkgs
+nix-search() {
+  nix search nixpkgs "$@"
+}
+
+# File system navigation and listing
+alias ls='eza -lh --group-directories-first --icons'
+alias lsa='ls -a'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='lt -a'
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Editors and tools
+alias n='nvim'
+alias v='nvim'
+alias vim='nvim'
+alias g='git'
+alias d='docker'
+
+# Git shortcuts
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit -a -m'
+alias gcad='git commit -a --amend'
+alias gp='git push'
+alias gl='git log --graph --pretty=format:"%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold cyan)<%an>%Creset"'

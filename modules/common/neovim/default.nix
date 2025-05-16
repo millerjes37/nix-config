@@ -162,7 +162,7 @@
     # Language servers
     nodePackages.typescript-language-server
     gopls
-    rust-analyzer
+    # rust-analyzer moved to development.nix
     
     # Formatting tools
     nodePackages.prettier

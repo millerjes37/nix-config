@@ -6,7 +6,8 @@
     ./zsh.nix
     ./alacritty.nix
     ./emacs.nix
-    ./neovim
+    ./neovim/default.nix
+    ./development.nix
   ];
   
   # Common packages for both platforms
@@ -16,7 +17,7 @@
     gh                  # GitHub CLI
     gitui               # TUI Git client
     just                # Command runner
-    rustup              # Rust toolchain
+    # rustup removed to avoid collision with rust-analyzer
     python3             # Python
     
     # CLI utilities
