@@ -66,9 +66,6 @@
 
   # Install additional theme-related packages
   home.packages = with pkgs; [
-    gruvbox-dark-gtk
-    papirus-icon-theme
-    vanilla-dmz
     adwaita-qt
     lxappearance # GTK theme switching tool
   ];
