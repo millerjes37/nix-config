@@ -12,8 +12,8 @@
     # Define shell aliases using absolute paths to ensure they work
     shellAliases = {
       # Nix aliases with platform-specific paths
-      nixrebuild = if pkgs.stdenv.isDarwin 
-        then "/Users/${config.home.username}/nix-config/scripts/rebuild.sh" 
+      nixrebuild = if pkgs.stdenv.isDarwin
+        then "/Users/${config.home.username}/nix-config/scripts/rebuild.sh"
         else "/home/${config.home.username}/nix-config/scripts/rebuild.sh";
 
       # File listing with enhanced colors (greens, teals, cyans, creams)
@@ -64,10 +64,10 @@
       # Load powerlevel10k
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-      
+
       # Ensure the rebuild script is executable
       chmod +x ${homeDir}/nix-config/scripts/rebuild.sh
-      
+
       # Make sure we can run binaries from various locations
       path+=(
         $HOME/.nix-profile/bin
@@ -78,7 +78,7 @@
         ${if pkgs.stdenv.isDarwin then "/opt/local/bin" else ""}
         ${pkgs.uutils-coreutils}/bin
       )
-      
+
       # Export the path
       export PATH
 
@@ -87,11 +87,11 @@
       nixrebuild() {
         ${homeDir}/nix-config/scripts/rebuild.sh "$@"
       }
-      
+
       # Load utility functions and aliases
       [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
       [[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
-      
+
       # Initialize zoxide (with cd replacement)
       if command -v zoxide &>/dev/null; then
         eval "$(zoxide init zsh --cmd cd)"
@@ -138,7 +138,7 @@
       autoload -U compinit && compinit
       zstyle ':completion:*' menu select
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-      
+
       # Key bindings
       bindkey '^[[A' history-substring-search-up
       bindkey '^[[B' history-substring-search-down
@@ -167,7 +167,7 @@
       enable = true;
       plugins = [ "git" "sudo" "colored-man-pages" ];
     };
-    
+
     # Enable native syntax highlighting (don't need zplug)
     syntaxHighlighting = {
       enable = true;
@@ -184,15 +184,15 @@
         path = "fg=cyan,underline";
         path_pathseparator = "fg=cyan,bold,underline";
         globbing = "fg=cyan,bold";
-        unknown-token = "fg=red,bold"; 
+        unknown-token = "fg=red,bold";
       };
     };
-    
+
     # Enable history substring search
     historySubstringSearch = {
       enable = true;
     };
-    
+
     # We use zoxide directly via initExtra instead
     # of this option which doesn't exist
   };
@@ -219,7 +219,6 @@
     choose
     zoxide
     starship
-    neovim
     zsh-powerlevel10k
     fzf
     jq
@@ -236,5 +235,6 @@
     xh
     qsv
     macchina
+    zellij
   ];
 }

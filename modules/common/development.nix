@@ -8,45 +8,44 @@
     deno       # JavaScript/TypeScript runtime
     go         # Go language
     # rustup removed to avoid collision with rust-analyzer
-    python311  # Python 3.11
-    
+
     # Build tools
     cmake      # C/C++ build system
     gnumake    # GNU Make build system
     ninja      # Fast build system
-    
+
     # Language servers
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
     python311Packages.python-lsp-server
     rust-analyzer
     gopls
-    
+
     # Development utilities
     gh         # GitHub CLI
     direnv     # Environment management
     docker-compose # Container orchestration
-    
+
     # Documentation tools
     pandoc     # Document converter
-    
+
     # Formatters and linters
     nodePackages.prettier   # Code formatter
     # rustfmt removed to avoid collision with rustup
     python311Packages.black # Python formatter
     python311Packages.pylint # Python linter
-    
+
     # Database tools
     dbeaver-bin    # Universal database tool
   ];
-  
+
   # Enable direnv for automatic environment switching
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
   };
-  
+
   # VSCode configuration
   programs.vscode = {
     enable = true;
@@ -56,12 +55,12 @@
         vscodevim.vim                 # Vim keybindings
         eamodio.gitlens               # Git integration
         yzhang.markdown-all-in-one    # Markdown support
-        
+
         # Language support
         rust-lang.rust-analyzer       # Rust
         ms-python.python              # Python
         golang.go                     # Go
-        
+
         # Themes & UI
         dracula-theme.theme-dracula   # Dracula theme
         pkief.material-icon-theme     # Icon theme

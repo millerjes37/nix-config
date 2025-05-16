@@ -9,7 +9,7 @@
     ./neovim/default.nix
     ./development.nix
   ];
-  
+
   # Common packages for both platforms
   home.packages = with pkgs; [
     # Development tools
@@ -19,7 +19,7 @@
     just                # Command runner
     # rustup removed to avoid collision with rust-analyzer
     python3             # Python
-    
+
     # CLI utilities
     ripgrep             # Fast search
     fd                  # Alternative to find
@@ -36,52 +36,52 @@
     hyperfine           # Benchmarking
     atuin               # Shell history
     zoxide              # Smart cd command
-    
+
     # Text processing
     sd                  # Better sed
     delta               # Better diff
     difftastic          # Syntax-aware diff
-    
+
     # Network tools
     curl
     wget
     bind                # For dig command
     mtr                 # Better traceroute
     nmap                # Network discovery
-    
+
     # File compression
     ouch                # Compression tool
     p7zip               # 7zip
     unzip
-    
+
     # File transfer
     rsync
     miniserve           # Simple HTTP server
   ];
-  
+
   # Common home-manager settings for both platforms
   programs = {
     home-manager.enable = true;
   };
-  
+
   # Create directory for common shell scripts
   home.file.".local/bin" = lib.mkIf (builtins.pathExists ../scripts/common) {
     source = ../scripts/common;
   };
-  
+
   # Common git configuration
   programs.git = {
     enable = true;
     userName = "Jackson Miller";
-    userEmail = "jackson@example.com";  # Replace with your email
-    
+    userEmail = "jackson@civitas.ltd";  # Replace with your email
+
     extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;
       core.editor = "nvim";
       core.autocrlf = "input";
     };
-    
+
     delta = {
       enable = true;
       options = {
@@ -93,7 +93,7 @@
       };
     };
   };
-    
+
   # Configure commonly used editors
   programs.neovim = {
     enable = true;
@@ -101,7 +101,7 @@
     viAlias = true;
     vimAlias = true;
   };
-  
+
   # Configure common shell tools
   programs.fzf.enable = true;
   programs.starship.enable = true;
