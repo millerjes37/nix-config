@@ -26,11 +26,6 @@ in
   programs = {
     # Enable home-manager
     home-manager.enable = true;
-    
-    # Configure browser - different for each platform
-    firefox = {
-      enable = isLinux;  # Only enable on Linux, use App Store on macOS
-    };
   };
 
   # On Linux, enable X session and set proper keyboard configuration
@@ -43,6 +38,8 @@ in
   launchd = lib.mkIf isDarwin {
     enable = true;
   };
+
+programs.zsh.enable = true;
 
   # Add hooks for post-build actions based on platform
   home.activation = {
