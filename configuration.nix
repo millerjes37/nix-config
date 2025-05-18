@@ -10,6 +10,8 @@
     alacritty  # Terminal emulator
     jq         # Used in the terminal launch script
     yabai      # Tiling Window Manager
+    inputs.zen-browser.packages."${system}".default
+
 ];
 
   # Enable Homebrew integration
