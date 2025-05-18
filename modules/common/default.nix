@@ -8,7 +8,6 @@
     ./emacs.nix
     ./neovim/default.nix
     ./development.nix
-    ./zen-browser.nix
   ];
 
   home.packages = with pkgs; [
