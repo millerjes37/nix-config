@@ -8,56 +8,79 @@
     ./emacs.nix
     ./neovim/default.nix
     ./development.nix
+    ./zen-browser.nix
   ];
 
-  # Common packages for both platforms
   home.packages = with pkgs; [
-    # Development tools
-    git
-    gh                  # GitHub CLI
-    gitui               # TUI Git client
-    just                # Command runner
-    # rustup removed to avoid collision with rust-analyzer
-    python3             # Python
+  # Development tools
+  git
+  gh                  # GitHub CLI
+  gitui               # TUI Git client
+  lazygit             # TUI Git client (Go)
+  just                # Command runner
+  python3             # Python
+  helix               # Modal text editor (Rust)
+  starship            # Shell prompt (Rust)
+  cargo               # Rust package manager
+  dprint              # Code formatter (Rust)
 
-    # CLI utilities
-    ripgrep             # Fast search
-    fd                  # Alternative to find
-    jq                  # JSON processor
-    yq                  # YAML processor
-    fzf                 # Fuzzy finder
-    bat                 # Better cat
-    eza                 # Better ls
-    du-dust             # Better du
-    bottom              # Better top
-    procs               # Better ps
-    tealdeer            # TL;DR pages
-    xh                  # HTTP client
-    hyperfine           # Benchmarking
-    atuin               # Shell history
-    zoxide              # Smart cd command
+  # CLI utilities
+  ripgrep             # Fast search
+  fd                  # Alternative to find
+  jq                  # JSON processor
+  yq                  # YAML processor
+  fzf                 # Fuzzy finder
+  bat                 # Better cat
+  eza                 # Better ls
+  du-dust             # Better du
+  bottom              # Better top
+  procs               # Better ps
+  tealdeer            # TL;DR pages
+  xh                  # HTTP client
+  hyperfine           # Benchmarking
+  atuin               # Shell history
+  zoxide              # Smart cd command
+  broot               # File navigator (Rust)
+  tokei               # Code stats (Rust)
+  zellij              # Terminal multiplexer (Rust)
+  gum                 # CLI scripting prompts (Go)
+  onefetch            # Git repo summary (Rust)
 
-    # Text processing
-    sd                  # Better sed
-    delta               # Better diff
-    difftastic          # Syntax-aware diff
+  # Text processing
+  sd                  # Better sed
+  delta               # Better diff
+  difftastic          # Syntax-aware diff
+  miller              # CSV/JSON processor (Rust)
 
-    # Network tools
-    curl
-    wget
-    bind                # For dig command
-    mtr                 # Better traceroute
-    nmap                # Network discovery
+  # System monitoring
+  btop                # Resource monitor
+  glances             # System monitor (Python)
+  bandwhich           # Network bandwidth monitor (Rust)
 
-    # File compression
-    ouch                # Compression tool
-    p7zip               # 7zip
-    unzip
+  # Network tools
+  curl
+  wget
+  dog                 # DNS lookup (Rust)
+  mtr                 # Better traceroute
+  nmap                # Network discovery
+  trippy              # Ping/traceroute TUI (Rust)
+  gping               # Graphical ping (Rust)
+  feroxbuster         # Web directory brute-forcer (Rust)
 
-    # File transfer
-    rsync
-    miniserve           # Simple HTTP server
-  ];
+  # File compression
+  ouch                # Compression tool
+  p7zip               # 7zip
+  unzip
+  zstd                # High-performance compression
+
+  # File transfer
+  rsync
+  miniserve           # Simple HTTP server
+
+  # Security tools
+  age                 # File encryption (Go)
+  fx                  # JSON viewer (JS)
+];
 
   # Common home-manager settings for both platforms
   programs = {
