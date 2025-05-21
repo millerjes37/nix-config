@@ -235,6 +235,20 @@ function main() {
     print_error "Please don't run this script as root/sudo"
     exit 1
   fi
+
+  # Check for yabai binary
+  if ! command -v yabai &> /dev/null; then
+      print_error "Error: yabai is not installed or not in your PATH"
+      print_warning "Please make sure yabai is installed via Nix or Homebrew"
+      exit 1
+  fi
+
+  # Check for skhd binary
+  if ! command -v skhd &> /dev/null; then
+      print_error "Error: skhd is not installed or not in your PATH"
+      print_warning "Please make sure skhd is installed via Nix or Homebrew"
+      exit 1
+  fi
   
   case "$1" in
     --skhd-only)
