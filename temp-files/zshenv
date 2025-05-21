@@ -1,7 +1,0 @@
-# Auto-generated zshenv file for Nix integration
-# Load Nix environment
-if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-fi
-# Add Nix paths
-export PATH="$HOME/.nix-profile/bin:$PATH"

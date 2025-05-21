@@ -2,6 +2,16 @@
 
 This repository contains a Nix configuration for home-manager that works on both macOS and Linux.
 
+## Project Goals
+
+The primary goal of this Nix configuration is to provide a consistent, reproducible, and easily manageable development environment across both macOS and Linux systems. It aims to:
+
+-   **Simplify Setup**: Automate the installation and configuration of development tools, shell environments, and window managers.
+-   **Ensure Consistency**: Maintain a synchronized environment across different machines and operating systems.
+-   **Promote Modularity**: Allow for easy addition and customization of applications and system settings through a modular structure.
+-   **Leverage Nix Flakes**: Utilize the power of Nix flakes for better dependency management and reproducibility.
+-   **Be Extensible**: Provide a clear framework for users to add their own tools and configurations.
+
 ## Overview
 
 This configuration uses Nix flakes and home-manager to manage:
@@ -23,26 +33,179 @@ The configuration is organized with a modular approach:
 ├── home.nix                # Main home-manager configuration
 ├── configuration.nix       # Darwin system configuration (macOS only)
 ├── modules/
-│   ├── common/             # Shared modules for both platforms
+│   ├── common/             # Shared core environment modules for both platforms
 │   │   ├── default.nix     # Common module imports
 │   │   ├── alacritty.nix   # Terminal configuration
 │   │   ├── zsh.nix         # Shell configuration
 │   │   └── emacs.nix       # Editor configuration
-│   ├── darwin/             # macOS-specific modules
+│   ├── darwin/             # macOS-specific core environment modules
 │   │   ├── default.nix     # Main macOS module
 │   │   ├── yabai.nix       # Window management
 │   │   ├── skhd.nix        # Hotkey daemon
-│   │   └── apps.nix        # macOS applications
-│   └── linux/              # Linux-specific modules
+│   │   └── apps.nix        # macOS applications (deprecated, see applications/)
+│   └── linux/              # Linux-specific core environment modules
 │       ├── default.nix     # Main Linux module
 │       ├── i3.nix          # Window management
 │       ├── rofi.nix        # Application launcher
 │       ├── gtk.nix         # GTK theming
-│       └── linux-apps.nix  # Linux applications
+│       └── linux-apps.nix  # Linux applications (deprecated, see applications/)
+├── applications/           # User-specific applications and services
+│   ├── common/             # Applications for both platforms
+│   │   └── default.nix     # Imports for common applications
+│   ├── darwin/             # macOS-specific applications
+│   │   └── default.nix     # Imports for macOS-specific applications
+│   └── linux/              # Linux-specific applications
+│       └── default.nix     # Imports for Linux-specific applications
 └── scripts/
     ├── rebuild.sh          # Cross-platform rebuild script
     └── ...
 ```
+The `modules/` directory contains core environment configurations (shell, terminal, editors, window managers).
+The `applications/` directory is intended for user-added applications and services, keeping them separate from the core environment setup.
+
+## Adding New Applications as Modules
+
+This configuration encourages adding new applications or services as self-contained modules. This approach enhances organization and makes it easier to manage and customize your setup.
+
+### Philosophy
+
+-   **Modularity**: Each application should ideally reside in its own `.nix` file, defining its package and any specific configurations.
+-   **Separation of Concerns**:
+    -   **Core Environment Modules (`modules/`)**: These define the fundamental parts of your environment (shell, terminal, window manager, core development tools like Git). Changes here are generally less frequent.
+    -   **User Applications/Services (`applications/`)**: This is where you add most of your day-to-day applications, tools, or background services. This directory is designed for more frequent customization by the user.
+
+### Adding a Common Application
+
+Common applications are those you want to be available on both macOS and Linux.
+
+1.  **Create the Application File**:
+    Create a new `.nix` file in the `applications/common/` directory. For example, to add a hypothetical notes application called `simplenotes`, you would create `applications/common/simplenotes.nix`.
+
+2.  **Define the Application**:
+    In `applications/common/simplenotes.nix`, define the package and any configuration.
+    ```nix
+    # applications/common/simplenotes.nix
+    { pkgs, ... }:
+
+    {
+      home.packages = [
+        pkgs.simplenotes # Assuming 'simplenotes' is available in nixpkgs
+      ];
+
+      # Optional: Add any configuration for simplenotes here
+      # environment.variables = { SIMPLENOTES_CONFIG_DIR = "~/.config/simplenotes"; };
+    }
+    ```
+
+3.  **Import the Module**:
+    Open `applications/common/default.nix`. If this file doesn't exist, create it. This file serves as an importer for all common applications.
+    Add your new application module to its `imports` list:
+    ```nix
+    # applications/common/default.nix
+    { ... }:
+
+    {
+      imports = [
+        ./simplenotes.nix
+        # ./another-common-app.nix
+      ];
+    }
+    ```
+    Finally, ensure that `applications/common/default.nix` is imported into your main `home.nix` or a relevant common modules aggregator if you have one (e.g., `modules/common/default.nix` might be a good place if it imports user applications). For this setup, let's assume it's imported into `modules/common/default.nix`:
+
+    ```nix
+    # modules/common/default.nix
+    { pkgs, ... }:
+
+    {
+      imports = [
+        ./alacritty.nix
+        ./zsh.nix
+        ./emacs.nix
+        ../../applications/common/default.nix # <-- Add this line
+      ];
+
+      # ... other common configurations
+    }
+    ```
+
+### Adding a Platform-Specific Application
+
+Platform-specific applications are those intended only for macOS or only for Linux.
+
+1.  **Create the Application File**:
+    Create a new `.nix` file in the appropriate platform-specific directory.
+    -   For a macOS GUI app like `supernotes-gui`, create `applications/darwin/supernotes-gui.nix`.
+    -   For a Linux utility like `ksysguard`, create `applications/linux/ksysguard.nix`.
+
+2.  **Define the Application**:
+    In the new file (e.g., `applications/darwin/supernotes-gui.nix`):
+    ```nix
+    # applications/darwin/supernotes-gui.nix
+    { pkgs, ... }:
+
+    {
+      home.packages = [
+        pkgs.supernotes-gui # Assuming this package exists for darwin
+      ];
+
+      # Optional: macOS-specific settings
+      # services.supernotes-agent = { enable = true; };
+    }
+    ```
+
+3.  **Import the Module**:
+    Open the `default.nix` file for that platform within the `applications` directory (e.g., `applications/darwin/default.nix` or `applications/linux/default.nix`). If these files don't exist, create them.
+    Add your new application module to its `imports` list:
+
+    ```nix
+    # applications/darwin/default.nix
+    { ... }:
+
+    {
+      imports = [
+        ./supernotes-gui.nix
+        # ./another-darwin-app.nix
+      ];
+    }
+    ```
+    Then, import this platform-specific application aggregator into the main platform module:
+
+    For macOS, edit `modules/darwin/default.nix`:
+    ```nix
+    # modules/darwin/default.nix
+    { pkgs, ... }:
+
+    {
+      imports = [
+        ./yabai.nix
+        ./skhd.nix
+        # ./apps.nix # This can be removed or refactored if it only contained packages
+        ../../applications/darwin/default.nix # <-- Add this line
+      ];
+
+      # ... other macOS configurations
+    }
+    ```
+    For Linux, edit `modules/linux/default.nix`:
+    ```nix
+    # modules/linux/default.nix
+    { pkgs, ... }:
+
+    {
+      imports = [
+        ./i3.nix
+        ./rofi.nix
+        ./gtk.nix
+        # ./linux-apps.nix # This can be removed or refactored
+        ../../applications/linux/default.nix # <-- Add this line
+      ];
+
+      # ... other Linux configurations
+    }
+    ```
+
+This modular approach keeps your application configurations tidy and makes it straightforward to see what's installed where.
 
 ## Usage
 
@@ -89,9 +252,7 @@ The configuration is organized with a modular approach:
    - Use `pkgs.stdenv.isDarwin` and `pkgs.stdenv.isLinux` for platform-specific options
 
 2. Adding Custom Packages:
-   - Common packages: Add to `modules/common/default.nix`
-   - macOS-specific: Add to `modules/darwin/default.nix` or `modules/darwin/apps.nix`
-   - Linux-specific: Add to `modules/linux/default.nix` or `modules/linux/linux-apps.nix`
+   - Refer to the "Adding New Applications as Modules" section above.
 
 ### Key Features
 
@@ -129,7 +290,7 @@ The configuration is organized with a modular approach:
 
 - **Yabai**: Tiling window manager for macOS
 - **Skhd**: Simple hotkey daemon for macOS
-- **Homebrew Integration**: Template for Homebrew bundle
+- **Homebrew Integration**: Template for Homebrew bundle (Note: managing apps via Nix is preferred)
 
 ### Linux-Specific Components
 

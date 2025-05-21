@@ -6,13 +6,14 @@ set -e
 
 # Define paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+NIX_CONFIG_DIR="$(cd "$SCRIPT_DIR/.." && pwd)" # Added NIX_CONFIG_DIR
 LAUNCH_AGENTS_DIR="$HOME/Library/LaunchAgents"
-YABAI_PLIST="$SCRIPT_DIR/com.koekeishiya.yabai.plist"
-SKHD_PLIST="$SCRIPT_DIR/com.koekeishiya.skhd.plist"
+YABAI_PLIST="$SCRIPT_DIR/com.koekeishiya.yabai.plist" # This is a launchd plist template, not a config file
+SKHD_PLIST="$SCRIPT_DIR/com.koekeishiya.skhd.plist" # This is a launchd plist template, not a config file
 YABAI_CONFIG_DIR="$HOME/.config/yabai"
 SKHD_CONFIG_DIR="$HOME/.config/skhd"
-YABAI_CONFIG="$SCRIPT_DIR/yabairc"
-SKHD_CONFIG="$SCRIPT_DIR/skhdrc"
+YABAI_CONFIG="$NIX_CONFIG_DIR/yabairc" # Changed to root yabairc
+SKHD_CONFIG="$NIX_CONFIG_DIR/skhdrc"   # Changed to root skhdrc
 
 # Create config directories if they don't exist
 mkdir -p "$YABAI_CONFIG_DIR"
@@ -60,12 +61,12 @@ cat > "$LAUNCH_AGENTS_DIR/com.koekeishiya.yabai.plist" << EOF
     <string>com.koekeishiya.yabai</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/jacksonmiller/.nix-profile/bin/yabai</string>
+        <string>$HOME/.nix-profile/bin/yabai</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/Users/jacksonmiller/.nix-profile/bin:/run/current-system/sw/bin:/etc/profiles/per-user/jacksonmiller/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>$HOME/.nix-profile/bin:/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     </dict>
     <key>RunAtLoad</key>
     <true/>
@@ -116,7 +117,7 @@ echo "Installed SKHD service"
 if ! launchctl load "$LAUNCH_AGENTS_DIR/com.koekeishiya.yabai.plist"; then
     echo "Failed to load Yabai with LaunchAgent, starting directly..."
     pkill -x yabai 2>/dev/null || true
-    /Users/jacksonmiller/.nix-profile/bin/yabai &
+    "$HOME/.nix-profile/bin/yabai" &
     disown
     echo "Yabai started directly"
 else

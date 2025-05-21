@@ -1,51 +1,89 @@
 { config, lib, pkgs, extraImports ? [], ... }:
 
+# This is the main home-manager configuration file.
+# It's used to define user-specific packages, dotfiles, and services.
+# - `config`: Provides access to the configuration options defined in modules.
+# - `lib`: Provides helper functions from Nixpkgs.
+# - `pkgs`: Provides access to the Nix Packages collection.
+# - `extraImports`: A list of additional modules passed from the flake,
+#   used here to import platform-specific configurations (macOS or Linux).
+
 let
+  # `isDarwin`: A boolean flag that is true if the current system is macOS.
   isDarwin = pkgs.stdenv.isDarwin;
+  # `isLinux`: A boolean flag that is true if the current system is Linux.
   isLinux = pkgs.stdenv.isLinux;
   
-  # Platform identification
+  # `platformName`: A string identifying the current platform ("darwin" or "linux").
+  # This can be useful for conditional configurations within this file or imported modules,
+  # though `isDarwin` and `isLinux` are often used directly.
   platformName = if isDarwin then "darwin" else "linux";
 in
 {
-  # Import all modules directly - platform-specific modules come via extraImports
+  # `imports`: Specifies a list of other Nix files (modules) to be included.
+  # This allows for a modular configuration.
+  # - `./modules/common/default.nix`: Imports shared configurations applicable to both macOS and Linux.
+  # - `++ extraImports`: Appends platform-specific modules (e.g., from `./modules/darwin/default.nix`
+  #   or `./modules/linux/default.nix`) that were passed in via the `flake.nix` `mkHomeConfig` function.
   imports = [ 
-    ./modules/common/default.nix  # Add direct import to common modules
-  ] ++ extraImports;
+    ./modules/common/default.nix  # Common modules for all platforms
+  ] ++ extraImports; # Platform-specific modules (macOS or Linux)
   
-  # Enable font discovery for all platforms
+  # `fonts.fontconfig.enable`: Enables fontconfig, a library for font customization and discovery.
+  # This ensures that fonts installed by home-manager are correctly recognized by applications.
   fonts.fontconfig.enable = true;
 
-  # Home-manager settings
+  # `home.stateVersion`: Specifies the version of home-manager to which this configuration is compatible.
+  # It's important to update this when migrating to newer home-manager releases if breaking changes occur.
+  # See home-manager documentation for details on state versions.
   home.stateVersion = "25.05";  
   
-  # Allow unfree packages
+  # `nixpkgs.config.allowUnfree`: Allows the installation of packages that have unfree licenses.
+  # Set to `true` to enable installation of proprietary software if needed.
   nixpkgs.config.allowUnfree = true;
   
-  # Configure program defaults that work on both platforms
+  # `programs`: A common namespace for configuring various applications managed by home-manager.
   programs = {
-    # Enable home-manager
+    # `home-manager.enable`: Enables the home-manager program itself, allowing it to manage your configuration.
+    # This is typically always true in a home-manager setup.
     home-manager.enable = true;
   };
 
-  # On Linux, enable X session and set proper keyboard configuration
+  # `xsession`: Configures the X session for Linux desktop environments.
+  # `lib.mkIf isLinux { ... }`: This block is only applied if the system is Linux (`isLinux` is true).
   xsession = lib.mkIf isLinux {
+    # `enable = true;`: Enables home-manager's X session management.
     enable = true;
+    # `numlock.enable = true;`: Ensures NumLock is enabled when the X session starts.
     numlock.enable = true;
   };
 
-  # On macOS, enable launchd
+  # `launchd`: Configures launchd, the service management framework on macOS.
+  # `lib.mkIf isDarwin { ... }`: This block is only applied if the system is macOS (`isDarwin` is true).
   launchd = lib.mkIf isDarwin {
+    # `enable = true;`: Enables home-manager's integration with launchd for managing user agents and daemons.
     enable = true;
   };
 
-programs.zsh.enable = true;
+# This seems to be a duplicate or misplaced line for enabling zsh.
+# zsh configuration is typically handled within `programs.zsh` in one of the imported modules (e.g., `modules/common/zsh.nix`).
+# If not, it should be within the `programs` block above.
+programs.zsh.enable = true; # This line should ideally be within `modules/common/zsh.nix` or similar.
 
-  # Add hooks for post-build actions based on platform
+  # `home.activation`: Defines actions to be run when the home-manager generation is activated (e.g., after `home-manager switch`).
+  # These are often used for tasks that need to happen outside of normal package installation or file linking.
   home.activation = {
+    # `reloadSystemdCustom`: A custom activation script specific to Linux systems using systemd.
+    # `lib.mkIf isLinux (...)`: This script only runs on Linux.
+    # `lib.hm.dag.entryAfter ["writeBoundary"]`: Ensures this script runs after home-manager has finished writing files.
+    # The script itself checks if `systemctl` is available and, if so, prints a message
+    # indicating that systemd user services might need reloading.
+    # In a more complete setup, it might actually run `systemctl --user daemon-reload`.
     reloadSystemdCustom = lib.mkIf isLinux (lib.hm.dag.entryAfter ["writeBoundary"] ''
       if command -v systemctl >/dev/null; then
         echo "Reloading systemd user services..."
+        # Consider adding: systemctl --user daemon-reload
+        # Consider adding: systemctl --user restart some.service (if you have user services managed by home-manager)
       fi
     '');
   };
