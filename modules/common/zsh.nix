@@ -17,18 +17,18 @@
         else "/home/${config.home.username}/nix-config/scripts/rebuild.sh";
 
       # File listing with enhanced colors (greens, teals, cyans, creams)
-      ls = "${pkgs.eza}/bin/eza --color=always --icons --group-directories-first --color-scale";
-      ll = "${pkgs.eza}/bin/eza -l --icons --git --color=always --header --group-directories-first --time-style=long-iso --color-scale --extended --no-filesize-metric";
-      la = "${pkgs.eza}/bin/eza -a --icons --color=always --color-scale --group-directories-first";
-      lla = "${pkgs.eza}/bin/eza -la --icons --git --color=always --header --group-directories-first --time-style=long-iso --color-scale --extended --no-filesize-metric";
-      lt = "${pkgs.eza}/bin/eza -T --icons --color=always --color-scale --level=3 --git-ignore";
-      lta = "${pkgs.eza}/bin/eza -Ta --icons --color=always --color-scale --git-ignore";
-      ltr = "${pkgs.eza}/bin/eza -l --icons --sort=modified --reverse --color=always --header --color-scale --git";
+      ls = "${pkgs.eza}/bin/eza --color=always --icons --group-directories-first"; # Removed --color-scale as LS_COLORS will handle it
+      ll = "${pkgs.eza}/bin/eza -l --icons --git --color=always --header --group-directories-first --time-style=long-iso --extended --no-filesize-metric"; # Removed --color-scale
+      la = "${pkgs.eza}/bin/eza -a --icons --color=always --group-directories-first"; # Removed --color-scale
+      lla = "${pkgs.eza}/bin/eza -la --icons --git --color=always --header --group-directories-first --time-style=long-iso --extended --no-filesize-metric"; # Removed --color-scale
+      lt = "${pkgs.eza}/bin/eza -T --icons --color=always --level=3 --git-ignore"; # Removed --color-scale
+      lta = "${pkgs.eza}/bin/eza -Ta --icons --color=always --git-ignore"; # Removed --color-scale
+      ltr = "${pkgs.eza}/bin/eza -l --icons --sort=modified --reverse --color=always --header --git"; # Removed --color-scale
 
       # Enhanced file content viewing with syntax highlighting
-      cat = "${pkgs.bat}/bin/bat --theme=Coldark-Cold --style=header,grid --italic-text=always --color=always";
-      less = "${pkgs.bat}/bin/bat --theme=Coldark-Cold --style=header,grid,numbers --italic-text=always --color=always --paging=always";
-      catp = "${pkgs.bat}/bin/bat --style=plain --color=always";
+      cat = "${pkgs.bat}/bin/bat --theme=Catppuccin-Mocha --style=header,grid --italic-text=always --color=always";
+      less = "${pkgs.bat}/bin/bat --theme=Catppuccin-Mocha --style=header,grid,numbers --italic-text=always --color=always --paging=always";
+      catp = "${pkgs.bat}/bin/bat --style=plain --color=always"; # Theme doesn't apply to plain style
 
       # Search tools
       find = "${pkgs.fd}/bin/fd";
@@ -108,14 +108,14 @@
         eval "$(atuin init zsh)"
       fi
 
-      # Environment variables with teal/cyan/green theme
-      export BAT_THEME="Coldark-Cold"  # Blue/green/teal theme with excellent contrast
+      # Environment variables with Catppuccin Mocha theme
+      export BAT_THEME="Catppuccin-Mocha"
       export BAT_STYLE="header,grid"  # Show file headers and borders
-      export DELTA_FEATURES="+side-by-side"
+      export DELTA_FEATURES="+side-by-side" # Delta theme will be set in cli.nix
       export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-      export LESS="-R"
-      # Custom LS_COLORS with teal/cyan/green/cream theme
-      export LS_COLORS="di=01;36:ln=04;37:so=01;35:pi=01;33:ex=01;32:bd=01;36;40:cd=01;36;40:su=01;37;41:sg=01;37;42:tw=01;37;44:ow=01;37;44"
+      export LESS="-R" # Ensures `less` processes color codes correctly
+      # Catppuccin Mocha LS_COLORS from https://github.com/catppuccin/dircolors
+      export LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;40:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
 
       # Zsh settings
       setopt AUTO_CD              # Change directory by typing directory name

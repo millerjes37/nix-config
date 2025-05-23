@@ -65,11 +65,6 @@ in
     enable = true;
   };
 
-# This seems to be a duplicate or misplaced line for enabling zsh.
-# zsh configuration is typically handled within `programs.zsh` in one of the imported modules (e.g., `modules/common/zsh.nix`).
-# If not, it should be within the `programs` block above.
-programs.zsh.enable = true; # This line should ideally be within `modules/common/zsh.nix` or similar.
-
   # `home.activation`: Defines actions to be run when the home-manager generation is activated (e.g., after `home-manager switch`).
   # These are often used for tasks that need to happen outside of normal package installation or file linking.
   home.activation = {

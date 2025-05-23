@@ -62,36 +62,82 @@ in
         thickness = 0.2;
       };
       
-      # Simple dark theme (terminal-centric)
+      # Catppuccin Mocha theme
       colors = {
         primary = {
-          background = "#1d1f21";
-          foreground = "#c5c8c6";
+          background = "#1e1e2e";
+          foreground = "#cdd6f4";
+          # dim_foreground = "#7f849c"; # Not a standard alacritty primary option
+          # bright_foreground = "#cdd6f4"; # Not a standard alacritty primary option
         };
         cursor = {
-          text = "#1d1f21";
-          cursor = "#c5c8c6";
+          text = "#1e1e2e";
+          cursor = "#f5e0dc";
+        };
+        vi_mode_cursor = {
+          text = "#1e1e2e";
+          cursor = "#b4befe";
+        };
+        search = {
+          matches = {
+            foreground = "#1e1e2e";
+            background = "#a6adc8";
+          };
+          focused_match = {
+            foreground = "#1e1e2e";
+            background = "#a6e3a1";
+          };
+        };
+        footer_bar = { # This might not be a standard Alacritty option, will check.
+                       # Update: Alacritty docs confirm 'footer_bar' is valid.
+          foreground = "#1e1e2e";
+          background = "#a6adc8";
+        };
+        hints = {
+          start = {
+            foreground = "#1e1e2e";
+            background = "#f9e2af";
+          };
+          end = {
+            foreground = "#1e1e2e";
+            background = "#a6adc8";
+          };
+        };
+        selection = {
+          text = "#1e1e2e";
+          background = "#f5e0dc";
         };
         normal = {
-          black = "#1d1f21";
-          red = "#cc6666";
-          green = "#b5bd68";
-          yellow = "#f0c674";
-          blue = "#81a2be";
-          magenta = "#b294bb";
-          cyan = "#8abeb7";
-          white = "#c5c8c6";
+          black = "#45475a";
+          red = "#f38ba8";
+          green = "#a6e3a1";
+          yellow = "#f9e2af";
+          blue = "#89b4fa";
+          magenta = "#f5c2e7";
+          cyan = "#94e2d5";
+          white = "#bac2de";
         };
         bright = {
-          black = "#666666";
-          red = "#d54e53";
-          green = "#b9ca4a";
-          yellow = "#e7c547";
-          blue = "#7aa6da";
-          magenta = "#c397d8";
-          cyan = "#70c0b1";
-          white = "#eaeaea";
+          black = "#585b70";
+          red = "#f38ba8";
+          green = "#a6e3a1";
+          yellow = "#f9e2af";
+          blue = "#89b4fa";
+          magenta = "#f5c2e7";
+          cyan = "#94e2d5";
+          white = "#a6adc8";
         };
+        # dim_foreground and bright_foreground from the TOML root are general palette colors.
+        # Alacritty also has top-level `dim` and `bright` sections for *all* dim/bright colors if needed,
+        # but Catppuccin provides them per color (normal.black, bright.black etc), which is standard.
+        # The specific `dim_foreground` from the TOML root was "#7f849c".
+        # If needed, one could set `colors.dim.foreground = "#7f849c";` but this is not standard.
+        # The TOML also had a root `bright_foreground = "#cdd6f4"`, which is the same as primary.foreground.
+
+        indexed_colors = [
+          { index = 16; color = "#fab387"; }
+          { index = 17; color = "#f5e0dc"; }
+        ];
       };
       
       # Essential key bindings
