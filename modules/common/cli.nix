@@ -26,7 +26,7 @@
   programs.bat = {
     enable = true;
     config = {
-      theme = "gruvbox-dark";
+      theme = "Catppuccin-Mocha"; # Updated theme
       italic-text = "always";
       style = "numbers,changes,header";
     };
@@ -56,7 +56,7 @@
     delta = {
       enable = true;
       options = {
-        syntax-theme = "gruvbox-dark";
+        syntax-theme = "Catppuccin-Mocha"; # Updated theme
         side-by-side = true;
         line-numbers = true;
       };
@@ -74,37 +74,4 @@
     };
   };
   
-  # Neovim basic configuration
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    plugins = with pkgs.vimPlugins; [
-      vim-nix        # Nix syntax highlighting
-      gruvbox        # Color scheme
-      vim-surround   # Surrounding text objects
-      vim-commentary # Comment handling
-    ];
-    extraConfig = ''
-      " Basic settings
-      set number relativenumber
-      set tabstop=2 shiftwidth=2 expandtab
-      set autoindent smartindent
-      set cursorline
-      set ignorecase smartcase
-      set termguicolors
-      set mouse=a
-      
-      " Set color scheme
-      colorscheme gruvbox
-      set background=dark
-      
-      " Keymaps
-      let mapleader = " "
-      nnoremap <leader>ff :find<space>
-      nnoremap <leader>w :write<cr>
-      nnoremap <leader>q :quit<cr>
-    '';
-  };
 }
