@@ -34,10 +34,6 @@
 
       # Syntax, Highlighting & Language Support
       treesitter
-      lsp = {
-        enable = true; # nvim-lspconfig
-        # servers = { ... }; # Server configurations will be handled later
-      };
       cmp = {
         enable = true; # nvim-cmp
         sources = [
