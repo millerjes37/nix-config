@@ -417,8 +417,17 @@
           filters = { 
             dotfiles = false;
             custom = [ ".git" "node_modules" ".cache" ];
-          git = { enable = true, ignore = false, timeout = 400 };
-          actions = { open_file = { quit_on_open = false, resize_window = true } };
+          git = { 
+            enable = true;
+            ignore = false;
+            timeout = 400;
+          };
+          actions = {
+            open_file = {
+               quit_on_open = false;
+              resize_window = true;
+            };
+          };
         };
       };
 
@@ -429,22 +438,46 @@
         };
         settings = { # from lua-config
           defaults = {
-            prompt_prefix = " ", selection_caret = " ", path_display = { "truncate" };
-            file_ignore_patterns = { "node_modules", ".git", "target", ".mypy_cache", "__pycache__", ".DS_Store", "%.ipynb" };
+            prompt_prefix = " ";
+            selection_caret = " ";
+            path_display = "truncate";
+            file_ignore_patterns = [ "node_modules" ".git" "target" ".mypy_cache" "__pycache__" ".DS_Store" "%.ipynb" ];
             mappings = {
               i = { ["<C-j>"] = "require('telescope.actions').move_selection_next", ["<C-k>"] = "require('telescope.actions').move_selection_previous", ["<C-q>"] = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end", ["<esc>"] = "require('telescope.actions').close" };
               n = { ["<C-j>"] = "require('telescope.actions').move_selection_next", ["<C-k>"] = "require('telescope.actions').move_selection_previous", ["<C-q>"] = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end" };
             }
           };
           pickers = {
-            find_files = { theme = "dropdown", previewer = true, hidden = true };
-            live_grep = { theme = "dropdown", previewer = true };
-            buffers = { theme = "dropdown", previewer = true, sort_mru = true, ignore_current_buffer = true };
-            help_tags = { theme = "dropdown", previewer = true };
-            oldfiles = { theme = "dropdown", previewer = true };
+            find_files = {
+              theme = "dropdown";
+              previewer = true;
+              hidden = true;
+            };
+            live_grep = {
+              theme = "dropdown";
+              previewer = true;
+            };
+            buffers = {
+              theme = "dropdown";
+              previewer = true;
+              sort_mru = true;
+              ignore_current_buffer = true;
+            };
+            help_tags = {
+              theme = "dropdown";
+              previewer = true;
+            };
+            oldfiles = {
+              theme = "dropdown";previewer = true;
+            };
           };
           extensions = {
-            fzf = { fuzzy = true, override_generic_sorter = true, override_file_sorter = true, case_mode = "smart_case" };
+            fzf = {
+              fuzzy = true;
+              override_generic_sorter = true;
+              override_file_sorter = true;
+              case_mode = "smart_case";
+            };
           };
           # pcall(telescope.load_extension, "fzf") -- This should be handled by nixvim if fzf-native is enabled
         };
