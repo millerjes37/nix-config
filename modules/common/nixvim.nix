@@ -414,7 +414,9 @@
               };
             };
           };
-          filters = { dotfiles = false, custom = { ".git", "node_modules", ".cache" } };
+          filters = { 
+            dotfiles = false;
+            custom = { ".git", "node_modules", ".cache" } };
           git = { enable = true, ignore = false, timeout = 400 };
           actions = { open_file = { quit_on_open = false, resize_window = true } };
         };
