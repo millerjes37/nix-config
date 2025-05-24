@@ -345,7 +345,7 @@
       };
 
       cmp = {
-        enable = true;
+        # enable = true;
         sources = [
           { name = "nvim_lsp"; } 
           { name = "luasnip"; }
