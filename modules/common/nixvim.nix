@@ -30,7 +30,7 @@
 
       # Editing Enhancements
       comment.enable = true; # numToStr_Comment-nvim
-      autopairs.enable = true; # windwp_nvim-autopairs
+      nvim-autopairs.enable = true; # windwp_nvim-autopairs
 
       # Snippets
       luasnip.enable = true;
