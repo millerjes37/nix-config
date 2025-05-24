@@ -342,11 +342,11 @@
           };
           experimental = { ghost_text = true; }; # Added trailing semicolon for consistency
         };
-        cmp-nvim_lsp.enable = true;
-        cmp-luasnip.enable = true;
-        cmp-buffer.enable = true;
-        cmp-path.enable = true;
       };
+      cmp-nvim_lsp.enable = true;
+      cmp-luasnip.enable = true;
+      cmp-buffer.enable = true;
+      cmp-path.enable = true;
 
       nvim-tree = {
         enable = true;
