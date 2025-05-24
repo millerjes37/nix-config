@@ -23,10 +23,10 @@
           fzf-native.enable = true; # telescope-fzf-native-nvim
         };
       };
-      nvim-tree = {
-        enable = true;
+      # nvim-tree = {
+      #  enable = true;
         # luaSetup = true; # Implied by nixvim structure, customize later if needed
-      };
+      #};
 
       # Editing Enhancements
       comment.enable = true; # numToStr_Comment-nvim
