@@ -339,8 +339,8 @@
           ensure_installed = "all"; # from lua-config
           sync_install = false;
           auto_install = true;
-          highlight = { enable = true };
-          indent = { enable = true };
+          highlight = true;
+          indent = true;
         };
       };
 
