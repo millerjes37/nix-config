@@ -33,11 +33,7 @@
       autopairs.enable = true; # windwp_nvim-autopairs
 
       # Syntax, Highlighting & Language Support
-      treesitter = {
-        enable = true;
-        grammars = "all"; # nvim-treesitter.withAllGrammars
-        # ensure_installed = "all"; # Alternative way to specify all grammars
-      };
+      treesitter
       lsp = {
         enable = true; # nvim-lspconfig
         # servers = { ... }; # Server configurations will be handled later
