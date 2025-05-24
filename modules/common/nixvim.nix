@@ -344,7 +344,6 @@
         };
       };
       cmp-nvim_lsp.enable = true;
-      luasnip.enable = true;
       cmp-buffer.enable = true;
       cmp-path.enable = true;
 
