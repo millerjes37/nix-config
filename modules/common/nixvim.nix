@@ -352,21 +352,24 @@
           { name = "buffer"; }
           { name = "path"; }
         ];
-        settings = { # from lua-config
-          snippet = { expand = "function(args) require('luasnip').lsp_expand(args.body) end" }, -- Note: functions need to be strings
+        settings = {
+          snippet = { expand = "function(args) require('luasnip').lsp_expand(args.body) end"; }; // Added trailing semicolon for consistency
           mapping = {
-            ['<C-b>'] = "cmp.mapping.scroll_docs(-4)",
-            ['<C-f>'] = "cmp.mapping.scroll_docs(4)",
-            ['<C-Space>'] = "cmp.mapping.complete()",
-            ['<C-e>'] = "cmp.mapping.abort()",
-            ['<CR>'] = "cmp.mapping.confirm({ select = true })",
-            ['<Tab>'] = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_next_item() elseif require('luasnip').expand_or_jumpable() then require('luasnip').expand_or_jump() else fallback() end end, { 'i', 's' })",
-            ['<S-Tab>'] = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_prev_item() elseif require('luasnip').jumpable(-1) then require('luasnip').jump(-1) else fallback() end end, { 'i', 's' })",
-          },
-          sources = { -- This will merge with the above sources option in nixvim
-            { name = 'nvim_lsp' }, { name = 'luasnip' }, { name = 'buffer' }, { name = 'path' },
-          },
-          experimental = { ghost_text = true }
+            ['<C-b>'] = "cmp.mapping.scroll_docs(-4)";
+            ['<C-f>'] = "cmp.mapping.scroll_docs(4)";
+            ['<C-Space>'] = "cmp.mapping.complete()";
+            ['<C-e>'] = "cmp.mapping.abort()";
+            ['<CR>'] = "cmp.mapping.confirm({ select = true })";
+            ['<Tab>'] = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_next_item() elseif require('luasnip').expand_or_jumpable() then require('luasnip').expand_or_jump() else fallback() end end, { 'i', 's' })";
+            ['<S-Tab>'] = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_prev_item() elseif require('luasnip').jumpable(-1) then require('luasnip').jump(-1) else fallback() end end, { 'i', 's' })";
+          };
+          sources = [ // Corrected: Use square brackets for a list
+            { name = "nvim_lsp"; }  // Use double quotes for consistency in Nix strings
+            { name = "luasnip"; }
+            { name = "buffer"; }
+            { name = "path"; }
+          ]; // Semicolon to terminate the 'sources' attribute definition
+          experimental = { ghost_text = true; }; // Added trailing semicolon for consistency
         };
       };
 
