@@ -440,13 +440,29 @@
           defaults = {
             prompt_prefix = " ";
             selection_caret = " ";
-            path_display = "truncate";
-            file_ignore_patterns = [ "node_modules" ".git" "target" ".mypy_cache" "__pycache__" ".DS_Store" "%.ipynb" ];
+            # path_display was changed to a string in your diff.
+            # If telescope expects a list (e.g., for multiple formatters),
+            # it should be path_display = [ "truncate" ];
+            # If a single string is fine, then this is okay.
+            path_display = "truncate"; 
+            file_ignore_patterns = [ "node_modules" ".git" "target" ".mypy_cache" "__pycache__" ".DS_Store" "%.ipynb" ]; # Correct list format
             mappings = {
-              i = { ["<C-j>"] = "require('telescope.actions').move_selection_next", ["<C-k>"] = "require('telescope.actions').move_selection_previous", ["<C-q>"] = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end", ["<esc>"] = "require('telescope.actions').close" };
-              n = { ["<C-j>"] = "require('telescope.actions').move_selection_next", ["<C-k>"] = "require('telescope.actions').move_selection_previous", ["<C-q>"] = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end" };
-            }
-          };
+              i = {
+                "<C-j>" = "require('telescope.actions').move_selection_next";
+                "<C-k>" = "require('telescope.actions').move_selection_previous";
+                "<C-q>" = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end";
+                "<esc>" = "require('telescope.actions').close";
+              };
+              n = {
+                "<C-j>" = "require('telescope.actions').move_selection_next";
+                "<C-k>" = "require('telescope.actions').move_selection_previous";
+                "<C-q>" = "function() require('telescope.actions').send_to_qflist() require('telescope.actions').open_qflist() end";
+                # Note: Your 'n' mappings in the error output didn't have an <esc> mapping.
+                # Add it here if it was intended, for example:
+                # "<esc>" = "require('telescope.actions').close"; 
+              };
+            }; # End of mappings
+          }; # End of defaults
           pickers = {
             find_files = {
               theme = "dropdown";
@@ -468,9 +484,10 @@
               previewer = true;
             };
             oldfiles = {
-              theme = "dropdown";previewer = true;
+              theme = "dropdown"; 
+              previewer = true; # Ensured space for readability
             };
-          };
+          }; # End of pickers
           extensions = {
             fzf = {
               fuzzy = true;
@@ -478,9 +495,10 @@
               override_file_sorter = true;
               case_mode = "smart_case";
             };
-          };
-          # pcall(telescope.load_extension, "fzf") -- This should be handled by nixvim if fzf-native is enabled
-        };
+          }; # End of extensions
+          # pcall(telescope.load_extension, "fzf") # This should be handled by nixvim if fzf-native is enabled
+        }; # End of settings
+      }; # End of telescope
       };
     };
   };
