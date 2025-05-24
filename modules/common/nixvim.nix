@@ -8,7 +8,7 @@
     plugins = {
       # UI & Appearance
       airline.enable = true;
-      airline-themes.enable = true;
+      # airline-themes.enable = true; # Not Working :{
       nvim-web-devicons.enable = true; # Usually a dependency, but good to be explicit
       lspkind.enable = true; # onsails_lspkind-nvim
 
