@@ -34,16 +34,7 @@
 
       # Syntax, Highlighting & Language Support
       treesitter = true;
-      cmp = {
-        enable = true; # nvim-cmp
-        sources = [
-          { name = "nvim_lsp"; } # cmp-nvim-lsp
-          { name = "buffer"; }   # cmp-buffer
-          { name = "path"; }     # cmp-path
-          { name = "luasnip"; }  # cmp_luasnip
-        ];
-      };
-
+      
       # Snippets
       luasnip.enable = true;
       friendly-snippets.enable = true; # rafamadriz_friendly-snippets
