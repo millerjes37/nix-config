@@ -32,9 +32,6 @@
       comment.enable = true; # numToStr_Comment-nvim
       autopairs.enable = true; # windwp_nvim-autopairs
 
-      # Syntax, Highlighting & Language Support
-      treesitter = true;
-      
       # Snippets
       luasnip.enable = true;
       friendly-snippets.enable = true; # rafamadriz_friendly-snippets
