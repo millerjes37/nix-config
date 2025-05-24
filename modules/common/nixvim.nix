@@ -378,7 +378,7 @@
         enable = true;
         settings = { # from lua-config
           sort_by = "case_sensitive";
-          view = { width = 30, side = 'left' };
+          view = { width = 30; side = "left"; }; 
           renderer = {
             group_empty = true, highlight_git = true;
             icons = {
