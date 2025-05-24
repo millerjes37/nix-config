@@ -33,7 +33,7 @@
       autopairs.enable = true; # windwp_nvim-autopairs
 
       # Syntax, Highlighting & Language Support
-      treesitter
+      treesitter = true;
       cmp = {
         enable = true; # nvim-cmp
         sources = [
