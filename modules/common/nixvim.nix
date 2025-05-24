@@ -5,6 +5,9 @@
   programs.nixvim = {
     enable = true;
     # Later, we will add plugins, options, keymaps, luaConfig here.
+    colorscheme = {
+      gruvbox.enable = true;
+    };
     plugins = {
       # UI & Appearance
       airline.enable = true;
@@ -35,9 +38,6 @@
       # Snippets
       luasnip.enable = true;
       friendly-snippets.enable = true; # rafamadriz_friendly-snippets
-
-      # Colorscheme
-      gruvbox.enable = true;
     };
 
     # Options
@@ -108,10 +108,6 @@
       visualbell = true;
       errorbells = false;
     };
-
-    # Colorscheme
-    colorscheme = "gruvbox"; # This assumes gruvbox plugin handles 'set background=dark' or it's the default.
-                             # If not, might need: colorscheme.settings.background = "dark";
 
     # Global variables (like mapleader)
     globals = {
@@ -324,7 +320,7 @@
         };
       };
 
-      plugins.cmp = {
+      cmp = {
         enable = true;
         sources = [
           { name = "nvim_lsp"; } 
