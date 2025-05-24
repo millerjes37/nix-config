@@ -336,7 +336,7 @@
         enable = true;
         grammars = "all";
         settings = {
-          ensure_installed = "all"; -- from lua-config
+          ensure_installed = "all"; # from lua-config
           sync_install = false;
           auto_install = true;
           highlight = { enable = true };
@@ -352,7 +352,7 @@
           { name = "buffer"; }
           { name = "path"; }
         ];
-        settings = { -- from lua-config
+        settings = { # from lua-config
           snippet = { expand = "function(args) require('luasnip').lsp_expand(args.body) end" }, -- Note: functions need to be strings
           mapping = {
             ['<C-b>'] = "cmp.mapping.scroll_docs(-4)",
@@ -372,7 +372,7 @@
 
       nvim-tree = {
         enable = true;
-        settings = { -- from lua-config
+        settings = { # from lua-config
           sort_by = "case_sensitive",
           view = { width = 30, side = 'left' },
           renderer = {
@@ -397,7 +397,7 @@
         extensions = {
           fzf-native.enable = true;
         };
-        settings = { -- from lua-config
+        settings = { # from lua-config
           defaults = {
             prompt_prefix = " ", selection_caret = " ", path_display = { "truncate" },
             file_ignore_patterns = { "node_modules", ".git", "target", ".mypy_cache", "__pycache__", ".DS_Store", "%.ipynb" },
