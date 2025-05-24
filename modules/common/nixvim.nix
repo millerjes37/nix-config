@@ -324,8 +324,8 @@
         };
       };
 
-      cmp = {
-        # enable = true;
+      plugins.cmp = {
+        enable = true;
         sources = [
           { name = "nvim_lsp"; } 
           { name = "luasnip"; }
