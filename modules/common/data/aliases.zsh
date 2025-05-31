@@ -51,8 +51,8 @@ alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 alias gcad='git commit -a --amend'
 alias gp='git push'
-alias gl='git log --graph --pretty=format:"%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold cyan)<%an>%Creset"'
-alias gll='git log --graph --pretty=format:"%Cblue%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold cyan)<%an>%Creset" --all'
+alias gl='git log --graph --pretty=format:"%C(blue)%h%Creset -%C(yellow)%d%Creset %s %C(green)(%cr) %C(cyan)<%an>%Creset"'
+alias gll='git log --graph --pretty=format:"%C(blue)%h%Creset -%C(yellow)%d%Creset %s %C(green)(%cr) %C(cyan)<%an>%Creset" --all'
 
 # Compression
 compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
