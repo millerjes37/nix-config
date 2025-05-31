@@ -21,10 +21,7 @@ in
         dynamic_title = true;
         
         # Platform-specific window dimensions
-        dimensions = if isLinux then {
-          columns = 110;
-          lines = 30;
-        } else null;
+        dimensions = { columns = 80, lines = 24 }
       };
       
       # Scrolling
