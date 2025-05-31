@@ -108,14 +108,14 @@
         eval "$(atuin init zsh)"
       fi
 
-      # Environment variables with Catppuccin Mocha theme
-      export BAT_THEME="Catppuccin-Mocha"
+      # Environment variables with Gruvbox Dark theme
+      export BAT_THEME="gruvbox-dark"
       export BAT_STYLE="header,grid"  # Show file headers and borders
       export DELTA_FEATURES="+side-by-side" # Delta theme will be set in cli.nix
       export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
       export LESS="-R" # Ensures `less` processes color codes correctly
-      # Catppuccin Mocha LS_COLORS from https://github.com/catppuccin/dircolors
-      export LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;40:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
+      # Gruvbox Dark LS_COLORS (adapted from Solarized dircolors by seebi)
+      export LS_COLORS="rs=0:di=01;38;5;66:ln=01;38;5;108:mh=00:pi=48;5;235;38;5;172;01:so=48;5;235;38;5;132;01:do=48;5;235;38;5;132;01:bd=48;5;235;38;5;223;01:cd=48;5;235;38;5;223;01:or=48;5;235;38;5;124;01:mi=00:su=38;5;229;48;5;124:sg=38;5;229;48;5;172:ca=00:tw=38;5;229;48;5;106:ow=38;5;66;48;5;235:st=38;5;229;48;5;72:ex=01;38;5;106:*.tar=01;38;5;124:*.tgz=01;38;5;124:*.arc=01;38;5;124:*.arj=01;38;5;124:*.taz=01;38;5;124:*.lha=01;38;5;124:*.lz4=01;38;5;124:*.lzh=01;38;5;124:*.lzma=01;38;5;124:*.tlz=01;38;5;124:*.txz=01;38;5;124:*.tzo=01;38;5;124:*.t7z=01;38;5;124:*.zip=01;38;5;124:*.z=01;38;5;124:*.dz=01;38;5;124:*.gz=01;38;5;124:*.lrz=01;38;5;124:*.lz=01;38;5;124:*.lzo=01;38;5;124:*.xz=01;38;5;124:*.zst=01;38;5;124:*.tzst=01;38;5;124:*.bz2=01;38;5;124:*.bz=01;38;5;124:*.tbz=01;38;5;124:*.tbz2=01;38;5;124:*.tz=01;38;5;124:*.deb=01;38;5;124:*.rpm=01;38;5;124:*.jar=01;38;5;124:*.war=01;38;5;124:*.ear=01;38;5;124:*.sar=01;38;5;124:*.rar=01;38;5;124:*.alz=01;38;5;124:*.ace=01;38;5;124:*.zoo=01;38;5;124:*.cpio=01;38;5;124:*.7z=01;38;5;124:*.rz=01;38;5;124:*.cab=01;38;5;124:*.jpg=01;38;5;132:*.jpeg=01;38;5;132:*.mjpg=01;38;5;132:*.mjpeg=01;38;5;132:*.gif=01;38;5;132:*.bmp=01;38;5;132:*.pbm=01;38;5;132:*.pgm=01;38;5;132:*.ppm=01;38;5;132:*.tga=01;38;5;132:*.xbm=01;38;5;132:*.xpm=01;38;5;132:*.tif=01;38;5;132:*.tiff=01;38;5;132:*.png=01;38;5;132:*.svg=01;38;5;132:*.svgz=01;38;5;132:*.mng=01;38;5;132:*.pcx=01;38;5;132:*.mov=01;38;5;132:*.mpg=01;38;5;132:*.mpeg=01;38;5;132:*.m2v=01;38;5;132:*.mkv=01;38;5;132:*.webm=01;38;5;132:*.ogm=01;38;5;132:*.mp4=01;38;5;132:*.m4v=01;38;5;132:*.mp4v=01;38;5;132:*.vob=01;38;5;132:*.qt=01;38;5;132:*.nuv=01;38;5;132:*.wmv=01;38;5;132:*.asf=01;38;5;132:*.rm=01;38;5;132:*.rmvb=01;38;5;132:*.flc=01;38;5;132:*.avi=01;38;5;132:*.fli=01;38;5;132:*.flv=01;38;5;132:*.gl=01;38;5;132:*.dl=01;38;5;132:*.xcf=01;38;5;132:*.xwd=01;38;5;132:*.yuv=01;38;5;132:*.cgm=01;38;5;132:*.emf=01;38;5;132:*.ogv=01;38;5;132:*.ogx=01;38;5;132:*.aac=00;38;5;72:*.au=00;38;5;72:*.flac=00;38;5;72:*.m4a=00;38;5;72:*.mid=00;38;5;72:*.midi=00;38;5;72:*.mka=00;38;5;72:*.mp3=00;38;5;72:*.mpc=00;38;5;72:*.ogg=00;38;5;72:*.ra=00;38;5;72:*.wav=00;38;5;72:*.oga=00;38;5;72:*.opus=00;38;5;72:*.spx=00;38;5;72:*.xspf=00;38;5;72:"
 
       # Zsh settings
       setopt AUTO_CD              # Change directory by typing directory name
@@ -205,6 +205,7 @@
 
   # Install packages
   home.packages = with pkgs; [
+    # Existing CLI tools
     eza # Modern ls replacement (fork of the now archived exa)
     bat
     fd
@@ -214,27 +215,42 @@
     bottom
     tealdeer
     gitui
-    uutils-coreutils
-    sd
-    choose
-    zoxide
-    starship
-    zsh-powerlevel10k
-    fzf
-    jq
-    yq
-    difftastic
-    delta
-    hyperfine
-    gawk
-    git
-    atuin
-    just
-    miniserve
-    ouch
-    xh
-    qsv
-    macchina
-    zellij
+    uutils-coreutils # Modern coreutils replacement
+    sd # Modern sed alternative
+    choose # Modern cut alternative
+    zoxide # Smarter cd command
+    starship # Cross-shell prompt (though p10k is used)
+    zsh-powerlevel10k # Powerlevel10k Zsh theme
+    fzf # Command-line fuzzy finder
+    jq # JSON processor
+    yq # YAML processor
+    difftastic # Diff tool that understands syntax
+    delta # Git diff viewer
+    hyperfine # Command-line benchmarking tool
+    gawk # GNU awk
+    git # Version control system
+    atuin # Shell history manager
+    just # Modern make alternative
+    miniserve # Simple HTTP server
+    ouch # Compression/decompression utility
+    xh # Modern curl alternative
+    qsv # CSV processing utility
+    macchina # System information tool
+    zellij # Terminal multiplexer
+
+    # Common development tools
+    (if pkgs.stdenv.isDarwin then clang else gcc) # C/C++ compiler
+    make # Build automation tool
+    python3 # Python 3 interpreter
+    nodejs_20 # Node.js (LTS version 20)
+    go # Go programming language
+    rustc # Rust compiler
+    cargo # Rust package manager
+    openjdk17 # OpenJDK 17 (LTS version)
+    cmake # Cross-platform build system generator
+    pkg-config # Helper tool for compiling applications and libraries
+    openssl # Cryptography toolkit
+    curl # Command-line tool for transferring data with URLs
+    wget # Command-line tool for downloading files
   ];
 }

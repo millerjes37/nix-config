@@ -62,82 +62,65 @@ in
         thickness = 0.2;
       };
       
-      # Catppuccin Mocha theme
+      # Gruvbox Dark theme
       colors = {
         primary = {
-          background = "#1e1e2e";
-          foreground = "#cdd6f4";
-          # dim_foreground = "#7f849c"; # Not a standard alacritty primary option
-          # bright_foreground = "#cdd6f4"; # Not a standard alacritty primary option
+          background = "0x1d2021";
+          foreground = "0xd4be98";
         };
         cursor = {
-          text = "#1e1e2e";
-          cursor = "#f5e0dc";
+          text = "0x1d2021";
+          cursor = "0xec5d2a";
         };
         vi_mode_cursor = {
-          text = "#1e1e2e";
-          cursor = "#b4befe";
+          text = "0x1d2021";
+          cursor = "0xec5d2a";
         };
         search = {
           matches = {
-            foreground = "#1e1e2e";
-            background = "#a6adc8";
+            foreground = "0x1d2021";
+            background = "0x7daea3"; # blue
           };
           focused_match = {
-            foreground = "#1e1e2e";
-            background = "#a6e3a1";
+            foreground = "0x1d2021";
+            background = "0xa9b665"; # green
           };
-        };
-        footer_bar = { # This might not be a standard Alacritty option, will check.
-                       # Update: Alacritty docs confirm 'footer_bar' is valid.
-          foreground = "#1e1e2e";
-          background = "#a6adc8";
         };
         hints = {
           start = {
-            foreground = "#1e1e2e";
-            background = "#f9e2af";
+            foreground = "0x1d2021";
+            background = "0xd8a657"; # yellow
           };
           end = {
-            foreground = "#1e1e2e";
-            background = "#a6adc8";
+            foreground = "0x1d2021";
+            background = "0x7daea3"; # blue
           };
         };
         selection = {
-          text = "#1e1e2e";
-          background = "#f5e0dc";
+          text = "0xd4be98";
+          background = "0x32302f";
         };
         normal = {
-          black = "#45475a";
-          red = "#f38ba8";
-          green = "#a6e3a1";
-          yellow = "#f9e2af";
-          blue = "#89b4fa";
-          magenta = "#f5c2e7";
-          cyan = "#94e2d5";
-          white = "#bac2de";
+          black = "0x32302f";
+          red = "0xea6962";
+          green = "0xa9b665";
+          yellow = "0xd8a657";
+          blue = "0x7daea3";
+          magenta = "0xd3869b";
+          cyan = "0x89b482";
+          white = "0xd4be98";
         };
         bright = {
-          black = "#585b70";
-          red = "#f38ba8";
-          green = "#a6e3a1";
-          yellow = "#f9e2af";
-          blue = "#89b4fa";
-          magenta = "#f5c2e7";
-          cyan = "#94e2d5";
-          white = "#a6adc8";
+          black = "0x32302f";
+          red = "0xea6962";
+          green = "0xa9b665";
+          yellow = "0xd8a657";
+          blue = "0x7daea3";
+          magenta = "0xd3869b";
+          cyan = "0x89b482";
+          white = "0xd4be98";
         };
-        # dim_foreground and bright_foreground from the TOML root are general palette colors.
-        # Alacritty also has top-level `dim` and `bright` sections for *all* dim/bright colors if needed,
-        # but Catppuccin provides them per color (normal.black, bright.black etc), which is standard.
-        # The specific `dim_foreground` from the TOML root was "#7f849c".
-        # If needed, one could set `colors.dim.foreground = "#7f849c";` but this is not standard.
-        # The TOML also had a root `bright_foreground = "#cdd6f4"`, which is the same as primary.foreground.
-
-        indexed_colors = [
-          { index = 16; color = "#fab387"; }
-          { index = 17; color = "#f5e0dc"; }
-        ];
+        # Gruvbox theme doesn't typically use indexed_colors
       };
       
       # Essential key bindings

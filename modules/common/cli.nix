@@ -26,7 +26,7 @@
   programs.bat = {
     enable = true;
     config = {
-      theme = "Catppuccin-Mocha"; # Updated theme
+      theme = "gruvbox-dark"; # Updated theme
       italic-text = "always";
       style = "numbers,changes,header";
     };
@@ -56,7 +56,7 @@
     delta = {
       enable = true;
       options = {
-        syntax-theme = "Catppuccin-Mocha"; # Updated theme
+        syntax-theme = "gruvbox-dark"; # Updated theme
         side-by-side = true;
         line-numbers = true;
       };
