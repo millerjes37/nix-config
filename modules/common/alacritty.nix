@@ -21,7 +21,7 @@ in
         dynamic_title = true;
         
         # Platform-specific window dimensions
-        dimensions = { columns = 80; lines = 24 }
+        dimensions = { columns = 80; lines = 24; };
       };
       
       # Scrolling
