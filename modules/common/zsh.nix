@@ -70,6 +70,7 @@
 
       # Make sure we can run binaries from various locations
       path+=(
+        $HOME/.cargo/bin
         $HOME/.nix-profile/bin
         /run/current-system/sw/bin
         /etc/profiles/per-user/$USER/bin
@@ -87,8 +88,6 @@
       nixrebuild() {
         ${homeDir}/nix-config/scripts/rebuild.sh "$@"
       }
-
-      export PATH="$HOME/.cargo/bin:$PATH"
 
       # Load utility functions and aliases
       [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
