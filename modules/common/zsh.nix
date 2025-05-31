@@ -88,6 +88,8 @@
         ${homeDir}/nix-config/scripts/rebuild.sh "$@"
       }
 
+      export PATH="$HOME/.cargo/bin:$PATH"
+
       # Load utility functions and aliases
       [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
       [[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
