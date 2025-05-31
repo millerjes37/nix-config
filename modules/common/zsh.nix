@@ -61,6 +61,11 @@
     initExtra = let
       homeDir = if pkgs.stdenv.isDarwin then "/Users/${config.home.username}" else "/home/${config.home.username}";
     in ''
+      # Source the Nix daemon environment script for multi-user installs
+      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+        . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+      fi
+
       # Load powerlevel10k
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
