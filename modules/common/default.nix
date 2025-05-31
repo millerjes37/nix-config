@@ -6,7 +6,7 @@
     ./zsh.nix
     ./alacritty.nix
     ./emacs.nix
-    ./nixvim.nix # Added new nixvim config
+    # ./nixvim.nix # Added new nixvim config
     ./development.nix
   ];
 
