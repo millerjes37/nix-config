@@ -27,8 +27,7 @@
     libertinus          # An extended version of Linux Libertine & Biolinum, offering more glyphs and features.
     eb-garamond         # EB Garamond font family (Garamond variant) (added)
     garamond-libre
-    urw-base35          # Core set of PostScript fonts, includes URWBaskerville, URWGaramond, and URWTimes (Baskerville, Garamond, Times New Roman alternatives) (requested)
-                        # Also includes standard Times, Helvetica, Courier, etc.
+    urw-base35
     liberation_ttf      # Liberation fonts (metric equivalents of Times, Arial, Courier - includes Times New Roman alternative) (re-enabled)
     inter               # A typeface specially designed for user interfaces
     roboto              # Google's signature font family (sans-serif)
