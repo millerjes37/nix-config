@@ -7,6 +7,7 @@
     ./alacritty.nix
     ./emacs.nix
     # ./nixvim.nix # Added new nixvim config
+    ./fonts.nix
     ./development.nix
   ];
 
