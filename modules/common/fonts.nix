@@ -37,7 +37,7 @@
     lato                # A sanserif typeface family
     cantarell-fonts     # Default font for GNOME (modern sans-serif)
     dejavu_fonts        # Font family based on Bitstream Vera, good Unicode coverage
-    freefont-ttf        # GNU FreeFont (Serif, Sans, Mono - includes Times New Roman alternative)
+    freefont_ttf        # GNU FreeFont (Serif, Sans, Mono - includes Times New Roman alternative)
 
     # --- Icon Fonts ---
     # Fonts that primarily provide icons and symbols.
