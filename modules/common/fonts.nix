@@ -44,10 +44,12 @@
 
     font-awesome        # The iconic SVG, font, and CSS toolkit
     material-design-icons # Official icon set from Google Material Design
-    nerdfonts           # A meta-package that installs a collection of popular Nerd Fonts.
+               # A meta-package that installs a collection of popular Nerd Fonts.
                         # This is a large package. If you only need specific Nerd Fonts (like MesloLGS NF already listed),
                         # you might prefer to list them individually to save space.
                         # Consider commenting this out if `meslo-lgs-nf` and `fira-code-nerdfont` are sufficient.
+    nerd-fonts.meslo-lg
+
 
     # --- Other Useful Font Packages ---
     # (Optional, uncomment if needed)
