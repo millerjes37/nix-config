@@ -22,7 +22,8 @@
     # --- Typesetting Fonts ---
     # Serif, Sans-serif, and other fonts suitable for documents, UI, and general reading.
 
-    linux-libertine     # Linux Libertine and Biolinum fonts (requested)
+    libertine           # Linux Libertine and Biolinum fonts (requested)
+    libertine-g
     libertinus          # An extended version of Linux Libertine & Biolinum, offering more glyphs and features.
     ebgaramond          # EB Garamond font family (Garamond variant) (added)
     urw-base35          # Core set of PostScript fonts, includes URWBaskerville, URWGaramond, and URWTimes (Baskerville, Garamond, Times New Roman alternatives) (requested)
