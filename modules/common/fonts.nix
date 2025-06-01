@@ -32,7 +32,7 @@
     roboto              # Google's signature font family (sans-serif)
     roboto-slab         # Slab serif companion to Roboto
     noto-fonts          # Google Noto Fonts (aims to support all languages with a harmonious look and feel)
-    noto-fonts-cjk      # Noto fonts for Chinese, Japanese, and Korean
+    noto-fonts-cjk-sans # Noto fonts for Chinese, Japanese, and Korean
     noto-fonts-emoji    # Noto emoji font
     lato                # A sanserif typeface family
     cantarell-fonts     # Default font for GNOME (modern sans-serif)
