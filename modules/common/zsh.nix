@@ -245,7 +245,7 @@
     zellij # Terminal multiplexer
 
     # Common development tools
-    (if pkgs.stdenv.isDarwin then clang else gcc) # C/C++ compiler
+    libgcc
     make # Build automation tool
     python3 # Python 3 interpreter
     nodejs_20 # Node.js (LTS version 20)
