@@ -25,7 +25,8 @@
     libertine           # Linux Libertine and Biolinum fonts (requested)
     libertine-g
     libertinus          # An extended version of Linux Libertine & Biolinum, offering more glyphs and features.
-    ebgaramond          # EB Garamond font family (Garamond variant) (added)
+    eb-garamond         # EB Garamond font family (Garamond variant) (added)
+    garamond-libre
     urw-base35          # Core set of PostScript fonts, includes URWBaskerville, URWGaramond, and URWTimes (Baskerville, Garamond, Times New Roman alternatives) (requested)
                         # Also includes standard Times, Helvetica, Courier, etc.
     liberation_ttf      # Liberation fonts (metric equivalents of Times, Arial, Courier - includes Times New Roman alternative) (re-enabled)
