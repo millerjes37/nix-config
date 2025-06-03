@@ -33,7 +33,7 @@
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
-  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, ... }:
+  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, inputs, ... }:
   let
     # `mkHomeConfig`: A helper function to create a home-manager configuration.
     # Parameters:
@@ -91,6 +91,30 @@
       };
   in
   {
+    # NixOS Configurations
+    nixosConfigurations = {
+      "nixos-desktop" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux"; # Or your target system
+        specialArgs = { inherit inputs; }; # Pass all flake inputs to modules
+        modules = [
+          # Main NixOS system configuration
+          ./modules/nixos/default.nix
+
+          # Home Manager integration for NixOS
+          home-manager.nixosModules.home-manager
+          {
+            nixpkgs.config.allowUnfree = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            # Configure Home Manager for a specific user
+            home-manager.users.jules = import ./modules/nixos/home.nix;
+            # Pass flake inputs to home-manager modules as well
+            home-manager.extraSpecialArgs = { inherit inputs; };
+          }
+        ];
+      };
+    };
+
     # `darwinConfigurations`: Defines complete macOS system configurations.
     # These are typically used to build and manage an entire macOS setup.
     # Example: `nix build .#darwinConfigurations.macbook-air`
