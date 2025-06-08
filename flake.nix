@@ -50,7 +50,7 @@
           };
         };
         # Pass `extraImports` to the modules, making them available for conditional logic.
-        extraSpecialArgs = { inherit extraImports imputs; };
+        extraSpecialArgs = { inherit extraImports inputs; };
         # List of modules to include in the home-manager configuration.
         modules = [
           ./home.nix # The main shared home-manager configuration.
