@@ -9,7 +9,6 @@
     ./gtk.nix                        # GTK theming
     ./linux-apps.nix                 # Linux-specific applications
     ./flatpak.nix
-    ./zen-browser-fh.nix
   ];
   
   # Common Linux-specific packages
