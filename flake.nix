@@ -27,9 +27,6 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     # Ensures nix-homebrew uses the same nixpkgs version.
     nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
-
-    # `zen-browser`: A flake for the Zen browser.
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
