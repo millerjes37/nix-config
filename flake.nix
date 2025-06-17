@@ -25,12 +25,13 @@
 
     # `nix-homebrew`: A flake for managing Homebrew packages via Nix.
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    # Ensures nix-homebrew uses the same nixpkgs version.
-    nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
+
+    # `nix-flatpak`: Declarative Flatpak management for Nix and Home Manager.
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
-  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, inputs, ... }:
+  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, ... }@inputs:
   let
     # `mkHomeConfig`: A helper function to create a home-manager configuration.
     # Parameters:
@@ -124,9 +125,9 @@
     # These can be activated on any system (macOS or Linux) where home-manager is installed.
     # They manage the user's dotfiles and user-specific packages.
     # Example: `home-manager switch --flake .#jacksonmiller@mac`
-    homeConfigurations = {
+    homeConfigurations = let
       # Home-manager configuration for a macOS user named "jacksonmiller".
-      "jacksonmiller@mac" = mkHomeConfig {
+      jacksonMac = mkHomeConfig {
         system = "aarch64-darwin";
         username = "jacksonmiller";
         # Imports macOS-specific modules from `modules/darwin/default.nix`.
@@ -134,9 +135,9 @@
           ./modules/darwin/default.nix # Main macOS user-specific configuration
         ];
       };
-      
+
       # Home-manager configuration for a Linux user named "jackson".
-      "jackson@linux" = mkHomeConfig {
+      jacksonLinux = mkHomeConfig {
         system = "x86_64-linux";
         username = "jackson";
         # Imports Linux-specific modules from `modules/linux/default.nix`.
@@ -144,6 +145,10 @@
           ./modules/linux/default.nix  # Main Linux user-specific configuration
         ];
       };
+    in {
+      "jacksonmiller@mac" = jacksonMac;
+      "jackson@linux" = jacksonLinux;
+      "jackson" = jacksonLinux;
     };
   };
 }

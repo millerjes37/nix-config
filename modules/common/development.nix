@@ -5,7 +5,6 @@
   home.packages = with pkgs; [
     # Programming languages and runtimes
     nodejs_20  # LTS Node.js
-    deno       # JavaScript/TypeScript runtime
     go         # Go language
     # rustup removed to avoid collision with rust-analyzer
 
@@ -33,10 +32,12 @@
     nodePackages.prettier   # Code formatter
     # rustfmt removed to avoid collision with rustup
     python311Packages.black # Python formatter
-    python311Packages.pylint # Python linter
 
     # Database tools
     dbeaver-bin    # Universal database tool
+
+    # AI-powered code editor (Cursor)
+    code-cursor
   ];
 
   # Enable direnv for automatic environment switching
@@ -86,8 +87,5 @@
         "vim.hlsearch" = true;
       };
     };
-  };
-  programs.code-cursor = {
-    enable = true;
   };
 }

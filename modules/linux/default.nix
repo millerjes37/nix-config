@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   # Import all Linux-specific modules
   imports = [
+    inputs.nix-flatpak.homeManagerModules.nix-flatpak  # Flatpak support
     ../../modules/common/default.nix  # Common modules first
     ./i3.nix                         # Window manager
     ./rofi.nix                       # Application launcher
