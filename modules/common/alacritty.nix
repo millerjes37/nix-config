@@ -11,6 +11,8 @@ in
   # Use home-manager's built-in Alacritty module with minimal settings
   programs.alacritty = {
     enable = true;
+    # On Linux, we don't install the package here since the Linux module provides a wrapped version
+    package = lib.mkIf isLinux null;
     
     settings = {
       # Simple window settings
