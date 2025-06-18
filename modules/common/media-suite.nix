@@ -7,7 +7,6 @@
   home.packages = with pkgs; [
     # === VIDEO EDITING SUITE ===
     kdePackages.kdenlive        # Primary video editor - professional, open source
-    davinci-resolve            # Professional color grading and video editing
     ffmpeg                      # Video processing and conversion engine
     ffmpeg-full                 # Full FFmpeg with all codecs
     yt-dlp                      # Video downloads for content research
