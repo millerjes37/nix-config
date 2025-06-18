@@ -54,7 +54,7 @@ KeePassXC supports importing from:
 ## Browser Extension Setup
 
 1. Install KeePassXC browser extension for your browser:
-   - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/)
+   - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) (Recommended)
    - [Chrome/Chromium](https://chrome.google.com/webstore/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)
    - [Safari](https://apps.apple.com/us/app/keepassxc-password-manager/id1467342620)
 
@@ -62,13 +62,54 @@ KeePassXC supports importing from:
    - Open KeePassXC
    - Go to Tools → Settings → Browser Integration
    - Enable browser integration
-   - Select your browsers
+   - Firefox integration is pre-configured in this setup
+   - For other browsers, select them in the settings
 
 3. Connect browser extension:
-   - Click the KeePassXC extension icon
+   - Click the KeePassXC extension icon in Firefox
    - Click "Connect" when prompted
-   - Enter a name for the connection
+   - Enter a name for the connection (e.g., "Firefox Primary")
    - Approve the connection in KeePassXC
+
+### Firefox-Specific Features
+
+KeePassXC is configured with enhanced Firefox integration:
+
+- **Auto-detection**: Firefox is automatically detected and enabled
+- **Path Configuration**: 
+  - Linux: Uses the Nix-installed Firefox path
+  - macOS: Uses the standard Firefox.app location
+- **Security Settings**:
+  - Notifications for browser requests
+  - Database must be unlocked for access
+  - No automatic access permissions
+  - Expired credentials are not allowed
+  - HTTP authentication support is disabled by default
+  - Browser proxy support is enabled
+  - Migration prompts are disabled
+
+### Troubleshooting Firefox Integration
+
+1. **Extension Not Connecting**:
+   - Ensure KeePassXC is running
+   - Check that browser integration is enabled in KeePassXC
+   - Verify the Firefox extension is up to date
+   - Try removing and re-adding the connection
+
+2. **Database Not Unlocking**:
+   - Check that "Unlock database" is enabled in browser settings
+   - Ensure you're using the latest version of the extension
+   - Try reconnecting the browser extension
+
+3. **Passwords Not Auto-filling**:
+   - Check that the URL matches exactly (including http/https)
+   - Try clicking the KeePassXC extension icon to see available entries
+   - Verify that the entry has the correct URL saved
+
+4. **Common Issues**:
+   - If the extension shows as "Not connected", restart both Firefox and KeePassXC
+   - If auto-fill doesn't work, try manually clicking the extension icon
+   - For new database entries, ensure URLs are saved with the entry
 
 ## SSH Agent Integration (Optional)
 

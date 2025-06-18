@@ -91,6 +91,39 @@
         NoMigrationPrompt = false;
       };
 
+      # Firefox-specific browser integration
+      Browser_Migration = {
+        Enabled = true;
+      };
+
+      Browser_Allowed = {
+        Browsers = ["firefox"];  # Explicitly allow Firefox
+      };
+
+      Browser_Custom = {
+        Type = "firefox";
+        Enabled = true;
+        Path = lib.mkMerge [
+          (lib.mkIf pkgs.stdenv.isLinux "${pkgs.firefox}/bin/firefox")
+          (lib.mkIf pkgs.stdenv.isDarwin "/Applications/Firefox.app/Contents/MacOS/firefox")
+        ];
+      };
+
+      # Additional browser integration settings
+      Browser_Firefox = {
+        Enabled = true;
+        AllowExpiredCredentials = false;
+        AlwaysAllowAccess = false;
+        AlwaysAllowUpdate = false;
+        HttpAuthPermission = false;
+        NoMigrationPrompt = true;
+        SearchInAllDatabases = false;
+        ShowNotification = true;
+        SupportBrowserProxy = true;
+        UnlockDatabase = true;
+        UseCustomProxy = false;
+      };
+
       # Password Generator defaults - Strong passwords by default
       PasswordGenerator = {
         Length = 20;              # 20 character passwords
