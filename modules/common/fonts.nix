@@ -11,7 +11,7 @@
 
     meslo-lg            # Meslo LGS Nerd Font (great for terminals with icons)
     fira-code           # Monospaced font with programming ligatures
-    fira-code-nerdfont  # Fira Code with Nerd Font icons
+    nerd-fonts.fira-code  # Fira Code with Nerd Font icons
     jetbrains-mono      # Free and open source typeface for developers
     source-code-pro     # Adobe's monospaced font family
     hack-font           # A typeface designed for source code

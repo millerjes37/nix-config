@@ -58,7 +58,7 @@
     };
 
     # Custom initialization script for .zshrc
-    initExtra = let
+    initContent = let
       homeDir = if pkgs.stdenv.isDarwin then "/Users/${config.home.username}" else "/home/${config.home.username}";
     in ''
       # Source the Nix daemon environment script for multi-user installs

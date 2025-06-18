@@ -1,13 +1,15 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  # Enable the Flatpak service and list packages to install
-  services.flatpak = {
-    enable = true;
-    packages = [
-      # Add Zen Browser using its Flathub application ID directly.
-      # This is the recommended way.
-      "app.zen_browser.zen"
-    ];
+  # Enable flatpak support
+  services.flatpak.enable = true;
+  
+  # Install flatpak packages system-wide
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
+    script = ''
+      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    '';
   };
 }
