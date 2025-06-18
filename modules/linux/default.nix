@@ -10,6 +10,7 @@
     ./gtk.nix                        # GTK theming
     ./linux-apps.nix                 # Linux-specific applications
     ./flatpak.nix
+    ./nixgl.nix                      # nixGL wrapper and packages
   ];
   
   # Common Linux-specific packages

@@ -143,9 +143,6 @@ in
   home.packages = with pkgs; [
     # Terminal fonts
     (if isDarwin then meslo-lgs-nf else dejavu_fonts)
+    # nixGL wrapper is added in Linux-specific module
   ];
-
-  xsession.initExtra = ''
-    export ALACRITTY=nixGLIntel alacritty
-  '';
 }
