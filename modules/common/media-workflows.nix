@@ -370,12 +370,12 @@
         GIMP Palette
         Name: Campaign Brand Colors
         #
-        ${BRAND_PRIMARY#\#} Primary Blue
-        ${BRAND_SECONDARY#\#} Secondary Red
-        ${BRAND_ACCENT#\#} Accent Gold
-        ${BRAND_NEUTRAL#\#} Neutral Gray
-        ${BRAND_LIGHT#\#} Light Gray
-        ${BRAND_DARK#\#} Dark Gray
+        ''${BRAND_PRIMARY#\#} Primary Blue
+        ''${BRAND_SECONDARY#\#} Secondary Red
+        ''${BRAND_ACCENT#\#} Accent Gold
+        ''${BRAND_NEUTRAL#\#} Neutral Gray
+        ''${BRAND_LIGHT#\#} Light Gray
+        ''${BRAND_DARK#\#} Dark Gray
         EOF
 
         echo "✅ Brand color palette generated!"
