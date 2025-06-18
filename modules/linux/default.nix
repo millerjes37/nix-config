@@ -5,6 +5,7 @@
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak  # Flatpak support
     ../../modules/common/default.nix  # Common modules first
+    ../../modules/common/keybindings.nix  # Shared keybindings
     ./i3.nix                         # Window manager
     ./rofi.nix                       # Application launcher
     ./gtk.nix                        # GTK theming

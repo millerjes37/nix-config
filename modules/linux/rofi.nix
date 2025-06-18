@@ -30,12 +30,13 @@
   
   # Additional Rofi theme configuration
   home.file.".config/rofi/gruvbox-custom.rasi".text = ''
-    /* Custom Gruvbox theme */
+    /* Enhanced Gruvbox theme - Riced version */
     * {
-      bg0: #282828;
+      bg0: #1d2021;          /* Darker background */
       bg1: #3c3836;
       bg2: #504945;
       bg3: #665c54;
+      bg4: #7c6f64;
       fg0: #fbf1c7;
       fg1: #ebdbb2;
       fg2: #d5c4a1;
@@ -48,6 +49,11 @@
       gray: #928374;
       orange: #fe8019;
       
+      /* Enhanced colors for more visual appeal */
+      accent: #689d6a;       /* Custom accent color */
+      highlight: #458588;    /* Highlight color */
+      urgent: #cc241d;       /* Urgent color */
+      
       background-color: transparent;
       text-color: @fg1;
       
@@ -58,12 +64,16 @@
     
     window {
       background-color: @bg0;
-      border: 3px;
-      border-color: @bg3;
-      border-radius: 10px;
-      padding: 20px;
-      width: 40%;
-      height: 50%;
+      border: 2px;
+      border-color: @accent;
+      border-radius: 15px;
+      padding: 25px;
+      width: 45%;
+      height: 55%;
+      /* Add subtle shadow effect */
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+      location: center;
+      anchor: center;
     }
     
     mainbox {
@@ -81,11 +91,13 @@
     }
     
     prompt {
-      background-color: @blue;
+      background-color: @accent;
       text-color: @bg0;
-      padding: 5px 8px;
-      border-radius: 4px;
-      margin: 0px 10px 0px 0px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin: 0px 15px 0px 0px;
+      font: "FiraMono Nerd Font Bold 13";
+      str: "🚀";
     }
     
     entry {
@@ -134,8 +146,11 @@
     }
     
     element selected.normal {
-      background-color: @bg2;
+      background-color: @highlight;
       text-color: @fg0;
+      border: 0px 0px 0px 4px;
+      border-color: @accent;
+      border-radius: 8px;
     }
     
     element selected.urgent {

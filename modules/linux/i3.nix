@@ -35,9 +35,10 @@ with lib;
             }
           ];
           terminal = "alacritty";
-          modifier = "Mod1"; # Alt key
+          modifier = "Mod4"; # Super key
           keybindings = let
-            modifier = "Mod1";
+            modifier = "Mod4";
+            superKey = "Mod4";
           in {
             # Focus
             "${modifier}+Left" = "focus left";
@@ -73,8 +74,10 @@ with lib;
             "${modifier}+space" = "floating toggle";
             "${modifier}+Shift+space" = "focus mode_toggle";
             
-            # Kill window
+            # Kill window (keep Alt+Q for compatibility)
             "${modifier}+q" = "kill";
+            # Super+W to close window (your preferred binding)
+            "${superKey}+w" = "kill";
             
             # Workspaces
             "${modifier}+1" = "workspace number 1";
@@ -96,7 +99,11 @@ with lib;
             
             # Applications
             "${modifier}+Return" = "exec alacritty";
+            # Super+Enter to open Alacritty without decorations (your preferred binding)
+            "${superKey}+Return" = "exec alacritty --config-file ~/.config/alacritty/floating.yml";
             "${modifier}+d" = "exec --no-startup-id rofi -show drun";
+            # Super+Space to launch riced rofi (your preferred binding)
+            "${superKey}+space" = "exec --no-startup-id rofi -show drun -theme gruvbox-custom";
             "${modifier}+Shift+e" = "exec --no-startup-id thunar";
             "${modifier}+Shift+w" = "exec --no-startup-id firefox";
             "${modifier}+Shift+c" = "exec --no-startup-id code";

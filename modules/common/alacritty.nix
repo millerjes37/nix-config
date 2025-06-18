@@ -18,7 +18,7 @@ in
       # Simple window settings
       window = {
         padding = { x = 5; y = 5; };
-        decorations = "full";
+        decorations = if isLinux then "none" else "full";  # No decorations on Linux
         opacity = 0.95;
         dynamic_title = true;
         
