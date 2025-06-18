@@ -144,4 +144,8 @@ in
     # Terminal fonts
     (if isDarwin then meslo-lgs-nf else dejavu_fonts)
   ];
+
+  xsession.initExtra = ''
+    export ALACRITTY=nixGLIntel alacritty
+  '';
 }

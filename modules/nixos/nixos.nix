@@ -8,8 +8,8 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # For sudo access
     shell = pkgs.zsh;
-    home = "/home/jules";
-    initialPassword = "password"; # Set an initial password
+    home = "/home/jackson";
+    initialPassword = "JEM"; # Set an initial password
   };
 
   # Enable Hyprland
