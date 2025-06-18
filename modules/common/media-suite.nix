@@ -45,7 +45,7 @@
     exiftool                    # Metadata management
     jpegoptim                   # JPEG optimization
     optipng                     # PNG optimization
-    webp                        # WebP conversion tools
+    libwebp                     # WebP conversion tools
     
     # === SPECIALIZED POLITICAL COMMUNICATION TOOLS ===
     qrencode                    # QR code generation
