@@ -1,0 +1,33 @@
+[package]
+name = "transcribe_turbo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "transcribe-turbo"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+clap = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+rayon = { workspace = true }
+chrono = { workspace = true }
+regex = { workspace = true }
+futures = { workspace = true }
+
+# Whisper integration
+whisper-rs = { workspace = true }
+candle-core = { workspace = true }
+
+# Audio processing
+rodio = "0.17"
+hound = "3.5"
+
+# Parallel processing
+crossbeam = { workspace = true }
+parking_lot = { workspace = true } 

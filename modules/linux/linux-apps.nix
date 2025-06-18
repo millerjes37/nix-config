@@ -11,12 +11,11 @@
     libreoffice
     kdePackages.okular  # PDF viewer
     
-    # Media
+    # Media (core tools - comprehensive suite in common/media-suite.nix)
     vlc            # Video player
     mpv            # Video player
-    gimp           # Image editor
-    inkscape       # Vector graphics
-    obs-studio     # Screen recording
+    # Note: GIMP, Inkscape, OBS Studio now configured in media-suite.nix
+    # with professional workflows and templates
     
     # Communication
     slack

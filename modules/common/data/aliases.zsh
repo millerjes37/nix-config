@@ -65,6 +65,53 @@ webm2mp4() {
   ffmpeg -i "$input_file" -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 192k "$output_file"
 }
 
+# Professional Media Workflow Aliases
+# Video processing shortcuts
+alias social-video='$HOME/Projects/Media/Scripts/ffmpeg/social-video.sh'
+alias process-audio='$HOME/Projects/Media/Scripts/ffmpeg/audio-process.sh'
+alias batch-resize='$HOME/Projects/Media/Scripts/ffmpeg/batch-resize.sh'
+
+# Campaign content generation
+alias campaign-post='$HOME/Projects/Media/Scripts/automation/campaign-post.sh'
+alias brand-colors='$HOME/Projects/Media/Scripts/automation/brand-colors.sh'
+alias create-templates='$HOME/Projects/Media/Scripts/automation/create-templates.sh'
+
+# Media directories
+alias media='cd $HOME/Projects/Media'
+alias media-assets='cd $HOME/Projects/Media/Assets'
+alias media-export='cd $HOME/Projects/Media/Export'
+alias media-templates='cd $HOME/Projects/Media/Templates'
+
+# Quick media operations
+alias optimize-images='find . -name "*.jpg" -exec jpegoptim --max=85 {} \;'
+alias optimize-pngs='find . -name "*.png" -exec optipng {} \;'
+alias media-info='mediainfo'
+
+# Social media format shortcuts
+instagram() {
+  if [ -f "$1" ]; then
+    social-video "$1" instagram
+  else
+    echo "Usage: instagram video_file.mp4"
+  fi
+}
+
+twitter() {
+  if [ -f "$1" ]; then
+    social-video "$1" twitter
+  else
+    echo "Usage: twitter video_file.mp4"
+  fi
+}
+
+facebook() {
+  if [ -f "$1" ]; then
+    social-video "$1" facebook
+  else
+    echo "Usage: facebook video_file.mp4"
+  fi
+}
+
 # Quick directory switching with zoxide
 z() {
   if [ $# -eq 0 ]; then
@@ -115,3 +162,27 @@ alias reload="source ~/.zshrc"
 
 # Show system info
 alias sysinfo="neofetch"
+
+# Advanced Media Processing Scripts
+# Core video processing
+alias auto-crop='$HOME/nix-config/scripts/media/video/auto-crop.sh'
+alias extract-highlights='$HOME/nix-config/scripts/media/video/highlight-detector.sh'
+alias speech-analysis='$HOME/nix-config/scripts/media/video/speech-segments.sh'
+
+# Audio and transcription
+alias transcribe='$HOME/nix-config/scripts/media/audio/transcribe.sh'
+alias add-subtitles='$HOME/nix-config/scripts/media/templates/subtitle-overlay.sh'
+
+# Complete automation workflows
+alias generate-shorts='$HOME/nix-config/scripts/media/automation/shorts-generator.sh'
+alias media-pipeline='$HOME/nix-config/scripts/media/automation/clip-pipeline.sh'
+alias bulk-process='$HOME/nix-config/scripts/media/automation/bulk-process.sh'
+
+# Quick workflow shortcuts for political communications
+alias quick-shorts='generate-shorts --viral-optimization --parallel-processing'
+alias political-clips='auto-crop --type speech --extract-quotes'
+alias social-ready='generate-shorts -s social -p tiktok,instagram,youtube'
+alias debate-highlights='extract-highlights --type applause --audience-reactions'
+alias transcribe-fast='transcribe -m tiny -f txt'
+alias transcribe-quality='transcribe -m large-v3 --political-keywords'
+alias add-captions='add-subtitles --auto-transcribe -s social'

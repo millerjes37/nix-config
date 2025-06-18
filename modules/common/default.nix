@@ -11,6 +11,9 @@
     ./development.nix
     ./helix.nix
     ./keepassxc.nix
+    ./media-suite.nix
+    ./media-workflows.nix
+    ./gimp-config.nix
   ];
 
   home.packages = with pkgs; [

@@ -1,0 +1,48 @@
+[workspace]
+members = [
+    "video_processor_turbo",
+    "text_analyzer_ai", 
+    "social_api_ninja",
+    "data_fusion_engine",
+    "metrics_lightning",
+    "transcribe_turbo",
+    "quote_turbo",
+    "hashtag_turbo",
+    "thumb_turbo"
+]
+
+[workspace.dependencies]
+tokio = { version = "1.0", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["json", "stream"] }
+clap = { version = "4.0", features = ["derive"] }
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+rayon = "1.7"
+dashmap = "5.4"
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+regex = "1.7"
+futures = "0.3"
+crossbeam = "0.8"
+parking_lot = "0.12"
+
+# AI/ML dependencies
+candle-core = "0.3"
+candle-nn = "0.3"
+candle-transformers = "0.3"
+whisper-rs = "0.10"
+
+# Video processing
+ffmpeg = "0.4"
+image = "0.24"
+
+# Social media APIs
+twitter-v2 = "0.1"
+facebook-api = "0.1"
+
+# Data processing
+polars = { version = "0.35", features = ["lazy", "json", "csv"] }
+arrow = "49.0" 
