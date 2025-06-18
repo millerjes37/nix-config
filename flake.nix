@@ -28,6 +28,9 @@
 
     # `nix-flatpak`: Declarative Flatpak management for Nix and Home Manager.
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+
+    # nixGL wrapper packages and overlay
+    nixgl.url = "github:guibou/nixGL";
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
@@ -43,6 +46,7 @@
       home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { # Import nixpkgs for the specified system.
           inherit system;
+          overlays = [ inputs.nixgl.overlay ];
           config = {
             allowUnfree = true; # Allow installation of unfree packages.
             permittedInsecurePackages = [
@@ -109,6 +113,9 @@
             # Pass flake inputs to home-manager modules as well
             home-manager.extraSpecialArgs = { inherit inputs; };
           }
+
+          # Overlay to expose nixgl in system pkgs
+          ({ nixpkgs.overlays = [ inputs.nixgl.overlay ]; })
         ];
       };
     };
