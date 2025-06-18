@@ -71,8 +71,8 @@ with lib;
             "${modifier}+f" = "fullscreen toggle";
             
             # Floating
-            "${modifier}+space" = "floating toggle";
-            "${modifier}+Shift+space" = "focus mode_toggle";
+            "${modifier}+Shift+space" = "floating toggle";
+            "${modifier}+Control+space" = "focus mode_toggle";
             
             # Kill window (keep Alt+Q for compatibility)
             "${modifier}+q" = "kill";

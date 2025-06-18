@@ -76,9 +76,10 @@ function handle_git_changes() {
     
     # Prompt for confirmation
     echo
-    print_step "Do you want to commit these changes? [y/N]"
+    print_step "Do you want to commit these changes? [Y/n]"
     read -r response
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    # Default to "yes" if response is empty
+    if [[ -z "$response" || "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
       # Auto-generate commit message based on changed files
       commit_msg="Update configuration: "
       
@@ -107,6 +108,7 @@ function handle_git_changes() {
         print_step "Commit message: $commit_msg"
         print_step "Edit commit message? [y/N]"
         read -r edit_msg
+        # Default to "no" if response is empty
         if [[ "$edit_msg" =~ ^([yY][eE][sS]|[yY])$ ]]; then
           print_step "Enter new commit message:"
           read -r new_msg
