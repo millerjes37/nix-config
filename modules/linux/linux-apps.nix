@@ -29,8 +29,9 @@
     arandr         # Display manager GUI
     gnome-disk-utility # Disk management
     
-    # Security
-    keepassxc      # Password manager
+    # Security tools
+    # Note: KeePassXC is now configured via the common module with Home Manager
+    # keepassxc is handled by programs.keepassxc in modules/common/keepassxc.nix
     
     # Utilities
     flameshot      # Screenshot tool

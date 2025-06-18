@@ -11,6 +11,11 @@
     cocoapods         # iOS/macOS dependency manager
     xcodes            # Xcode version manager
     
+    # Security - KeePassXC as preferred password manager
+    # Note: KeePassXC is also configured via the common module
+    # but we include it here for macOS-specific package availability
+    keepassxc         # Cross-platform password manager
+    
     # Tools that work better with Homebrew (consider using it for these)
     # (They're commented out since you might want to use Homebrew for these)
     # docker
@@ -33,7 +38,8 @@
     brew "mas"                 # Mac App Store command line interface
     
     # Applications
-    cask "1password"          # Password manager
+    # cask "1password"        # Password manager - Using KeePassXC as primary
+    cask "keepassxc"          # Primary password manager - cross-platform
     cask "alfred"             # Launcher
     cask "discord"            # Chat
     cask "docker"             # Containerization

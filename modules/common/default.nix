@@ -10,6 +10,7 @@
     ./fonts.nix
     ./development.nix
     ./helix.nix
+    ./keepassxc.nix
   ];
 
   home.packages = with pkgs; [
