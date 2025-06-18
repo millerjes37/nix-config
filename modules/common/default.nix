@@ -9,6 +9,7 @@
     # ./nixvim.nix # Added new nixvim config
     ./fonts.nix
     ./development.nix
+    ./helix.nix
   ];
 
   home.packages = with pkgs; [
@@ -19,7 +20,6 @@
   lazygit             # TUI Git client (Go)
   just                # Command runner
   python3             # Python
-  helix               # Modal text editor (Rust)
   starship            # Shell prompt (Rust)
   cargo               # Rust package manager
   dprint              # Code formatter (Rust)

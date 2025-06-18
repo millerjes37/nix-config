@@ -40,7 +40,30 @@ function main() {
     echo -e "${YELLOW}Window managers are managed by Nix/Home Manager. Skipping external setup.${NC}"
   fi
   
+  # 1. Ensure the Home-Manager zsh is the login shell and whitelisted
+  ensure_zsh_shell
+  
   echo -e "\n${BLUE}====== POST-REBUILD HOOKS COMPLETE ======${NC}"
+}
+
+# Ensure zsh from Home-Manager is correctly registered and set as login shell
+function ensure_zsh_shell() {
+  local hm_zsh="$HOME/.nix-profile/bin/zsh"
+  if [[ ! -x "$hm_zsh" ]]; then
+    echo -e "${RED}Home-Manager zsh not found at $hm_zsh – skip shell check.${NC}"
+    return
+  fi
+
+  local current_shell
+  current_shell="$(getent passwd "$USER" | cut -d: -f7)"
+
+  if grep -Fxq "$hm_zsh" /etc/shells && [[ "$current_shell" == "$hm_zsh" ]]; then
+    echo -e "${GREEN}Login shell already set to Home-Manager zsh.${NC}"
+    return
+  fi
+
+  echo -e "${YELLOW}Running setup-shell.sh to finalise zsh configuration...${NC}"
+  sudo "$NIX_CONFIG_DIR/scripts/setup-shell.sh" --user "$USER"
 }
 
 # Run the main function
