@@ -98,7 +98,6 @@ with lib;
             "${modifier}+p" = "workspace prev";
             
             # Applications
-            "${modifier}+Return" = "exec alacritty";
             # Super+Enter to open Alacritty without decorations (your preferred binding)
             "${superKey}+Return" = "exec alacritty --config-file ~/.config/alacritty/floating.yml";
             "${modifier}+d" = "exec --no-startup-id rofi -show drun";
