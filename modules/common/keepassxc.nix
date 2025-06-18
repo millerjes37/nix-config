@@ -97,7 +97,7 @@
       };
 
       Browser_Allowed = {
-        Browsers = ["firefox"];  # Explicitly allow Firefox
+        Browsers = "firefox";    # Explicitly allow Firefox
       };
 
       Browser_Custom = {
