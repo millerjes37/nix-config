@@ -22,8 +22,7 @@
     # --- Typesetting Fonts ---
     # Serif, Sans-serif, and other fonts suitable for documents, UI, and general reading.
 
-    libertine           # Linux Libertine and Biolinum fonts (requested)
-    libertine-g
+    libertine-g         # Linux Libertine and Biolinum fonts (requested)
     libertinus          # An extended version of Linux Libertine & Biolinum, offering more glyphs and features.
     eb-garamond         # EB Garamond font family (Garamond variant) (added)
     garamond-libre
