@@ -246,10 +246,10 @@
       EXPECTED_PROXY="${pkgs.keepassxc}/bin/keepassxc-proxy"
       
       # Check if KeePassXC proxy exists
-      if [ -x "$EXPECTED_PROXY" ]; then
-        echo -e "✅ KeePassXC proxy found: ${GREEN}$EXPECTED_PROXY${NC}"
+      if [ -x "''$EXPECTED_PROXY" ]; then
+        echo -e "✅ KeePassXC proxy found: ''${GREEN}''$EXPECTED_PROXY''${NC}"
       else
-        echo -e "❌ KeePassXC proxy not found: ${RED}$EXPECTED_PROXY${NC}"
+        echo -e "❌ KeePassXC proxy not found: ''${RED}''$EXPECTED_PROXY''${NC}"
         exit 1
       fi
       
@@ -259,33 +259,33 @@
       
       # Function to check a native messaging host file
       check_nm_host() {
-        local file="$1"
-        local description="$2"
+        local file="''$1"
+        local description="''$2"
         
-        if [ -f "$file" ]; then
-          echo -e "  📄 $description: ${GREEN}Found${NC}"
-          local proxy_path=$(jq -r '.path' "$file" 2>/dev/null || echo "invalid")
-          if [ "$proxy_path" = "$EXPECTED_PROXY" ]; then
-            echo -e "      ✅ Proxy path: ${GREEN}$proxy_path${NC}"
+        if [ -f "''$file" ]; then
+          echo -e "  📄 ''$description: ''${GREEN}Found''${NC}"
+          local proxy_path=$(jq -r '.path' "''$file" 2>/dev/null || echo "invalid")
+          if [ "''$proxy_path" = "''$EXPECTED_PROXY" ]; then
+            echo -e "      ✅ Proxy path: ''${GREEN}''$proxy_path''${NC}"
           else
-            echo -e "      ⚠️  Proxy path: ${YELLOW}$proxy_path${NC} (expected: $EXPECTED_PROXY)"
+            echo -e "      ⚠️  Proxy path: ''${YELLOW}''$proxy_path''${NC} (expected: ''$EXPECTED_PROXY)"
           fi
         else
-          echo -e "  📄 $description: ${YELLOW}Not found${NC}"
+          echo -e "  📄 ''$description: ''${YELLOW}Not found''${NC}"
         fi
         echo ""
       }
       
       # Check standard Firefox/Zen browser configuration
-      check_nm_host "$HOME/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+      check_nm_host "''$HOME/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
                     "Standard Firefox/Zen browser"
       
       # Check Flatpak configurations (Linux only)
       if [ "$(uname)" = "Linux" ]; then
-        check_nm_host "$HOME/.var/app/app.zen_browser.zen/data/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+        check_nm_host "''$HOME/.var/app/app.zen_browser.zen/data/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
                       "Zen browser (Flatpak data)"
         
-        check_nm_host "$HOME/.var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+        check_nm_host "''$HOME/.var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
                       "Zen browser (Flatpak Mozilla)"
       fi
       
