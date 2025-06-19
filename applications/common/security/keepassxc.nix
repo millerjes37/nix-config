@@ -79,9 +79,9 @@
         MatchUrlScheme = true;    # Match URL scheme (https/http)
         SortByUsername = false;
         SupportBrowserProxy = true;
-        UseCustomProxy = false;
-        CustomProxyLocation = "";
-        UpdateBinaryPath = true;
+        UseCustomProxy = true;    # Use custom proxy to ensure Nix path
+        CustomProxyLocation = "${pkgs.keepassxc}/bin/keepassxc-proxy";  # Nix-provided proxy
+        UpdateBinaryPath = false; # Don't auto-update to prevent wrong path detection
         AllowExpiredCredentials = false;
         AlwaysAllowAccess = false;
         AlwaysAllowUpdate = false;
@@ -97,7 +97,7 @@
       };
 
       Browser_Allowed = {
-        Browsers = "firefox";    # Explicitly allow Firefox
+        Browsers = "firefox;zen";    # Allow both Firefox and Zen browser
       };
 
       Browser_Custom = {
@@ -109,7 +109,7 @@
         ];
       };
 
-      # Additional browser integration settings
+      # Firefox-specific browser integration (also applies to Zen browser)
       Browser_Firefox = {
         Enabled = true;
         AllowExpiredCredentials = false;
@@ -121,7 +121,26 @@
         ShowNotification = true;
         SupportBrowserProxy = true;
         UnlockDatabase = true;
-        UseCustomProxy = false;
+        UseCustomProxy = true;    # Use custom proxy for Firefox
+        CustomProxyLocation = "${pkgs.keepassxc}/bin/keepassxc-proxy";
+        UpdateBinaryPath = false; # Prevent auto-detection of wrong paths
+      };
+
+      # Zen browser integration (same as Firefox since it's Firefox-based)
+      Browser_Zen = {
+        Enabled = true;
+        AllowExpiredCredentials = false;
+        AlwaysAllowAccess = false;
+        AlwaysAllowUpdate = false;
+        HttpAuthPermission = false;
+        NoMigrationPrompt = true;
+        SearchInAllDatabases = false;
+        ShowNotification = true;
+        SupportBrowserProxy = true;
+        UnlockDatabase = true;
+        UseCustomProxy = true;    # Use custom proxy for Zen browser
+        CustomProxyLocation = "${pkgs.keepassxc}/bin/keepassxc-proxy";
+        UpdateBinaryPath = false; # Prevent auto-detection of wrong paths
       };
 
       # Password Generator defaults - Strong passwords by default
@@ -153,6 +172,134 @@
         UseOpenSSH = true;        # Use OpenSSH format
       };
     };
+  };
+
+  # Manual native messaging host configuration for broader browser support
+  # This ensures Zen browser and other Firefox-based browsers can communicate with KeePassXC
+  # We explicitly override any auto-generated config to ensure it uses the Nix-provided proxy
+  home.file = {
+    # Standard Firefox/Zen browser native messaging host (for non-Flatpak browsers)
+    ".mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" = {
+      force = true;  # Override any existing file to ensure correct Nix path
+      text = builtins.toJSON {
+        name = "org.keepassxc.keepassxc_browser";
+        description = "KeePassXC integration with native messaging support";
+        path = "${pkgs.keepassxc}/bin/keepassxc-proxy";
+        type = "stdio";
+        allowed_extensions = [
+          "keepassxc-browser@keepassxc.org"
+        ];
+      };
+    };
+    
+    # Flatpak native messaging host for Zen browser (if installed via Flatpak)
+    ".var/app/app.zen_browser.zen/data/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" = lib.mkIf pkgs.stdenv.isLinux {
+      force = true;
+      text = builtins.toJSON {
+        name = "org.keepassxc.keepassxc_browser";
+        description = "KeePassXC integration with native messaging support (Flatpak)";
+        path = "${pkgs.keepassxc}/bin/keepassxc-proxy";
+        type = "stdio";
+        allowed_extensions = [
+          "keepassxc-browser@keepassxc.org"
+        ];
+      };
+    };
+    
+    # Alternative Flatpak location for Mozilla-based browsers
+    ".var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" = lib.mkIf pkgs.stdenv.isLinux {
+      force = true;
+      text = builtins.toJSON {
+        name = "org.keepassxc.keepassxc_browser";
+        description = "KeePassXC integration with native messaging support (Flatpak Mozilla)";
+        path = "${pkgs.keepassxc}/bin/keepassxc-proxy";
+        type = "stdio";
+        allowed_extensions = [
+          "keepassxc-browser@keepassxc.org"
+        ];
+      };
+    };
+    
+    # Also create directories to ensure they exist
+    ".mozilla/native-messaging-hosts/.keep".text = "";
+    ".var/app/app.zen_browser.zen/data/native-messaging-hosts/.keep".text = lib.mkIf pkgs.stdenv.isLinux "";
+    ".var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/.keep".text = lib.mkIf pkgs.stdenv.isLinux "";
+    
+    # Create a verification script to check native messaging configuration
+    ".local/bin/check-keepassxc-integration".text = ''
+      #!/usr/bin/env bash
+      # Script to verify KeePassXC native messaging configuration
+      
+      set -e
+      
+      echo "🔐 KeePassXC Native Messaging Configuration Check"
+      echo "================================================"
+      echo ""
+      
+      # Color codes
+      GREEN='\033[0;32m'
+      RED='\033[0;31m'
+      YELLOW='\033[1;33m'
+      NC='\033[0m' # No Color
+      
+      # Expected proxy path
+      EXPECTED_PROXY="${pkgs.keepassxc}/bin/keepassxc-proxy"
+      
+      # Check if KeePassXC proxy exists
+      if [ -x "$EXPECTED_PROXY" ]; then
+        echo -e "✅ KeePassXC proxy found: ${GREEN}$EXPECTED_PROXY${NC}"
+      else
+        echo -e "❌ KeePassXC proxy not found: ${RED}$EXPECTED_PROXY${NC}"
+        exit 1
+      fi
+      
+      echo ""
+      echo "Checking native messaging host configurations:"
+      echo ""
+      
+      # Function to check a native messaging host file
+      check_nm_host() {
+        local file="$1"
+        local description="$2"
+        
+        if [ -f "$file" ]; then
+          echo -e "  📄 $description: ${GREEN}Found${NC}"
+          local proxy_path=$(jq -r '.path' "$file" 2>/dev/null || echo "invalid")
+          if [ "$proxy_path" = "$EXPECTED_PROXY" ]; then
+            echo -e "      ✅ Proxy path: ${GREEN}$proxy_path${NC}"
+          else
+            echo -e "      ⚠️  Proxy path: ${YELLOW}$proxy_path${NC} (expected: $EXPECTED_PROXY)"
+          fi
+        else
+          echo -e "  📄 $description: ${YELLOW}Not found${NC}"
+        fi
+        echo ""
+      }
+      
+      # Check standard Firefox/Zen browser configuration
+      check_nm_host "$HOME/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+                    "Standard Firefox/Zen browser"
+      
+      # Check Flatpak configurations (Linux only)
+      if [ "$(uname)" = "Linux" ]; then
+        check_nm_host "$HOME/.var/app/app.zen_browser.zen/data/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+                      "Zen browser (Flatpak data)"
+        
+        check_nm_host "$HOME/.var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json" \
+                      "Zen browser (Flatpak Mozilla)"
+      fi
+      
+      echo "🎯 Configuration check complete!"
+      echo ""
+      echo "To test the integration:"
+      echo "1. Start KeePassXC"
+      echo "2. Enable browser integration in KeePassXC settings"
+      echo "3. Open Zen browser and install the KeePassXC extension"
+      echo "4. Try connecting the extension to KeePassXC"
+    '';
+    
+    # Make the verification script executable
+    ".local/bin/check-keepassxc-integration".executable = true;
   };
 
   # Platform-specific file associations

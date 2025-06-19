@@ -57,12 +57,14 @@ KeePassXC supports importing from:
    - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) (Recommended)
    - [Chrome/Chromium](https://chrome.google.com/webstore/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)
    - [Safari](https://apps.apple.com/us/app/keepassxc-password-manager/id1467342620)
+   - **Zen Browser**: Uses Firefox extension (install from Firefox Add-ons)
 
 2. Configure browser integration:
    - Open KeePassXC
    - Go to Tools → Settings → Browser Integration
    - Enable browser integration
    - Firefox integration is pre-configured in this setup
+   - Zen browser works automatically with Firefox configuration
    - For other browsers, select them in the settings
 
 3. Connect browser extension:
@@ -110,6 +112,30 @@ KeePassXC is configured with enhanced Firefox integration:
    - If the extension shows as "Not connected", restart both Firefox and KeePassXC
    - If auto-fill doesn't work, try manually clicking the extension icon
    - For new database entries, ensure URLs are saved with the entry
+
+### Zen Browser Integration
+
+Since Zen browser is based on Firefox, it uses the same native messaging configuration:
+
+1. **Installation**:
+   - Install the KeePassXC browser extension from Firefox Add-ons
+   - The extension works the same as in Firefox
+   - No additional configuration needed
+
+2. **Configuration**:
+   - Zen browser automatically uses the Firefox native messaging host
+   - The configuration file at `~/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json` serves both browsers
+   - **Flatpak Installation**: If Zen browser is installed as a Flatpak, additional configurations are created:
+     - `~/.var/app/app.zen_browser.zen/data/native-messaging-hosts/org.keepassxc.keepassxc_browser.json`
+     - `~/.var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json`
+   - All configurations automatically point to the Nix-provided proxy: `${pkgs.keepassxc}/bin/keepassxc-proxy`
+   - KeePassXC is configured to use custom proxy location to prevent auto-detection of wrong paths
+
+3. **Troubleshooting Zen Browser**:
+   - If Zen browser can't connect to KeePassXC, restart both applications
+   - Verify that browser integration is enabled in KeePassXC settings
+   - Check that the extension is installed and enabled in Zen browser
+   - The same troubleshooting steps for Firefox apply to Zen browser
 
 ## SSH Agent Integration (Optional)
 
