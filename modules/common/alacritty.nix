@@ -8,11 +8,11 @@ let
   modKey = if isDarwin then "Command" else "Control";
 in
 {
-  # Use home-manager's built-in Alacritty module with minimal settings
-  programs.alacritty = {
+    # Use home-manager's built-in Alacritty module with minimal settings
+  programs.alacritty = ({
     enable = true;
     # On Linux, we don't install the package here since the Linux module provides a wrapped version
-    package = lib.mkIf isLinux null;
+    # On Darwin, use the default package
     
     settings = {
       # Simple window settings
@@ -139,12 +139,13 @@ in
         ];
       };
     };
-  };
+  } // lib.optionalAttrs isLinux {
+    package = null;
+  });
   
   # Install fonts for the terminal (ensure they exist)
-  home.packages = with pkgs; [
-    # Terminal fonts
-    (if isDarwin then meslo-lgs-nf else dejavu_fonts)
-    # nixGL wrapper is added in Linux-specific module
-  ];
+  home.packages = with pkgs; (
+    lib.optionals isDarwin [ meslo-lgs-nf ] ++
+    lib.optionals isLinux [ dejavu_fonts ]
+  );
 }

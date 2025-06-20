@@ -11,7 +11,7 @@
     ./development.nix
     ./helix.nix
     ./keepassxc.nix
-    ./media-suite.nix
+    # ./media-suite.nix  # Temporarily disabled for Darwin compatibility
     ./media-workflows.nix
     ./gimp-config.nix
   ];

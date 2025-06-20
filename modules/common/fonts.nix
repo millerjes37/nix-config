@@ -25,7 +25,7 @@
     libertine-g         # Linux Libertine and Biolinum fonts (requested)
     libertinus          # An extended version of Linux Libertine & Biolinum, offering more glyphs and features.
     eb-garamond         # EB Garamond font family (Garamond variant) (added)
-    garamond-libre
+    garamond-libre      # Garamond Libre font family
     liberation_ttf      # Liberation fonts (metric equivalents of Times, Arial, Courier - includes Times New Roman alternative) (re-enabled)
     inter               # A typeface specially designed for user interfaces
     roboto              # Google's signature font family (sans-serif)

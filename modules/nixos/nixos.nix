@@ -12,15 +12,6 @@
     initialPassword = "JEM"; # Set an initial password
   };
 
-  # Enable Hyprland
-  programs.hyprland.enable = true;
-
-  # Enable XDG Desktop Portal for Hyprland
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-  };
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 }

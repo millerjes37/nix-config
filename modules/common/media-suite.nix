@@ -6,17 +6,17 @@
 
   home.packages = with pkgs; [
     # === VIDEO EDITING SUITE ===
-    kdePackages.kdenlive        # Primary video editor - professional, open source
+    openshot-qt                 # Primary video editor - professional, open source (Darwin compatible)
     ffmpeg-full                 # Full FFmpeg with all codecs (includes everything)
     yt-dlp                      # Video downloads for content research
     mediainfo                   # Media file information
     mkvtoolnix                  # Matroska video tools
-    handbrake                   # Video transcoding
+    # handbrake                   # Video transcoding (currently broken on this platform)
 
     # === IMAGE EDITING SUITE ===
     gimp                        # Primary image editor
     inkscape                    # Vector graphics and logo design
-    krita                       # Digital painting and graphics
+    # krita                       # Digital painting and graphics (not available on Darwin ARM64)
     darktable                   # RAW photo processing
     rawtherapee                 # Alternative RAW processor
     imagemagick                 # Command-line image processing
@@ -32,11 +32,11 @@
     
     # === SCREEN RECORDING & STREAMING ===
     obs-studio                  # Screen recording and live streaming
-    simplescreenrecorder        # Alternative screen recorder
-    peek                        # GIF screen recorder
+    # simplescreenrecorder        # Alternative screen recorder (Linux only)
+    # peek                        # GIF screen recorder (Linux only)
     
     # === DESIGN & TYPOGRAPHY ===
-    scribus                     # Desktop publishing for print materials
+    # scribus                     # Desktop publishing for print materials (may have Linux deps)
     fontforge                   # Font editing and creation
     
     # === WORKFLOW TOOLS ===
@@ -89,12 +89,12 @@
 
   # XDG file associations for media files
   xdg.mimeApps.defaultApplications = lib.mkIf pkgs.stdenv.isLinux {
-    # Video files -> Kdenlive for editing, VLC for viewing
-    "video/mp4" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
-    "video/avi" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
-    "video/mkv" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
-    "video/mov" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
-    "video/webm" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
+    # Video files -> OpenShot for editing, VLC for viewing
+    "video/mp4" = ["openshot-qt.desktop" "vlc.desktop"];
+    "video/avi" = ["openshot-qt.desktop" "vlc.desktop"];
+    "video/mkv" = ["openshot-qt.desktop" "vlc.desktop"];
+    "video/mov" = ["openshot-qt.desktop" "vlc.desktop"];
+    "video/webm" = ["openshot-qt.desktop" "vlc.desktop"];
     
     # Audio files -> Audacity for editing
     "audio/wav" = ["audacity.desktop"];
