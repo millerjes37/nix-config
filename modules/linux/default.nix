@@ -1,51 +1,17 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  # Import all Linux-specific modules
+  # Import system configuration modules
   imports = [
-    inputs.nix-flatpak.homeManagerModules.nix-flatpak  # Flatpak support
-    ../../modules/common/default.nix  # Common modules first
-    ../../modules/common/keybindings.nix  # Shared keybindings
-    ./i3.nix                         # Window manager
-    ./rofi.nix                       # Application launcher
-    ./gtk.nix                        # GTK theming
-    ./linux-apps.nix                 # Linux-specific applications
-    ./flatpak.nix
-    ./nixgl.nix                      # nixGL wrapper and packages
-  ];
-  
-  # Common Linux-specific packages
-  home.packages = with pkgs; [
-    # GUI tools
-    firefox
-    keepassxc
-    libreoffice
-    discord
+    # Core system configuration
+    ../common/default.nix  # Common system modules
     
-    # System utilities
-    pavucontrol      # Audio control
-    blueman          # Bluetooth manager
-    networkmanager   # Network management
+    # Window management
+    ./window-management/default.nix
     
-    # Window management tools
-    xclip            # Clipboard tool
-    xdotool          # X11 automation
-    xorg.xev         # X event viewer
-    dunst            # Notification daemon
+    # Linux system settings
+    ./gtk.nix
+    ./services.nix
+    ./hardware.nix
   ];
-  
-  # Enable XDG desktop integration
-  xdg = {
-    enable = true;
-    userDirs = {
-      enable = true;
-      createDirectories = true;
-      desktop = "${config.home.homeDirectory}/Desktop";
-      documents = "${config.home.homeDirectory}/Documents";
-      download = "${config.home.homeDirectory}/Downloads";
-      music = "${config.home.homeDirectory}/Music";
-      pictures = "${config.home.homeDirectory}/Pictures";
-      videos = "${config.home.homeDirectory}/Videos";
-    };
-  };
 }

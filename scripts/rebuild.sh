@@ -262,15 +262,33 @@ function rebuild_configuration() {
 }
 
 function handle_git_push() {
-  # Provide option to push changes if we made commits
-  print_step "Do you want to push the changes to the remote repository? [y/N]"
+  print_header "SYNCING TO REMOTE REPOSITORY"
+  
+  # Check if there are any commits to push
+  if git log --oneline @{u}.. 2>/dev/null | grep -q .; then
+    print_step "Local commits detected that need to be pushed to remote."
+  else
+    print_step "Local repository is up to date with remote."
+    print_success "No sync needed - already up to date!"
+    return 0
+  fi
+  
+  # Provide option to push changes
+  print_step "Do you want to push the local commits to the remote repository? [Y/n]"
   read -r push_changes
-  if [[ "$push_changes" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    print_step "Pushing changes to remote repository..."
-    git push
-    print_success "Changes successfully pushed!"
+  # Default to "yes" if response is empty
+  if [[ -z "$push_changes" || "$push_changes" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    print_step "Pushing commits to remote repository..."
+    if git push; then
+      print_success "Successfully synced local commits to remote repository!"
+    else
+      print_error "Failed to push to remote repository."
+      print_step "You may need to resolve conflicts or check your network connection."
+      return 1
+    fi
   else
     print_warning "Skipping push to remote repository."
+    print_step "Remember to push your changes later with: git push"
   fi
 }
 
@@ -307,8 +325,8 @@ function main() {
   # Run post-rebuild hooks
   run_post_rebuild
   
-  # Offer to push if we made commits
-  if [[ "$made_commits" = true ]]; then
+  # Always sync to remote after successful rebuild (unless git operations are skipped)
+  if [[ "$SKIP_GIT" -eq 0 ]]; then
     handle_git_push
   fi
   

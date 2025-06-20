@@ -1,39 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  # Import system configuration modules
-  imports = [
-    # Core system configuration
-    ../common/default.nix  # Common system modules
-    
-    # Window management
-    ./window-management/default.nix
-    
-    # Darwin system settings
-    ./system-settings.nix
-    ./services.nix
-  ];
-  
-  # Install macOS-specific packages
-  home.packages = with pkgs; [
-    # Window management
-    yabai             # Tiling window manager
-    skhd              # Hotkey daemon
-    
-    # macOS utilities
-    m-cli             # Swiss army knife for macOS
-    mas               # Mac App Store CLI
-    
-    # Development tools
-    cocoapods         # Dependency manager for Swift and Objective-C
-    xcodes            # Manage Xcode versions
-  ];
-  
-  # macOS-specific home manager settings
+  # macOS-specific system settings and defaults
   targets.darwin = {
     currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
     
-    # Add more macOS defaults as needed
+    # macOS system defaults
     defaults = {
       NSGlobalDomain = {
         # Finder behavior
@@ -71,4 +43,4 @@
       };
     };
   };
-}
+} 

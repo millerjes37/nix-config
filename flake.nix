@@ -36,68 +36,61 @@
   # Outputs define what this flake provides to other flakes or to the user.
   outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, ... }@inputs:
   let
-    # `mkHomeConfig`: A helper function to create a home-manager configuration.
-    # Parameters:
-    #   - `system`: The target system architecture (e.g., "aarch64-darwin", "x86_64-linux").
-    #   - `username`: The username for the home-manager configuration.
-    #   - `extraImports` (optional): A list of additional Nix modules to import,
-    #     allowing for platform-specific or user-specific configurations.
-    mkHomeConfig = { system, username, extraImports ? [] }:
+    # Helper function to create a home-manager configuration with the new modular structure
+    mkHomeConfig = { system, username, profile ? "workstation", extraModules ? [] }:
       home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { # Import nixpkgs for the specified system.
+        pkgs = import nixpkgs {
           inherit system;
           overlays = [ inputs.nixgl.overlay ];
           config = {
-            allowUnfree = true; # Allow installation of unfree packages.
+            allowUnfree = true;
             permittedInsecurePackages = [
-              "electron-25.9.0" # Example: Allow a specific insecure package.
+              "electron-25.9.0"
             ];
           };
         };
-        # Pass `extraImports` to the modules, making them available for conditional logic.
-        extraSpecialArgs = { inherit extraImports inputs; };
-        # List of modules to include in the home-manager configuration.
+        
+        extraSpecialArgs = { inherit inputs; };
+        
         modules = [
-          ./home.nix # The main shared home-manager configuration.
-          nixvim.homeManagerModules.nixvim # Module for nixvim integration.
-          # Anonymous module to set user-specific details.
+          # Core system configuration
+          ./modules/common/default.nix
+          
+          # Applications
+          ./applications/common/default.nix
+          
+          # User profile
+          ./profiles/${profile}.nix
+          
+          # User-specific configuration
           ({ pkgs, ... }: {
             home.username = username;
             home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
-            nixpkgs.config.allowUnfree = true; # Also allow unfree packages here.
+            nixpkgs.config.allowUnfree = true;
           })
-        ];
+          
+          # nixvim integration
+          nixvim.homeManagerModules.nixvim
+          
+          # Platform-specific modules
+        ] ++ lib.optionals pkgs.stdenv.isDarwin [
+          ./modules/darwin/default.nix
+          ./applications/darwin/default.nix
+        ] ++ lib.optionals pkgs.stdenv.isLinux [
+          ./modules/linux/default.nix
+          ./applications/linux/default.nix
+          inputs.nix-flatpak.homeManagerModules.nix-flatpak
+        ] ++ extraModules;
       };
 
-    # `mkDarwinConfig`: A helper function to create a nix-darwin system configuration for macOS.
-    # Parameters:
-    #   - `system`: The target macOS system architecture (e.g., "aarch64-darwin").
-    #   - `username`: The username for the macOS system.
-    # This function sets up a full macOS system configuration using nix-darwin.
-    mkDarwinConfig = { system, username }:
-      darwin.lib.darwinSystem {
-        inherit system;
-        # List of modules for the nix-darwin configuration.
-        modules = [
-          ./configuration.nix # macOS specific system configurations.
-          home-manager.darwinModules.home-manager # Integrate home-manager into the darwin system.
-          {
-            # Configure home-manager to use global packages and user packages.
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # Import the main home.nix configuration for the specified user.
-            home-manager.users.${username} = import ./home.nix;
-            nixpkgs.config.allowUnfree = true; # Allow unfree packages for the system.
-          }
-        ];
-      };
+    lib = nixpkgs.lib;
   in
   {
     # NixOS Configurations
     nixosConfigurations = {
       "nixos-desktop" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux"; # Or your target system
-        specialArgs = { inherit inputs; }; # Pass all flake inputs to modules
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           # Main NixOS system configuration
           ./modules/nixos/default.nix
@@ -109,7 +102,17 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             # Configure Home Manager for a specific user
-            home-manager.users.jules = import ./modules/nixos/home.nix;
+            home-manager.users.jules = {
+              imports = [
+                ./modules/common/default.nix
+                ./applications/common/default.nix
+                ./profiles/workstation.nix
+                ./modules/linux/default.nix
+                ./applications/linux/default.nix
+                inputs.nix-flatpak.homeManagerModules.nix-flatpak
+                nixvim.homeManagerModules.nixvim
+              ];
+            };
             # Pass flake inputs to home-manager modules as well
             home-manager.extraSpecialArgs = { inherit inputs; };
           }
@@ -120,42 +123,71 @@
       };
     };
 
-    # `darwinConfigurations`: Defines complete macOS system configurations.
-    # These are typically used to build and manage an entire macOS setup.
-    # Example: `nix build .#darwinConfigurations.macbook-air`
-    darwinConfigurations."macbook-air" = mkDarwinConfig {
-      system = "aarch64-darwin"; # Apple Silicon Mac
-      username = "jacksonmiller";
+    # Darwin Configurations (macOS system-level)
+    darwinConfigurations."macbook-air" = darwin.lib.darwinSystem {
+      system = "aarch64-darwin";
+      modules = [
+        ./configuration.nix
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.jacksonmiller = {
+            imports = [
+              ./modules/common/default.nix
+              ./applications/common/default.nix
+              ./profiles/workstation.nix
+              ./modules/darwin/default.nix
+              ./applications/darwin/default.nix
+              nixvim.homeManagerModules.nixvim
+            ];
+          };
+          home-manager.extraSpecialArgs = { inherit inputs; };
+          nixpkgs.config.allowUnfree = true;
+        }
+      ];
     };
 
-    # `homeConfigurations`: Defines standalone home-manager configurations.
-    # These can be activated on any system (macOS or Linux) where home-manager is installed.
-    # They manage the user's dotfiles and user-specific packages.
-    # Example: `home-manager switch --flake .#jacksonmiller@mac`
-    homeConfigurations = let
-      # Home-manager configuration for a macOS user named "jacksonmiller".
-      jacksonMac = mkHomeConfig {
+    # Home Manager Configurations (user-level, standalone)
+    homeConfigurations = {
+      # macOS configurations
+      "jacksonmiller@mac" = mkHomeConfig {
         system = "aarch64-darwin";
         username = "jacksonmiller";
-        # Imports macOS-specific modules from `modules/darwin/default.nix`.
-        extraImports = [
-          ./modules/darwin/default.nix # Main macOS user-specific configuration
-        ];
+        profile = "workstation";
+      };
+      
+      "jacksonmiller@mac-minimal" = mkHomeConfig {
+        system = "aarch64-darwin";
+        username = "jacksonmiller";
+        profile = "minimal";
       };
 
-      # Home-manager configuration for a Linux user named "jackson".
-      jacksonLinux = mkHomeConfig {
+      # Linux configurations
+      "jackson@linux" = mkHomeConfig {
         system = "x86_64-linux";
         username = "jackson";
-        # Imports Linux-specific modules from `modules/linux/default.nix`.
-        extraImports = [
-          ./modules/linux/default.nix  # Main Linux user-specific configuration
-        ];
+        profile = "workstation";
       };
-    in {
-      "jacksonmiller@mac" = jacksonMac;
-      "jackson@linux" = jacksonLinux;
-      "jackson" = jacksonLinux;
+      
+      "jackson@linux-minimal" = mkHomeConfig {
+        system = "x86_64-linux";
+        username = "jackson";
+        profile = "minimal";
+      };
+      
+      "jackson@media" = mkHomeConfig {
+        system = "x86_64-linux";
+        username = "jackson";
+        profile = "media-production";
+      };
+
+      # Aliases for convenience
+      "jackson" = mkHomeConfig {
+        system = "x86_64-linux";
+        username = "jackson";
+        profile = "workstation";
+      };
     };
   };
 }
