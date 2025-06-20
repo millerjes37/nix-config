@@ -139,8 +139,6 @@ in
         ];
       };
     };
-  } // lib.optionalAttrs isLinux {
-    package = null;
   });
   
   # Install fonts for the terminal (ensure they exist)

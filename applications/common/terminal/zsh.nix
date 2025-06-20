@@ -80,10 +80,16 @@
         /run/current-system/sw/bin
         /etc/profiles/per-user/$USER/bin
         /usr/local/bin
-        ${if pkgs.stdenv.isDarwin then "/opt/homebrew/bin" else ""}
-        ${if pkgs.stdenv.isDarwin then "/opt/local/bin" else ""}
         ${pkgs.uutils-coreutils}/bin
       )
+      
+      # Add platform-specific paths
+      ${lib.optionalString pkgs.stdenv.isDarwin ''
+        path+=(
+          /opt/homebrew/bin
+          /opt/local/bin
+        )
+      ''}
 
       # Export the path
       export PATH
@@ -245,7 +251,6 @@
     zellij # Terminal multiplexer
 
     # Common development tools
-    libgcc
     gnumake # Build automation tool
     python3 # Python 3 interpreter
     nodejs_20 # Node.js (LTS version 20)
@@ -258,5 +263,8 @@
     openssl # Cryptography toolkit
     curl # Command-line tool for transferring data with URLs
     wget # Command-line tool for downloading files
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    # Linux-specific packages
+    libgcc # GCC runtime library (not available on macOS)
   ];
 }

@@ -11,7 +11,7 @@
     cacheHome = "${config.home.homeDirectory}/.cache";
     stateHome = "${config.home.homeDirectory}/.local/state";
     
-    # Set up MIME types and default applications
-    mimeApps.enable = true;
+    # Set up MIME types and default applications (Linux only)
+    mimeApps.enable = pkgs.stdenv.isLinux;
   };
 } 

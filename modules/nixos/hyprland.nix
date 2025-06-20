@@ -211,8 +211,7 @@
 
   # Programs
   programs = {
-    # Hyprland
-    hyprland.enable = true;
+    # Hyprland already enabled above
     
     # Thunar file manager
     thunar = {

@@ -73,10 +73,10 @@
           nixvim.homeManagerModules.nixvim
           
           # Platform-specific modules
-        ] ++ lib.optionals pkgs.stdenv.isDarwin [
+        ] ++ lib.optionals (lib.hasSuffix "darwin" system) [
           ./modules/darwin/default.nix
           ./applications/darwin/default.nix
-        ] ++ lib.optionals pkgs.stdenv.isLinux [
+        ] ++ lib.optionals (lib.hasSuffix "linux" system) [
           ./modules/linux/default.nix
           ./applications/linux/default.nix
           inputs.nix-flatpak.homeManagerModules.nix-flatpak
