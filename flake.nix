@@ -33,7 +33,10 @@
     nixgl.url = "github:guibou/nixGL";
 
     # nix-colors: Universal theming with base16 color schemes
-    nix-colors.url = "github:misterio77/nix-colors";
+    nix-colors = {
+      url = "tarball+https://github.com/misterio77/nix-colors/archive/main.tar.gz";
+      flake = true;
+    };
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
