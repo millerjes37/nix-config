@@ -27,12 +27,14 @@
         auto-save   = true;          # Autosave files when focus is lost.
       };
 
-      # Custom key mappings (TOML-style keys).
+      # Custom key mappings (correct Helix format).
       keys = {
         normal = {
-          "space w" = ":write";         # <leader>w to save.
-          "space q" = ":quit";          # <leader>q to quit.
-          "space h" = ":nohlsearch";    # Clear search highlights.
+          space = {
+            w = ":write";         # <space>w to save.
+            q = ":quit";          # <space>q to quit.
+            h = "select_all";     # <space>h to select all (no hlsearch in helix).
+          };
         };
       };
     };
