@@ -57,6 +57,66 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
+function sync_with_remote() {
+  print_header "SYNCING WITH REMOTE REPOSITORY"
+  
+  # Define the remote repository URL
+  REMOTE_URL="https://github.com/millerjes37/nix-config.git"
+  
+  # Check if we're in a git repository
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    print_error "Not in a git repository. Skipping sync."
+    return 1
+  fi
+  
+  # Fetch the latest changes from remote
+  print_step "Fetching latest changes from remote repository..."
+  if ! git fetch origin; then
+    print_error "Failed to fetch from remote repository."
+    return 1
+  fi
+  
+  # Check if we have local changes
+  if [[ -n "$(git status --porcelain)" ]]; then
+    print_warning "Local changes detected. Stashing changes before sync..."
+    git stash push -m "Auto-stash before sync $(date '+%Y-%m-%d %H:%M:%S')"
+    stashed_changes=true
+  else
+    stashed_changes=false
+  fi
+  
+  # Get current branch
+  current_branch=$(git branch --show-current)
+  
+  # Pull the latest changes
+  print_step "Pulling latest changes from origin/$current_branch..."
+  if git pull origin "$current_branch"; then
+    print_success "Successfully synced with remote repository."
+  else
+    print_error "Failed to pull from remote repository."
+    
+    # Restore stashed changes if we stashed them
+    if [[ "$stashed_changes" = true ]]; then
+      print_step "Restoring previously stashed changes..."
+      git stash pop
+    fi
+    return 1
+  fi
+  
+  # Restore stashed changes if we stashed them
+  if [[ "$stashed_changes" = true ]]; then
+    print_step "Restoring previously stashed changes..."
+    if git stash pop; then
+      print_success "Successfully restored stashed changes."
+    else
+      print_warning "There were conflicts restoring stashed changes. Please resolve manually."
+      print_step "Use 'git stash list' to see stashed changes and 'git stash pop' to restore them."
+    fi
+  fi
+  
+  return 0
+}
+
 function handle_git_changes() {
   print_header "GIT STATUS"
   
@@ -223,6 +283,11 @@ function main() {
   
   # Go to the nix-config directory
   cd "$NIX_CONFIG_DIR" || exit
+  
+  # Sync with remote repository unless git operations are skipped
+  if [[ "$SKIP_GIT" -eq 0 ]]; then
+    sync_with_remote
+  fi
   
   # Handle git changes unless skipped
   if [[ "$SKIP_GIT" -eq 0 ]]; then
