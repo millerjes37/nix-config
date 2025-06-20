@@ -10,8 +10,13 @@
 
     # Helix configuration rendered to ~/.config/helix/config.toml
     settings = {
-      # Global theme. `gruvbox_dark_hard` ships with Helix.
-      theme = "gruvbox_dark_hard";
+      # Dynamic theme based on color scheme - matches your browns and tans preference
+      theme = if config.colorScheme.slug == "atelier-dune" then "autumn_night_transparent"
+              else if config.colorScheme.slug == "atelier-cave" then "monokai"
+              else if config.colorScheme.slug == "atelier-heath" then "autumn_night"
+              else if config.colorScheme.slug == "ir-black" then "monokai"
+              else if lib.hasPrefix "gruvbox" config.colorScheme.slug then "gruvbox_dark_hard"
+              else "gruvbox_dark_hard"; # fallback
 
       # Editor-wide settings.
       editor = {
