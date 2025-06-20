@@ -31,10 +31,13 @@
 
     # nixGL wrapper packages and overlay
     nixgl.url = "github:guibou/nixGL";
+
+    # nix-colors: Universal theming with base16 color schemes
+    nix-colors.url = "github:misterio77/nix-colors";
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
-  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, darwin, nix-homebrew, nixvim, nix-colors, ... }@inputs:
   let
     # Helper function to create a home-manager configuration with the new modular structure
     mkHomeConfig = { system, username, profile ? "workstation", extraModules ? [] }:

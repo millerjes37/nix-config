@@ -6,6 +6,7 @@
     ./fonts.nix
     ./xdg.nix
     ./locale.nix
+    ./theming.nix
   ];
 
   # Essential system configuration

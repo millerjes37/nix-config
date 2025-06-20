@@ -61,65 +61,64 @@ in
         thickness = 0.2;
       };
       
-      # Gruvbox Dark theme
+      # Universal color scheme via nix-colors
       colors = {
         primary = {
-          background = "0x1d2021";
-          foreground = "0xd4be98";
+          background = "0x${config.colorScheme.palette.base00}";
+          foreground = "0x${config.colorScheme.palette.base05}";
         };
         cursor = {
-          text = "0x1d2021";
-          cursor = "0xec5d2a";
+          text = "0x${config.colorScheme.palette.base00}";
+          cursor = "0x${config.colorScheme.palette.base05}";
         };
         vi_mode_cursor = {
-          text = "0x1d2021";
-          cursor = "0xec5d2a";
+          text = "0x${config.colorScheme.palette.base00}";
+          cursor = "0x${config.colorScheme.palette.base09}";
         };
         search = {
           matches = {
-            foreground = "0x1d2021";
-            background = "0x7daea3"; # blue
+            foreground = "0x${config.colorScheme.palette.base00}";
+            background = "0x${config.colorScheme.palette.base0A}";
           };
           focused_match = {
-            foreground = "0x1d2021";
-            background = "0xa9b665"; # green
+            foreground = "0x${config.colorScheme.palette.base00}";
+            background = "0x${config.colorScheme.palette.base0B}";
           };
         };
         hints = {
           start = {
-            foreground = "0x1d2021";
-            background = "0xd8a657"; # yellow
+            foreground = "0x${config.colorScheme.palette.base00}";
+            background = "0x${config.colorScheme.palette.base0A}";
           };
           end = {
-            foreground = "0x1d2021";
-            background = "0x7daea3"; # blue
+            foreground = "0x${config.colorScheme.palette.base00}";
+            background = "0x${config.colorScheme.palette.base0D}";
           };
         };
         selection = {
-          text = "0xd4be98";
-          background = "0x32302f";
+          text = "0x${config.colorScheme.palette.base05}";
+          background = "0x${config.colorScheme.palette.base02}";
         };
         normal = {
-          black = "0x32302f";
-          red = "0xea6962";
-          green = "0xa9b665";
-          yellow = "0xd8a657";
-          blue = "0x7daea3";
-          magenta = "0xd3869b";
-          cyan = "0x89b482";
-          white = "0xd4be98";
+          black = "0x${config.colorScheme.palette.base00}";
+          red = "0x${config.colorScheme.palette.base08}";
+          green = "0x${config.colorScheme.palette.base0B}";
+          yellow = "0x${config.colorScheme.palette.base0A}";
+          blue = "0x${config.colorScheme.palette.base0D}";
+          magenta = "0x${config.colorScheme.palette.base0E}";
+          cyan = "0x${config.colorScheme.palette.base0C}";
+          white = "0x${config.colorScheme.palette.base05}";
         };
         bright = {
-          black = "0x32302f";
-          red = "0xea6962";
-          green = "0xa9b665";
-          yellow = "0xd8a657";
-          blue = "0x7daea3";
-          magenta = "0xd3869b";
-          cyan = "0x89b482";
-          white = "0xd4be98";
+          black = "0x${config.colorScheme.palette.base03}";
+          red = "0x${config.colorScheme.palette.base08}";
+          green = "0x${config.colorScheme.palette.base0B}";
+          yellow = "0x${config.colorScheme.palette.base0A}";
+          blue = "0x${config.colorScheme.palette.base0D}";
+          magenta = "0x${config.colorScheme.palette.base0E}";
+          cyan = "0x${config.colorScheme.palette.base0C}";
+          white = "0x${config.colorScheme.palette.base07}";
         };
-        # Gruvbox theme doesn't typically use indexed_colors
       };
       
       # Essential key bindings
