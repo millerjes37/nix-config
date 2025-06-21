@@ -17,8 +17,7 @@
   # Install macOS-specific packages
   home.packages = with pkgs; [
     # Window management
-    yabai             # Tiling window manager
-    skhd              # Hotkey daemon
+    aerospace         # AeroSpace tiling window manager
     
     # macOS utilities
     m-cli             # Swiss army knife for macOS
