@@ -7,7 +7,7 @@
   # Home Manager settings for NixOS
   home = {
     username = "jackson";
-    homeDirectory = "/home/jackson";
+    homeDirectory = lib.mkForce "/home/jackson";
     stateVersion = "25.05";
   };
 

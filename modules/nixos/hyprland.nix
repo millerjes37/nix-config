@@ -130,9 +130,6 @@
     # Bluetooth
     blueman.enable = true;
     
-    # Network
-    networkmanager.enable = true;
-    
     # Printing
     printing.enable = true;
     avahi = {
@@ -140,9 +137,6 @@
       nssmdns4 = true;
       openFirewall = true;
     };
-    
-    # Polkit
-    polkit.enable = true;
     
     # GNOME Keyring
     gnome.gnome-keyring.enable = true;
@@ -177,6 +171,11 @@
     
     # PulseAudio (disabled in favor of PipeWire)
     pulseaudio.enable = false;
+  };
+
+  # Networking configuration
+  networking = {
+    networkmanager.enable = true;
   };
 
   # Fonts

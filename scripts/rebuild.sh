@@ -1,340 +1,359 @@
 #!/usr/bin/env bash
-# Cross-platform rebuild script for Nix configurations
+# Enhanced Nix Configuration Rebuild Script with Git Integration
+# Handles cross-platform builds, validation, and automatic git operations
 
-set -e
+set -euo pipefail
 
-# Get the directory of this script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-NIX_CONFIG_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-# Source common utilities if available
-if [ -f "$NIX_CONFIG_DIR/scripts/utils/common.sh" ]; then
-  source "$NIX_CONFIG_DIR/scripts/utils/common.sh"
-else
-  echo "Error: scripts/utils/common.sh not found. Please ensure it exists."
-  exit 1
-fi
+# -----------------------------------------------------------------------------
+# Enhanced global error handling
+# -----------------------------------------------------------------------------
+# Whenever any command in the script fails, this trap prints a helpful message
+# and exits with the failing command's status code.  Use --verbose for the full
+# command trace that led to the error.
+
+on_error() {
+  local exit_code=$?
+  local line_no=$1
+  local cmd=$2
+  echo -e "${RED}[ERROR]${NC} Command '${cmd}' failed on line ${line_no} with exit code ${exit_code}" | tee -a "$LOG_FILE"
+  echo -e "${YELLOW}[HINT]${NC} Review the log at $LOG_FILE or rerun with the --verbose flag for a command-by-command trace." | tee -a "$LOG_FILE"
+  exit "$exit_code"
+}
+trap 'on_error $LINENO "$BASH_COMMAND"' ERR
+trap 'echo -e "${YELLOW}[INTERRUPTED]${NC} Build was interrupted." | tee -a "$LOG_FILE"; exit 130' INT TERM
+
+# Configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+CONFIG_ROOT="$(cd "$SCRIPT_DIR/.." &> /dev/null && pwd)"
+LOG_FILE="/tmp/nix-rebuild.log"
 
 # Platform detection
 if [[ "$(uname)" == "Darwin" ]]; then
-  PLATFORM="darwin"
-  if [[ "$USER" == "" ]]; then
-    USER="jacksonmiller"
-  fi
-  FLAKE_TARGET="$USER@mac"
+    PLATFORM="darwin"
+    PLATFORM_NAME="macOS"
+    DEFAULT_USER="jacksonmiller"
+    DEFAULT_TARGET="jacksonmiller@mac"
+    REBUILD_CMD="darwin-rebuild"
 else
-  PLATFORM="linux"
-  if [[ "$USER" == "" ]]; then
-    USER="jackson"
-  fi
-  FLAKE_TARGET="$USER@linux"
+    PLATFORM="linux"
+    PLATFORM_NAME="Linux"
+    DEFAULT_USER="jackson"
+    DEFAULT_TARGET="jackson@linux"
+    REBUILD_CMD="home-manager"
 fi
 
-# Check for arguments
-VERBOSE=0
-DARWIN_REBUILD=0
-UPGRADE_LOCK=0
-SKIP_GIT=0
+# Functions
+log() {
+    echo -e "${BLUE}[$(date +'%H:%M:%S')]${NC} $1" | tee -a "$LOG_FILE"
+}
 
-# Parse arguments
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -v|--verbose) VERBOSE=1; shift ;;
-    -d|--darwin) DARWIN_REBUILD=1; shift ;;
-    -u|--upgrade) UPGRADE_LOCK=1; shift ;;
-    -s|--skip-git) SKIP_GIT=1; shift ;;
-    -h|--help) 
-      echo "Usage: $0 [options]"
-      echo "Options:"
-      echo "  -v, --verbose     Enable verbose output"
-      echo "  -d, --darwin      Use darwin-rebuild instead of home-manager on macOS"
-      echo "  -u, --upgrade     Update flake lock file (upgrade all dependencies)"
-      echo "  -s, --skip-git    Skip git operations"
-      echo "  -h, --help        Show this help message"
-      exit 0
-      ;;
-    *) echo "Unknown parameter: $1"; exit 1 ;;
-  esac
+warn() {
+    echo -e "${YELLOW}[WARN]${NC} $1" | tee -a "$LOG_FILE"
+}
+
+error() {
+    echo -e "${RED}[ERROR]${NC} $1" | tee -a "$LOG_FILE"
+}
+
+success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1" | tee -a "$LOG_FILE"
+}
+
+print_header() {
+    echo
+    echo "====== NIX CONFIG REBUILD SCRIPT ======"
+    echo "Platform: $PLATFORM_NAME"
+    echo "User: $DEFAULT_USER"
+    echo "Target: $DEFAULT_TARGET"
+    echo "Config Root: $CONFIG_ROOT"
+    echo
+}
+
+check_prerequisites() {
+    log "Checking prerequisites..."
+    
+    local missing_tools=()
+    
+    # Check for required tools
+    command -v nix >/dev/null 2>&1 || missing_tools+=("nix")
+    command -v git >/dev/null 2>&1 || missing_tools+=("git")
+    command -v $REBUILD_CMD >/dev/null 2>&1 || missing_tools+=("$REBUILD_CMD")
+    
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        error "Missing required tools: ${missing_tools[*]}"
+        exit 1
+    fi
+    
+    success "All prerequisites satisfied"
+}
+
+check_git_status() {
+    log "Checking git status..."
+    
+    cd "$CONFIG_ROOT"
+    
+    # Check if we're in a git repository
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        error "Not in a git repository!"
+        exit 1
+    fi
+    
+    # Check for uncommitted changes
+    if ! git diff-index --quiet HEAD --; then
+        warn "Uncommitted changes detected"
+        return 1
+    fi
+    
+    success "Git repository is clean"
+    return 0
+}
+
+commit_and_push() {
+    log "Committing and pushing changes..."
+    
+    cd "$CONFIG_ROOT"
+    
+    # Add all changes
+    git add .
+    
+    # Check if there are changes to commit
+    if git diff-index --quiet --cached HEAD --; then
+        log "No changes to commit"
+        return 0
+    fi
+    
+    # Generate commit message
+    local commit_msg="Auto-commit: $(date +'%Y-%m-%d %H:%M:%S') on $PLATFORM_NAME"
+    
+    # Commit changes
+    git commit -m "$commit_msg"
+    
+    # Push to remote
+    if git remote get-url origin >/dev/null 2>&1; then
+        log "Pushing to remote repository..."
+        git push origin main
+        success "Changes pushed to remote"
+    else
+        warn "No remote repository configured"
+    fi
+}
+
+validate_flake() {
+    log "Validating flake configuration..."
+    
+    cd "$CONFIG_ROOT"
+    
+    local attempts=1
+    local max_attempts=3
+    while (( attempts <= max_attempts )); do
+        if nix flake check --no-build 2>&1 | tee -a "$LOG_FILE"; then
+            success "Flake validation passed on attempt $attempts"
+            return 0
+        fi
+        if (( attempts == max_attempts )); then
+            error "Flake validation failed after $max_attempts attempts"
+            return 1
+        fi
+        warn "Flake validation failed (attempt $attempts/$max_attempts). Retrying in 5 seconds..."
+        attempts=$((attempts+1))
+        sleep 5
+    done
+}
+
+backup_config() {
+    log "Creating backup..."
+    
+    local backup_dir="$HOME/.config/nix-backups/$(date +'%Y-%m-%d_%H-%M-%S')"
+    mkdir -p "$backup_dir"
+    
+    # Backup important config files
+    if [[ "$PLATFORM" == "linux" ]]; then
+        cp -r "$HOME/.config/home-manager" "$backup_dir/" 2>/dev/null || true
+        cp "$HOME/.config/mimeapps.list" "$backup_dir/" 2>/dev/null || true
+    fi
+    
+    success "Backup created at $backup_dir"
+}
+
+rebuild_config() {
+    local target="${1:-$DEFAULT_TARGET}"
+    
+    log "Rebuilding configuration for target: $target"
+    
+    cd "$CONFIG_ROOT"
+    
+    # Clear any stale backup file that can trip home-manager
+    [[ -f "$HOME/.config/mimeapps.list.backup" ]] && rm -f "$HOME/.config/mimeapps.list.backup"
+    
+    # ---------------------------------------------------------------------------
+    # Build the appropriate command for the current platform/target
+    # ---------------------------------------------------------------------------
+    local cmd=""
+    if [[ "$PLATFORM" == "darwin" ]]; then
+        if [[ "$target" == *"@mac" ]]; then
+            cmd="home-manager switch --flake .#${target} -b backup"
+        else
+            cmd="darwin-rebuild switch --flake .#${target}"
+        fi
+    else
+        if [[ "$target" == "nixos-desktop" ]]; then
+            cmd="sudo nixos-rebuild switch --flake .#${target}"
+        else
+            cmd="home-manager switch --flake .#${target} -b backup"
+        fi
+    fi
+
+    log "Running rebuild command: $cmd"
+    if eval $cmd 2>&1 | tee -a "$LOG_FILE"; then
+        success "Configuration rebuilt successfully"
+        return 0
+    fi
+
+    # If we get here the first attempt failed – retry with --show-trace for detail
+    warn "Rebuild failed – retrying once with --show-trace for detailed diagnostics"
+    if [[ "$cmd" != *"--show-trace"* ]]; then
+        cmd+=" --show-trace"
+    fi
+    eval $cmd 2>&1 | tee -a "$LOG_FILE"
+}
+
+update_flake() {
+    log "Updating flake inputs..."
+    
+    cd "$CONFIG_ROOT"
+    nix flake update
+    
+    success "Flake inputs updated"
+}
+
+show_help() {
+    echo "Usage: $0 [OPTIONS] [TARGET]"
+    echo ""
+    echo "Enhanced Nix configuration rebuild script"
+    echo ""
+    echo "OPTIONS:"
+    echo "  -h, --help          Show this help message"
+    echo "  -u, --update        Update flake inputs before rebuilding"
+    echo "  -c, --commit        Commit and push changes after successful rebuild"
+    echo "  -s, --skip-check    Skip flake validation"
+    echo "  -b, --backup        Create backup before rebuilding"
+    echo "  -v, --verbose       Enable verbose output"
+    echo ""
+    echo "TARGETS:"
+    echo "  Linux:"
+    echo "    jackson@linux     Home Manager configuration (default)"
+    echo "    nixos-desktop     NixOS system configuration"
+    echo ""
+    echo "  macOS:"
+    echo "    jacksonmiller@mac Home Manager configuration (default)"
+    echo "    macbook-air       nix-darwin system configuration"
+    echo ""
+    echo "Examples:"
+    echo "  $0                  # Rebuild default configuration"
+    echo "  $0 -uc              # Update, rebuild, and commit"
+    echo "  $0 nixos-desktop    # Rebuild NixOS system"
+}
+
+# Parse command line arguments
+UPDATE_FLAKE=false
+COMMIT_CHANGES=false
+SKIP_CHECK=false
+CREATE_BACKUP=false
+VERBOSE=false
+TARGET=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -u|--update)
+            UPDATE_FLAKE=true
+            shift
+            ;;
+        -c|--commit)
+            COMMIT_CHANGES=true
+            shift
+            ;;
+        -s|--skip-check)
+            SKIP_CHECK=true
+            shift
+            ;;
+        -b|--backup)
+            CREATE_BACKUP=true
+            shift
+            ;;
+        -v|--verbose)
+            VERBOSE=true
+            set -x
+            shift
+            ;;
+        -*)
+            error "Unknown option $1"
+            show_help
+            exit 1
+            ;;
+        *)
+            TARGET="$1"
+            shift
+            ;;
+    esac
 done
 
-function sync_with_remote() {
-  print_header "SYNCING WITH REMOTE REPOSITORY"
-  
-  # Define the remote repository URL
-  REMOTE_URL="https://github.com/millerjes37/nix-config.git"
-  
-  # Check if we're in a git repository
-  if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    print_error "Not in a git repository. Skipping sync."
-    return 1
-  fi
-  
-  # Fetch the latest changes from remote
-  print_step "Fetching latest changes from remote repository..."
-  if ! git fetch origin; then
-    print_error "Failed to fetch from remote repository."
-    return 1
-  fi
-  
-  # Check if we have local changes
-  if [[ -n "$(git status --porcelain)" ]]; then
-    print_warning "Local changes detected. Stashing changes before sync..."
-    git stash push -m "Auto-stash before sync $(date '+%Y-%m-%d %H:%M:%S')"
-    stashed_changes=true
-  else
-    stashed_changes=false
-  fi
-  
-  # Get current branch
-  current_branch=$(git branch --show-current)
-  
-  # Pull the latest changes
-  print_step "Pulling latest changes from origin/$current_branch..."
-  if git pull origin "$current_branch"; then
-    print_success "Successfully synced with remote repository."
-  else
-    print_error "Failed to pull from remote repository."
-    
-    # Restore stashed changes if we stashed them
-    if [[ "$stashed_changes" = true ]]; then
-      print_step "Restoring previously stashed changes..."
-      git stash pop
-    fi
-    return 1
-  fi
-  
-  # Restore stashed changes if we stashed them
-  if [[ "$stashed_changes" = true ]]; then
-    print_step "Restoring previously stashed changes..."
-    if git stash pop; then
-      print_success "Successfully restored stashed changes."
-    else
-      print_warning "There were conflicts restoring stashed changes. Please resolve manually."
-      print_step "Use 'git stash list' to see stashed changes and 'git stash pop' to restore them."
-    fi
-  fi
-  
-  return 0
-}
+# Use default target if none specified
+TARGET="${TARGET:-$DEFAULT_TARGET}"
 
-function handle_git_changes() {
-  print_header "GIT STATUS"
-  
-  # Show git status and check if there are changes
-  print_step "Current Git Status:"
-  git_status=$(git status -s)
-  echo "$git_status"
-  
-  # Check if there are any changes
-  if [[ -z "$git_status" ]]; then
-    print_success "No changes detected in git."
-    return 1  # No changes
-  else
-    # Show git diff
-    print_step "Changes to be applied:"
-    git diff --color=always | head -n 100
+# Main execution
+main() {
+    print_header
     
-    # Prompt for confirmation
-    echo
-    print_step "Do you want to commit these changes? [Y/n]"
-    read -r response
-    # Default to "yes" if response is empty
-    if [[ -z "$response" || "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-      # Auto-generate commit message based on changed files
-      commit_msg="Update configuration: "
-      
-      if command -v mapfile &> /dev/null; then
-        mapfile -t changed_files < <(git diff --name-only)
-      else
-        # Fallback for platforms without mapfile (older bash)
-        IFS=$'\n' read -d '' -ra changed_files < <(git diff --name-only)
-      fi
-      
-      if [[ ${#changed_files[@]} -eq 0 ]]; then
-        print_warning "No files changed. Skipping commit."
-        return 1  # No changes
-      else
-        for file in "${changed_files[@]}"; do
-          basename=$(basename "$file")
-          if [[ "$commit_msg" != *"$basename"* ]]; then
-            commit_msg+="$basename, "
-          fi
-        done
-        
-        # Remove trailing comma and space
-        commit_msg=${commit_msg%, }
-        
-        # Allow user to edit the commit message
-        print_step "Commit message: $commit_msg"
-        print_step "Edit commit message? [y/N]"
-        read -r edit_msg
-        # Default to "no" if response is empty
-        if [[ "$edit_msg" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-          print_step "Enter new commit message:"
-          read -r new_msg
-          commit_msg="$new_msg"
+    # Initialize log
+    echo "Rebuild started at $(date)" > "$LOG_FILE"
+    
+    # Check prerequisites
+    check_prerequisites
+    
+    # Backup if requested
+    if [[ "$CREATE_BACKUP" == true ]]; then
+        backup_config
+    fi
+    
+    # Update flake if requested
+    if [[ "$UPDATE_FLAKE" == true ]]; then
+        update_flake
+    fi
+    
+    # Validate flake
+    if [[ "$SKIP_CHECK" != true ]]; then
+        if ! validate_flake; then
+            error "Flake validation failed. Use --skip-check to bypass."
+            exit 1
         fi
-        
-        # Commit changes
-        git add .
-        git commit -m "$commit_msg"
-        print_success "Changes committed with message: $commit_msg"
-        
-        return 0  # Changes committed
-      fi
-    else
-      print_warning "Skipping commit, proceeding with rebuild..."
-      return 1  # No changes committed
-    fi
-  fi
-}
-
-function run_post_rebuild() {
-  print_header "POST-REBUILD ACTIONS"
-  
-  if [[ "$PLATFORM" == "darwin" ]]; then
-    # macOS post-rebuild tasks
-    if command -v yabai &> /dev/null && [[ -f "$HOME/.config/yabai/yabairc" ]]; then
-      print_step "Restarting yabai..."
-      yabai --restart-service
     fi
     
-    if command -v skhd &> /dev/null && [[ -f "$HOME/.config/skhd/skhdrc" ]]; then
-      print_step "Restarting skhd..."
-      skhd --restart-service
-    fi
-  else
-    # Linux post-rebuild tasks
-    if command -v i3-msg &> /dev/null; then
-      print_step "Reloading i3..."
-      i3-msg reload > /dev/null
+    # Rebuild configuration
+    if ! rebuild_config "$TARGET"; then
+        error "Configuration rebuild failed!"
+        exit 1
     fi
     
-    if command -v systemctl &> /dev/null; then
-      print_step "Reloading user services..."
-      systemctl --user daemon-reload
+    # Commit and push if requested
+    if [[ "$COMMIT_CHANGES" == true ]]; then
+        commit_and_push
     fi
-  fi
-  
-  # Check if post-rebuild hook script exists and run it
-  if [ -f "$SCRIPT_DIR/post-rebuild-hooks.sh" ]; then
-    print_step "Running post-rebuild hooks..."
-    "$SCRIPT_DIR/post-rebuild-hooks.sh"
-  fi
+    
+    success "Rebuild completed successfully!"
+    log "Log saved to: $LOG_FILE"
 }
 
-function rebuild_configuration() {
-  print_header "REBUILDING NIX CONFIGURATION"
-  
-  # Environment variables for allowing unfree packages
-  export NIXPKGS_ALLOW_UNFREE=1
-  export NIXPKGS_ALLOW_INSECURE=1
-  
-  # Determine command to run based on platform
-  if [[ "$PLATFORM" == "darwin" && "$DARWIN_REBUILD" -eq 1 ]]; then
-    print_step "Rebuilding macOS configuration with darwin-rebuild..."
-    CMD="darwin-rebuild switch --flake \"$NIX_CONFIG_DIR#macbook-air\""
-  else
-    print_step "Rebuilding with home-manager on $PLATFORM..."
-    CMD="home-manager switch --flake \"$NIX_CONFIG_DIR#$FLAKE_TARGET\""
-  fi
-  
-  # Add upgrade flag if requested
-  if [[ "$UPGRADE_LOCK" -eq 1 ]]; then
-    CMD="$CMD --recreate-lock-file"
-  fi
-  
-  # Add backup flag for home-manager
-  if [[ "$DARWIN_REBUILD" -eq 0 ]]; then
-    CMD="$CMD -b backup"
-  fi
-  
-  # Add verbosity if requested
-  if [[ "$VERBOSE" -eq 1 ]]; then
-    CMD="$CMD --verbose"
-  fi
-  
-  # Run the command
-  print_step "Running: $CMD"
-  eval "$CMD"
-  
-  print_success "Configuration successfully rebuilt!"
-}
-
-function handle_git_push() {
-  print_header "SYNCING TO REMOTE REPOSITORY"
-  
-  # Check if there are any commits to push
-  if git log --oneline @{u}.. 2>/dev/null | grep -q .; then
-    print_step "Local commits detected that need to be pushed to remote."
-  else
-    print_step "Local repository is up to date with remote."
-    print_success "No sync needed - already up to date!"
-    return 0
-  fi
-  
-  # Provide option to push changes
-  print_step "Do you want to push the local commits to the remote repository? [Y/n]"
-  read -r push_changes
-  # Default to "yes" if response is empty
-  if [[ -z "$push_changes" || "$push_changes" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    print_step "Pushing commits to remote repository..."
-    if git push; then
-      print_success "Successfully synced local commits to remote repository!"
-    else
-      print_error "Failed to push to remote repository."
-      print_step "You may need to resolve conflicts or check your network connection."
-      return 1
-    fi
-  else
-    print_warning "Skipping push to remote repository."
-    print_step "Remember to push your changes later with: git push"
-  fi
-}
-
-# Main function
-function main() {
-  print_header "NIX CONFIG REBUILD SCRIPT"
-  print_step "Platform: $PLATFORM"
-  print_step "User: $USER"
-  print_step "Flake target: $FLAKE_TARGET"
-  
-  # Go to the nix-config directory
-  cd "$NIX_CONFIG_DIR" || exit
-  
-  # Sync with remote repository unless git operations are skipped
-  if [[ "$SKIP_GIT" -eq 0 ]]; then
-    sync_with_remote
-  fi
-  
-  # Handle git changes unless skipped
-  if [[ "$SKIP_GIT" -eq 0 ]]; then
-    if handle_git_changes; then
-      made_commits=true
-    else
-      made_commits=false
-    fi
-  else
-    print_warning "Skipping git operations as requested."
-    made_commits=false
-  fi
-  
-  # Rebuild nix configuration
-  rebuild_configuration
-  
-  # Run post-rebuild hooks
-  run_post_rebuild
-  
-  # Always sync to remote after successful rebuild (unless git operations are skipped)
-  if [[ "$SKIP_GIT" -eq 0 ]]; then
-    handle_git_push
-  fi
-  
-  print_header "REBUILD COMPLETE"
-}
-
-# Make the script executable
-chmod +x "$0"
-
-# Run the script
+# Run main function
+main "$@"
 main "$@"
