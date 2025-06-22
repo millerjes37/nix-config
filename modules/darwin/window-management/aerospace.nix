@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.programs.aerospace;
+  cfg = config.programs.aerospace-custom;
   defaultConfig = ''
     # AeroSpace Configuration
     # Place this file in ~/.aerospace.toml
@@ -176,8 +176,8 @@ let
 in
 
 {
-  options.programs.aerospace = {
-    enable = mkEnableOption "aerospace tiling window manager";
+  options.programs.aerospace-custom = {
+    enable = mkEnableOption "aerospace tiling window manager (custom configuration)";
     config = mkOption {
       type = types.lines;
       default = defaultConfig;

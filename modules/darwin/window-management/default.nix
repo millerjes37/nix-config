@@ -5,6 +5,6 @@
     ./aerospace.nix
   ];
   
-  # Enable aerospace instead of yabai and skhd
-  programs.aerospace.enable = true;
+  # Enable our custom aerospace configuration
+  programs.aerospace-custom.enable = true;
 } 
