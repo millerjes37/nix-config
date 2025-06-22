@@ -35,8 +35,7 @@
     # Database tools
     dbeaver-bin    # Universal database tool
 
-    # AI-powered code editor (Cursor)
-    code-cursor
+    # AI-powered code editor (Cursor) - configured per-platform in Linux/Darwin modules
   ];
 
   # Enable direnv for automatic environment switching

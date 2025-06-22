@@ -3,6 +3,7 @@
 {
   # Import system configuration modules
   imports = [
+<<<<<<< HEAD
     # Core system configuration
     ../common/default.nix  # Common system modules
     
@@ -12,6 +13,13 @@
     # Darwin system settings
     ./system-settings.nix
     ./services.nix
+=======
+    ../../modules/common/default.nix  # Common modules first
+    ./yabai.nix       # Window manager
+    ./skhd.nix        # Hotkey daemon
+    ./apps.nix        # macOS applications
+    ./cursor.nix      # Cursor AI editor
+>>>>>>> ac19e5a (Fix Cursor SUID sandbox issue on Linux)
   ];
   
   # Install macOS-specific packages
