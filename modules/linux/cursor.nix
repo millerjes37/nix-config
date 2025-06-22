@@ -23,8 +23,8 @@ in
         "$@"
     '')
 
-    # Also provide the original cursor for fallback
-    pkgs.code-cursor
+    # Original cursor is available through the wrapper above
+    # pkgs.code-cursor  # Commented out to avoid collision with our wrapper
   ];
 
   # Create desktop entry for Cursor with proper configuration
