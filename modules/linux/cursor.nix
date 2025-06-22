@@ -6,8 +6,14 @@
   home.packages = with pkgs; [
     # Wrapped Cursor with proper sandbox configuration
     (writeShellScriptBin "cursor" ''
+<<<<<<< HEAD
       # Launch Cursor with sandbox fixes
       exec ${code-cursor}/bin/code-cursor \
+=======
+      # Use nixGL wrapper if available for better graphics compatibility
+      ${if config.nixGL.enable then "${config.nixGL.packages.nixGLIntel}/bin/nixGL" else ""} \
+      ${pkgs.code-cursor}/bin/code-cursor \
+>>>>>>> e520611 (Fix package references in cursor.nix files)
         --no-sandbox \
         --disable-gpu-sandbox \
         --disable-software-rasterizer \
@@ -20,7 +26,7 @@
     '')
 
     # Also provide the original cursor for fallback
-    code-cursor
+    pkgs.code-cursor
   ];
 
   # Create desktop entry for Cursor with proper configuration
@@ -45,7 +51,7 @@
   xdg.desktopEntries.cursor-safe = {
     name = "Cursor (Safe Mode)";
     comment = "AI-powered code editor (Safe Mode - No GPU)";
-    exec = "${code-cursor}/bin/code-cursor --no-sandbox --disable-gpu --disable-software-rasterizer %F";
+    exec = "${pkgs.code-cursor}/bin/code-cursor --no-sandbox --disable-gpu --disable-software-rasterizer %F";
     icon = "code-cursor";
     categories = [ "Development" "IDE" ];
     settings = {
@@ -75,18 +81,28 @@
       #!/usr/bin/env bash
       # Debug version of Cursor with verbose output
       echo "🚀 Starting Cursor in debug mode..."
+<<<<<<< HEAD
       echo "📍 Cursor location: ${code-cursor}/bin/code-cursor"
       echo "🔧 Using nixGL: No (simplified for stability)"
+=======
+      echo "📍 Cursor location: ${pkgs.code-cursor}/bin/code-cursor"
+      echo "🔧 Using nixGL: ${if config.nixGL.enable then "Yes" else "No"}"
+>>>>>>> e520611 (Fix package references in cursor.nix files)
       echo ""
       
       # Check if the binary exists
-      if [ ! -f "${code-cursor}/bin/code-cursor" ]; then
+      if [ ! -f "${pkgs.code-cursor}/bin/code-cursor" ]; then
         echo "❌ Cursor binary not found at expected location!"
         exit 1
       fi
       
       # Run with debug output
+<<<<<<< HEAD
       exec ${code-cursor}/bin/code-cursor \
+=======
+      ${if config.nixGL.enable then "${config.nixGL.packages.nixGLIntel}/bin/nixGL" else ""} \
+      ${pkgs.code-cursor}/bin/code-cursor \
+>>>>>>> e520611 (Fix package references in cursor.nix files)
         --no-sandbox \
         --disable-gpu-sandbox \
         --enable-logging \
