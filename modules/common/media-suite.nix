@@ -46,17 +46,49 @@
     p7zip                       # Compression
     unzip                       # Archives
     rsync                       # File synchronization
-    tree                        # Directory structure
-    ncdu                        # Disk usage analyzer
+    rclone                      # Cloud storage sync
   ];
+
+  # Create organized directory structure for media projects
+  home.file = {
+    # Main project structure
+    "Projects/Media/.keep".text = "";
+    "Projects/Media/Video/.keep".text = "";
+    "Projects/Media/Audio/.keep".text = "";
+    "Projects/Media/Graphics/.keep".text = "";
+    "Projects/Media/Templates/.keep".text = "";
+    "Projects/Media/Assets/.keep".text = "";
+    "Projects/Media/Scripts/.keep".text = "";
+    "Projects/Media/Export/.keep".text = "";
+    
+    # Brand assets directory
+    "Projects/Media/Assets/Logos/.keep".text = "";
+    "Projects/Media/Assets/Fonts/.keep".text = "";
+    "Projects/Media/Assets/Colors/.keep".text = "";
+    "Projects/Media/Assets/Photos/.keep".text = "";
+    "Projects/Media/Assets/Graphics/.keep".text = "";
+    "Projects/Media/Assets/Audio/.keep".text = "";
+    
+    # Export formats directory
+    "Projects/Media/Export/Social/.keep".text = "";
+    "Projects/Media/Export/Web/.keep".text = "";
+    "Projects/Media/Export/Print/.keep".text = "";
+    "Projects/Media/Export/Video/.keep".text = "";
+    
+    # Workflow scripts directory
+    "Projects/Media/Scripts/ffmpeg/.keep".text = "";
+    "Projects/Media/Scripts/gimp/.keep".text = "";
+    "Projects/Media/Scripts/automation/.keep".text = "";
+  };
 
   # Create media production workspace directories
   home.file.".local/share/media-templates/.keep".text = "";
   
-  # NOTE: File associations moved to platform-specific modules
-  # Linux: modules/linux/default.nix
-  # macOS: modules/darwin/default.nix (if needed)
-  # This ensures platform-appropriate application associations
+  # TODO: Add actual media workflow templates when available
+  # home.file.".local/share/media-workflows" = {
+  #   source = ./data/media-workflows;
+  #   recursive = true;
+  # };
 
   # Environment variables for media applications
   home.sessionVariables = {
@@ -65,4 +97,9 @@
     MEDIA_TEMPLATES = "$HOME/.local/share/media-templates";
     MEDIA_EXPORT = "$HOME/Projects/Media/Export";
   };
+
+  # NOTE: File associations moved to platform-specific modules
+  # Linux: modules/linux/default.nix
+  # macOS: modules/darwin/default.nix (if needed)
+  # This ensures platform-appropriate application associations
 } 

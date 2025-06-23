@@ -77,21 +77,6 @@
     };
   };
   
-  # File associations
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = "firefox.desktop";
-      "text/xml" = "firefox.desktop";
-      "application/xhtml+xml" = "firefox.desktop";
-      "application/pdf" = "okular.desktop";
-      "image/jpeg" = "org.gnome.eog.desktop";
-      "image/png" = "org.gnome.eog.desktop";
-      "image/gif" = "org.gnome.eog.desktop";
-      "video/mp4" = "vlc.desktop";
-      "video/x-matroska" = "vlc.desktop";
-      "audio/mpeg" = "vlc.desktop";
-      "text/plain" = "org.gnome.gedit.desktop";
-    };
-  };
+  # NOTE: File associations moved to modules/linux/default.nix to avoid conflicts
+  # This ensures centralized MIME type management
 }

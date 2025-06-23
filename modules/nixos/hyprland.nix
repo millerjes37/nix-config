@@ -210,7 +210,8 @@
 
   # Programs
   programs = {
-    # Hyprland already enabled above
+    # Hyprland is already enabled at the top of this file
+    # hyprland.enable = true;  # REMOVED: Duplicate configuration
     
     # Thunar file manager
     thunar = {

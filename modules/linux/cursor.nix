@@ -59,19 +59,8 @@ in
     };
   };
 
-  # Set file associations for common development files
-  xdg.mimeApps.defaultApplications = {
-    "text/plain" = "cursor.desktop";
-    "text/x-python" = "cursor.desktop";
-    "text/x-rust" = "cursor.desktop";
-    "text/x-go" = "cursor.desktop";
-    "text/x-javascript" = "cursor.desktop";
-    "text/x-typescript" = "cursor.desktop";
-    "application/json" = "cursor.desktop";
-    "text/x-markdown" = "cursor.desktop";
-    "text/x-yaml" = "cursor.desktop";
-    "text/x-toml" = "cursor.desktop";
-  };
+  # NOTE: File associations moved to modules/linux/default.nix to avoid conflicts
+  # This ensures a single source of truth for MIME type associations
 
   # Create a launcher script in ~/.local/bin for easy terminal access
   home.file.".local/bin/cursor-debug" = {

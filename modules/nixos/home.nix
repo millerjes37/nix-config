@@ -1,4 +1,5 @@
 { config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   # NixOS-specific home-manager configuration
@@ -7,7 +8,7 @@
   # Home Manager settings for NixOS
   home = {
     username = "jackson";
-    homeDirectory = lib.mkForce "/home/jackson";
+    homeDirectory = "/home/jackson";
     stateVersion = "25.05";
   };
 
@@ -50,4 +51,4 @@
   
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-} 
+}

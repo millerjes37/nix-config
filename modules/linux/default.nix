@@ -16,17 +16,13 @@
   ];
   
   # Common Linux-specific packages (avoid duplicates with common and linux-apps)
+  # Common Linux-specific packages (avoid duplicates with common and linux-apps)
   home.packages = with pkgs; [
-    # GUI tools
-    firefox
-    keepassxc
-    libreoffice
-    discord
-    
     # System utilities (unique to Linux desktop integration)
     pavucontrol      # Audio control
     blueman          # Bluetooth manager
     
+    # Window management tools (X11 specific)
     # Window management tools (X11 specific)
     xclip            # Clipboard tool
     xdotool          # X11 automation
@@ -72,15 +68,40 @@
         # Documents -> LibreOffice/Okular
         "application/pdf" = "okular.desktop";
         
-        # Images -> EOG for viewing
-        "image/jpeg" = "org.gnome.eog.desktop";
-        "image/png" = "org.gnome.eog.desktop";
-        "image/gif" = "org.gnome.eog.desktop";
+        # Images -> GIMP for editing, EOG for viewing
+        "image/jpeg" = "gimp.desktop";
+        "image/png" = "gimp.desktop";
+        "image/gif" = "gimp.desktop";
+        "image/bmp" = "gimp.desktop";
+        "image/tiff" = "gimp.desktop";
+        "image/webp" = "gimp.desktop";
+        "image/svg+xml" = "org.inkscape.Inkscape.desktop";
         
-        # Video -> VLC for viewing
-        "video/mp4" = "vlc.desktop";
+        # RAW files -> Darktable
+        "image/x-canon-cr2" = "darktable.desktop";
+        "image/x-canon-crw" = "darktable.desktop";
+        "image/x-nikon-nef" = "darktable.desktop";
+        "image/x-sony-arw" = "darktable.desktop";
+        "image/x-adobe-dng" = "darktable.desktop";
+        
+        # Video -> Kdenlive for editing, VLC for viewing
+        "video/mp4" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
+        "video/avi" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
+        "video/mkv" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
+        "video/mov" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
+        "video/webm" = ["org.kde.kdenlive.desktop" "vlc.desktop"];
         "video/x-matroska" = "vlc.desktop";
+        
+        # Audio -> Audacity for editing
+        "audio/wav" = "audacity.desktop";
+        "audio/mp3" = ["audacity.desktop" "vlc.desktop"];
+        "audio/ogg" = ["audacity.desktop" "vlc.desktop"];
+        "audio/flac" = ["audacity.desktop" "vlc.desktop"];
         "audio/mpeg" = "vlc.desktop";
+        
+        # Security -> KeePassXC
+        "application/x-keepass2" = "org.keepassxc.KeePassXC.desktop";
+        "application/x-keepassxc" = "org.keepassxc.KeePassXC.desktop";
       };
     };
   };
