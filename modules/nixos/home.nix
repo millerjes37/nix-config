@@ -1,5 +1,4 @@
 { config, lib, pkgs, inputs, ... }:
-{ config, lib, pkgs, inputs, ... }:
 
 {
   # NixOS-specific home-manager configuration
