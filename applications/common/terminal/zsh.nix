@@ -257,8 +257,6 @@
     python3 # Python 3 interpreter
     nodejs_20 # Node.js (LTS version 20)
     go # Go programming language
-    rustc # Rust compiler
-    cargo # Rust package manager
     openjdk17 # OpenJDK 17 (LTS version)
     cmake # Cross-platform build system generator
     pkg-config # Helper tool for compiling applications and libraries

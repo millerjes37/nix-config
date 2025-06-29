@@ -4,6 +4,8 @@
   imports = [
     ./git.nix
     ./languages.nix
+    ./rust.nix
+    ./ai-tools.nix
     ./containers.nix
     ./databases.nix
   ];
@@ -12,7 +14,6 @@
     # Build tools and utilities
     just                # Command runner
     dprint              # Code formatter (Rust)
-    cargo               # Rust package manager
   ];
 
   # Enable direnv for project-specific environments

@@ -27,6 +27,8 @@
         HidePasswords = true;
         HideUsernames = false;
         HideNotes = false;
+        # Sync integration - default database location in sync folder
+        LastDatabases = "${config.home.homeDirectory}/.keepassxc-sync/passwords.kdbx";
         # Language = "system";
       };
 
@@ -323,5 +325,74 @@
         }
       ];
     };
+  };
+
+  # KeePassXC database management scripts
+  home.file.".local/bin/keepass-sync" = {
+    text = ''
+      #!/bin/bash
+      # KeePassXC Syncthing Integration Script
+      
+      SYNC_DIR="${config.home.homeDirectory}/.keepassxc-sync"
+      PRIMARY_DB="$SYNC_DIR/passwords.kdbx"
+      BACKUP_DIR="$SYNC_DIR/backups"
+      
+      case "$1" in
+        status)
+          echo "KeePassXC Sync Status:"
+          echo "Sync Directory: $SYNC_DIR"
+          if [ -f "$PRIMARY_DB" ]; then
+            echo "Primary Database: Found ($(stat -c%s "$PRIMARY_DB" 2>/dev/null || stat -f%z "$PRIMARY_DB") bytes)"
+            echo "Last Modified: $(stat -c%y "$PRIMARY_DB" 2>/dev/null || stat -f%Sm "$PRIMARY_DB")"
+          else
+            echo "Primary Database: Not found"
+          fi
+          echo "Backups: $(ls "$BACKUP_DIR"/*.kdbx 2>/dev/null | wc -l) files"
+          ;;
+        backup)
+          mkdir -p "$BACKUP_DIR"
+          if [ -f "$PRIMARY_DB" ]; then
+            TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
+            cp "$PRIMARY_DB" "$BACKUP_DIR/passwords_$TIMESTAMP.kdbx"
+            echo "Database backed up to: $BACKUP_DIR/passwords_$TIMESTAMP.kdbx"
+            # Keep only last 10 backups
+            ls -t "$BACKUP_DIR"/passwords_*.kdbx | tail -n +11 | xargs rm -f
+          else
+            echo "No database found to backup"
+          fi
+          ;;
+        init)
+          mkdir -p "$SYNC_DIR"
+          mkdir -p "$BACKUP_DIR"
+          echo "Initialized KeePassXC sync directories"
+          echo "Place your KeePassXC database at: $PRIMARY_DB"
+          echo "It will be automatically synced across your devices"
+          ;;
+        open)
+          if command -v keepassxc >/dev/null; then
+            keepassxc "$PRIMARY_DB" &
+          else
+            echo "KeePassXC not found in PATH"
+          fi
+          ;;
+        *)
+          echo "Usage: $0 {status|backup|init|open}"
+          echo "  status - Show sync status"
+          echo "  backup - Create manual backup"
+          echo "  init   - Initialize sync directories"
+          echo "  open   - Open primary database"
+          ;;
+      esac
+    '';
+    executable = true;
+  };
+
+  # Shell aliases for KeePassXC management
+  programs.zsh.shellAliases = {
+    "kp-status" = "keepass-sync status";
+    "kp-backup" = "keepass-sync backup";
+    "kp-init" = "keepass-sync init";
+    "kp-open" = "keepass-sync open";
+    "kp" = "keepassxc ${config.home.homeDirectory}/.keepassxc-sync/passwords.kdbx &";
   };
 } 

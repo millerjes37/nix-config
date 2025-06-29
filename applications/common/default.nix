@@ -8,6 +8,7 @@
     ./editors/default.nix
     ./security/default.nix
     ./media/default.nix
+    ./cross-platform-aliases.nix
   ];
 
   # Common home-manager settings

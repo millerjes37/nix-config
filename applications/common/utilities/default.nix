@@ -7,5 +7,6 @@
     ./network-tools.nix
     ./compression.nix
     ./file-managers.nix
+    ./syncthing.nix
   ];
 } 
