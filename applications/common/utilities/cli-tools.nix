@@ -19,13 +19,12 @@
     jq                  # JSON processor and query language
     yq-go               # YAML/XML/TOML processor (Go)
     sd                  # sed alternative with simpler syntax (Rust)
-    delta               # git diff viewer with syntax highlighting (Rust)
+    delta               # enhanced git diff viewer (Rust)
     difftastic          # structural diff tool that understands syntax (Rust)
     miller              # CSV/JSON/YAML data processor (C but fast)
     htmlq               # HTML processor like jq (Rust)
     dasel               # query and modify data structures (Go)
     choose              # cut alternative with simpler syntax (Rust)
-    rargs               # xargs with pattern matching (Rust)
     parallel            # GNU parallel for command execution
     
     # System monitoring and performance (Rust-powered)
@@ -34,14 +33,11 @@
     procs               # ps alternative with colored output (Rust)
     bandwhich           # network bandwidth monitor by process (Rust)
     zenith              # system monitor with zoom and search (Rust)
-    ytop                # system monitor with vim keybindings (Rust)
     macchina            # neofetch alternative (Rust)
-    gpu-usage           # GPU utilization monitor
     
     # File and directory utilities (Rust-powered)
     lsd                 # ls alternative with icons and colors (Rust)
     tre-command         # tree alternative with regex filtering (Rust)
-    xcp                 # cp alternative with progress bars (Rust)
     ouch                # compression/decompression utility (Rust)
     zip                 # compression utilities
     unzip               # decompression utilities
@@ -54,12 +50,10 @@
     xh                  # HTTPie clone with JSON support (Rust)
     websocat            # WebSocket client (Rust)
     miniserve           # simple HTTP file server (Rust)
-    basic-http-server   # another simple HTTP server (Rust)
     
     # Development utilities (Rust-powered)
     tokei               # code statistics and line counting (Rust)
     onefetch            # git repository summary (Rust)
-    git-delta           # enhanced git diff viewer (Rust)
     gitui               # terminal git UI (Rust)
     lazygit             # simple terminal UI for git (Go)
     gitmux              # git status in tmux (Go)
@@ -72,10 +66,10 @@
     # Performance benchmarking and testing
     hyperfine           # command-line benchmarking tool (Rust)
     criterion           # statistical benchmarking (Rust)
-    dhat                # heap profiler (Rust)
+    # dhatViewer          # heap profiler viewer (Rust) – temporarily disabled due to missing darwin package
     
     # Shell and terminal enhancement
-    atuin               # shell history with sync and search (Rust)
+    # atuin               # shell history with sync and search (Rust) - temporarily disabled
     starship            # cross-shell prompt (Rust)
     gum                 # shell scripting with style (Go)
     charm               # CLI framework components
@@ -83,12 +77,10 @@
     
     # File format conversion and processing
     pandoc              # universal document converter
-    rpmfile             # extract data from RPM files (Rust)
-    
-    # Data processing and analysis
+    # rpmfile             # extract data from RPM files (Rust) – unavailable on Darwin
     qsv                 # CSV data processing toolkit (Rust)
     frawk               # AWK alternative (Rust)
-    polars-cli          # fast DataFrame operations (Rust)
+    # polars-cli          # fast DataFrame operations (Rust) – unavailable on Darwin
     
     # Security and encryption utilities
     age                 # simple file encryption (Go)
@@ -113,6 +105,7 @@
     
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     # Linux-specific oxidized tools
+    xcp                 # cp alternative with progress bars (Rust)
     btop                # resource monitor (C++)
     iotop               # I/O monitor
     nethogs             # network bandwidth per process
@@ -121,6 +114,7 @@
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     # macOS-specific tools
     swift-format        # Swift code formatter
+    asitop              # Apple Silicon system monitor (macOS)
   ];
 
   # Configure related programs with enhanced settings
@@ -138,7 +132,6 @@
       ];
       fileWidgetCommand = "fd --type file --follow --hidden --exclude .git";
       fileWidgetOptions = [ "--preview 'bat --color=always --style=numbers --line-range=:500 {}'" ];
-      directoryWidgetCommand = "fd --type directory --follow --hidden --exclude .git";
       historyWidgetOptions = [ "--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'" ];
     };
     
@@ -185,36 +178,21 @@
       enable = true;
       enableZshIntegration = true;
       settings = {
-        format = lib.concatStrings [
-          "$username"
-          "$hostname"
-          "$directory"
-          "$git_branch"
-          "$git_state"
-          "$git_status"
-          "$cmd_duration"
-          "$line_break"
-          "$python"
-          "$character"
-        ];
-        
         directory = {
           style = "blue bold";
           truncation_length = 4;
           truncation_symbol = "…/";
         };
-        
+
         character = {
-          success_symbol = "[❯](purple)";
-          error_symbol = "[❯](red)";
           vicmd_symbol = "[❮](green)";
         };
-        
+
         git_branch = {
           format = "[$branch]($style)";
           style = "bright-black";
         };
-        
+
         git_status = {
           format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)";
           style = "cyan";
@@ -226,12 +204,12 @@
           deleted = "​";
           stashed = "≡";
         };
-        
+
         git_state = {
           format = "([$state( $progress_current/$progress_total)]($style)) ";
           style = "bright-black";
         };
-        
+
         cmd_duration = {
           format = "[$duration]($style) ";
           style = "yellow";
@@ -245,29 +223,17 @@
   programs.zsh.shellAliases = {
     # Enhanced ls alternatives
     "l" = "eza -la --icons --git --group-directories-first";
-    "ll" = "eza -l --icons --git --group-directories-first";
-    "la" = "eza -la --icons --git --group-directories-first";
-    "lt" = "eza -T --icons --git-ignore --level=3";
     "lsd-tree" = "lsd --tree";
     
     # Search and find
-    "find" = "fd";
     "search" = "rg --smart-case --follow --hidden";
-    "grep" = "rg --smart-case";
     
     # System monitoring
-    "top" = "bottom";
     "htop" = "bottom";
-    "ps" = "procs";
-    "du" = "dust";
-    "ncdu" = "dust";
     "net" = "bandwhich";
     "sys" = "macchina";
     
     # Text processing
-    "cat" = "bat --style=plain";
-    "less" = "bat --paging=always";
-    "diff" = "difft";
     "delta-diff" = "delta";
     
     # Network utilities
@@ -282,11 +248,9 @@
     "cp" = "xcp";
     "compress" = "ouch compress";
     "decompress" = "ouch decompress";
-    "extract" = "ouch decompress";
     
     # Git enhancements
     "git-ui" = "gitui";
-    "tig" = "gitui";
     "lazygit" = "lazygit";
     "onefetch" = "onefetch";
     
@@ -313,7 +277,6 @@
     "weather" = "curl wttr.in";
     "cheat" = "tldr";
     "tldr" = "tealdeer";
-    "help" = "tealdeer";
   };
 
   # Environment variables for oxidized tools
@@ -323,7 +286,6 @@
     
     # FZF configuration
     FZF_DEFAULT_COMMAND = "fd --type file --follow --hidden --exclude .git";
-    FZF_CTRL_T_COMMAND = "$FZF_DEFAULT_COMMAND";
     FZF_ALT_C_COMMAND = "fd --type directory --follow --hidden --exclude .git";
     
     # Bat theme
@@ -336,6 +298,9 @@
     _ZO_ECHO = "1";
     _ZO_RESOLVE_SYMLINKS = "1";
   };
+
+  # Force our preferred FZF CTRL-T command to avoid conflicts with the default
+  home.sessionVariables.FZF_CTRL_T_COMMAND = lib.mkForce "$FZF_DEFAULT_COMMAND";
 
   # Configuration files for tools
   home.file = {

@@ -5,19 +5,18 @@
   # Enables automatic synchronization of files across multiple devices
   
   # Install Syncthing
-  home.packages = with pkgs; [
-    syncthing                       # P2P file synchronization tool
-    syncthing-gtk                   # GTK GUI for Syncthing (Linux)
-  ];
+  home.packages = with pkgs;
+    [ syncthing ]                                   # Core CLI tool
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      syncthing-gtk                                 # GTK GUI (Linux only)
+    ]
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      syncthing-macos                               # macOS menu-bar wrapper
+    ];
 
   # Syncthing service configuration
   services.syncthing = {
     enable = true;
-    
-    # User and directory configuration
-    user = config.home.username;
-    dataDir = "${config.home.homeDirectory}/.local/share/syncthing";
-    configDir = "${config.home.homeDirectory}/.config/syncthing";
     
     # GUI settings
     guiAddress = "127.0.0.1:8384";  # Local access only for security
@@ -166,24 +165,11 @@
       };
     };
     
-    # Override settings for different platforms
-    overrideFolders = lib.mkMerge [
-      # macOS-specific folder overrides
-      (lib.mkIf pkgs.stdenv.isDarwin {
-        # Add macOS-specific ignore patterns
-      })
-      
-      # Linux-specific folder overrides  
-      (lib.mkIf pkgs.stdenv.isLinux {
-        # Add Linux-specific configurations
-      })
-    ];
+    # No folder overrides by default
+    overrideFolders = false;
     
-    # Override devices (to be configured per-system)
-    overrideDevices = {
-      # Device configurations will be added here
-      # This is where you'll add your specific device IDs
-    };
+    # No device overrides by default
+    overrideDevices = false;
   };
 
   # Create sync directories

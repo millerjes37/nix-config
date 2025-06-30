@@ -11,12 +11,14 @@
     # Helix configuration rendered to ~/.config/helix/config.toml
     settings = {
       # Dynamic theme based on color scheme - matches your browns and tans preference
-      theme = if config.colorScheme.slug == "atelier-dune" then "autumn_night_transparent"
-              else if config.colorScheme.slug == "atelier-cave" then "monokai"
-              else if config.colorScheme.slug == "atelier-heath" then "autumn_night"
-              else if config.colorScheme.slug == "ir-black" then "monokai"
-              else if lib.hasPrefix "gruvbox" config.colorScheme.slug then "gruvbox_dark_hard"
-              else "gruvbox_dark_hard"; # fallback
+      theme = lib.mkDefault (
+        if config.colorScheme.slug == "atelier-dune" then "autumn_night_transparent"
+        else if config.colorScheme.slug == "atelier-cave" then "monokai"
+        else if config.colorScheme.slug == "atelier-heath" then "autumn_night"
+        else if config.colorScheme.slug == "ir-black" then "monokai"
+        else if lib.hasPrefix "gruvbox" config.colorScheme.slug then "gruvbox_dark_hard"
+        else "gruvbox_dark_hard"
+      ); # fallback
 
       # Editor-wide settings.
       editor = {
@@ -31,8 +33,6 @@
       keys = {
         normal = {
           space = {
-            w = ":write";         # <space>w to save.
-            q = ":quit";          # <space>q to quit.
             h = "select_all";     # <space>h to select all (no hlsearch in helix).
           };
         };

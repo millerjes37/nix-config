@@ -222,10 +222,9 @@
       };
     };
     
-    # Also create directories to ensure they exist
-    ".mozilla/native-messaging-hosts/.keep".text = "";
-    ".var/app/app.zen_browser.zen/data/native-messaging-hosts/.keep".text = lib.mkIf pkgs.stdenv.isLinux "";
-    ".var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/.keep".text = lib.mkIf pkgs.stdenv.isLinux "";
+    # Linux-only Flatpak directories
+    ".var/app/app.zen_browser.zen/data/native-messaging-hosts/.keep".text = "";
+    ".var/app/app.zen_browser.zen/.mozilla/native-messaging-hosts/.keep".text = "";
     
     # Create a verification script to check native messaging configuration
     ".local/bin/check-keepassxc-integration".text = ''

@@ -31,6 +31,9 @@
 
     # nixGL wrapper packages and overlay
     nixgl.url = "github:guibou/nixGL";
+
+    # nix-colors: Declarative color theming for Nix
+    nix-colors.url = "github:misterio77/nix-colors";
   };
 
   # Outputs define what this flake provides to other flakes or to the user.
@@ -97,32 +100,33 @@
       };
   in
   {
-    # NixOS Configurations
-    nixosConfigurations = {
-      "nixos-desktop" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux"; # Or your target system
-        specialArgs = { inherit inputs; }; # Pass all flake inputs to modules
-        modules = [
-          # Main NixOS system configuration
-          ./modules/nixos/default.nix
+    # NixOS Configurations (commented out - incomplete configuration)
+    # Uncomment and complete when you need NixOS support
+    # nixosConfigurations = {
+    #   "nixos-desktop" = nixpkgs.lib.nixosSystem {
+    #     system = "x86_64-linux"; # Or your target system
+    #     specialArgs = { inherit inputs; }; # Pass all flake inputs to modules
+    #     modules = [
+    #       # Main NixOS system configuration
+    #       ./modules/nixos/default.nix
 
-          # Home Manager integration for NixOS
-          home-manager.nixosModules.home-manager
-          {
-            nixpkgs.config.allowUnfree = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # Configure Home Manager for the correct user (jackson, not jules)
-            home-manager.users.jackson = import ./modules/nixos/home.nix;
-            # Pass flake inputs to home-manager modules as well
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          }
+    #       # Home Manager integration for NixOS
+    #       home-manager.nixosModules.home-manager
+    #       {
+    #         nixpkgs.config.allowUnfree = true;
+    #         home-manager.useGlobalPkgs = true;
+    #         home-manager.useUserPackages = true;
+    #         # Configure Home Manager for the correct user (jackson, not jules)
+    #         home-manager.users.jackson = import ./modules/nixos/home.nix;
+    #         # Pass flake inputs to home-manager modules as well
+    #         home-manager.extraSpecialArgs = { inherit inputs; };
+    #       }
 
-          # Only apply nixGL overlay for NixOS (Linux-based)
-          ({ nixpkgs.overlays = [ inputs.nixgl.overlay ]; })
-        ];
-      };
-    };
+    #       # Only apply nixGL overlay for NixOS (Linux-based)
+    #       ({ nixpkgs.overlays = [ inputs.nixgl.overlay ]; })
+    #     ];
+    #   };
+    # };
 
     # `darwinConfigurations`: Defines complete macOS system configurations.
     # These are typically used to build and manage an entire macOS setup.

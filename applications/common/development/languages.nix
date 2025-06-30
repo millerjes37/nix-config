@@ -4,7 +4,7 @@
   # Install common development packages
   home.packages = with pkgs; [
     # Programming languages and runtimes
-    nodejs_20  # LTS Node.js
+    # Node.js provided elsewhere; avoid duplicate versions
     go         # Go language
 
     # Build tools
@@ -31,11 +31,6 @@
 
     # Database tools
     dbeaver-bin    # Universal database tool
-
-<<<<<<< Updated upstream
-    # AI-powered code editor (Cursor) - configured per-platform in Linux/Darwin modules
-=======
->>>>>>> Stashed changes
   ];
 
   # Enable direnv for automatic environment switching

@@ -10,7 +10,7 @@
   ];
 
   # Essential system configuration
-  home.stateVersion = "23.11";
+  home.stateVersion = lib.mkDefault "23.11";
   
   # Enable common programs that are part of the system configuration
   programs = {

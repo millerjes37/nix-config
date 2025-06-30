@@ -11,7 +11,6 @@
     lazygit             # Simple terminal UI for Git (Go)
     git-lfs             # Git Large File Storage
     git-crypt           # Transparent file encryption in Git
-    gitg                # GNOME Git repository viewer (Linux only)
     tig                 # Text-based Git repository browser
     gitleaks            # Secrets detection tool
     pre-commit          # Pre-commit hook framework
@@ -653,8 +652,6 @@
   # Shell aliases for Git workflows
   programs.zsh.shellAliases = {
     # Basic Git commands
-    "g" = "git";
-    "gs" = "git status";
     "ga" = "git add";
     "gaa" = "git add --all";
     "gc" = "git commit";
@@ -667,7 +664,6 @@
     "gf" = "git fetch";
     "gd" = "git diff";
     "gdc" = "git diff --cached";
-    "gl" = "git log --oneline -10";
     "gla" = "git log --oneline --all -10";
     
     # Advanced Git workflows

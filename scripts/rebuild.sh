@@ -80,11 +80,21 @@ check_prerequisites() {
     log "Checking prerequisites..."
     
     local missing_tools=()
+    local target="${1:-$DEFAULT_TARGET}"
     
     # Check for required tools
     command -v nix >/dev/null 2>&1 || missing_tools+=("nix")
-    command -v git >/dev/null 2>&1 || missing_tools+=("git")
-    command -v $REBUILD_CMD >/dev/null 2>&1 || missing_tools+=("$REBUILD_CMD")
+    command -v home-manager >/dev/null 2>&1 || missing_tools+=("home-manager")
+    
+    # Only check for darwin-rebuild if we're on macOS and not using a home-manager target
+    if [[ "$PLATFORM" == "darwin" && "$target" != *"@mac" ]]; then
+        command -v darwin-rebuild >/dev/null 2>&1 || missing_tools+=("darwin-rebuild")
+    fi
+    
+    # Only check for nixos-rebuild if we're targeting a nixos configuration
+    if [[ "$target" == "nixos-desktop" ]]; then
+        command -v nixos-rebuild >/dev/null 2>&1 || missing_tools+=("nixos-rebuild")
+    fi
     
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
         error "Missing required tools: ${missing_tools[*]}"
@@ -95,54 +105,13 @@ check_prerequisites() {
 }
 
 check_git_status() {
-    log "Checking git status..."
-    
-    cd "$CONFIG_ROOT"
-    
-    # Check if we're in a git repository
-    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        error "Not in a git repository!"
-        exit 1
-    fi
-    
-    # Check for uncommitted changes
-    if ! git diff-index --quiet HEAD --; then
-        warn "Uncommitted changes detected"
-        return 1
-    fi
-    
-    success "Git repository is clean"
+    log "Skipping git status check (git sync disabled)"
     return 0
 }
 
 commit_and_push() {
-    log "Committing and pushing changes..."
-    
-    cd "$CONFIG_ROOT"
-    
-    # Add all changes
-    git add .
-    
-    # Check if there are changes to commit
-    if git diff-index --quiet --cached HEAD --; then
-        log "No changes to commit"
-        return 0
-    fi
-    
-    # Generate commit message
-    local commit_msg="Auto-commit: $(date +'%Y-%m-%d %H:%M:%S') on $PLATFORM_NAME"
-    
-    # Commit changes
-    git commit -m "$commit_msg"
-    
-    # Push to remote
-    if git remote get-url origin >/dev/null 2>&1; then
-        log "Pushing to remote repository..."
-        git push origin main
-        success "Changes pushed to remote"
-    else
-        warn "No remote repository configured"
-    fi
+    log "Skipping git commit and push (git sync disabled)"
+    return 0
 }
 
 validate_flake() {
@@ -196,17 +165,25 @@ rebuild_config() {
     # Build the appropriate command for the current platform/target
     # ---------------------------------------------------------------------------
     local cmd=""
+    local force_flags=""
+    
+    # Add force rebuild flags if requested
+    if [[ "$FORCE_REBUILD" == true ]]; then
+        force_flags="--impure"
+        log "Force rebuild enabled - using --impure flag"
+    fi
+    
     if [[ "$PLATFORM" == "darwin" ]]; then
         if [[ "$target" == *"@mac" ]]; then
-            cmd="home-manager switch --flake .#${target} -b backup"
+            cmd="home-manager switch --flake .#${target} -b backup $force_flags"
         else
-            cmd="darwin-rebuild switch --flake .#${target}"
+            cmd="darwin-rebuild switch --flake .#${target} $force_flags"
         fi
     else
         if [[ "$target" == "nixos-desktop" ]]; then
-            cmd="sudo nixos-rebuild switch --flake .#${target}"
+            cmd="sudo nixos-rebuild switch --flake .#${target} $force_flags"
         else
-            cmd="home-manager switch --flake .#${target} -b backup"
+            cmd="home-manager switch --flake .#${target} -b backup $force_flags"
         fi
     fi
 
@@ -233,6 +210,15 @@ update_flake() {
     success "Flake inputs updated"
 }
 
+update_nixpkgs() {
+    log "Updating nixpkgs input..."
+    
+    cd "$CONFIG_ROOT"
+    nix flake lock --update-input nixpkgs
+    
+    success "Nixpkgs input updated"
+}
+
 show_help() {
     echo "Usage: $0 [OPTIONS] [TARGET]"
     echo ""
@@ -241,6 +227,8 @@ show_help() {
     echo "OPTIONS:"
     echo "  -h, --help          Show this help message"
     echo "  -u, --update        Update flake inputs before rebuilding"
+    echo "  -f, --force         Force rebuild even if no changes detected"
+    echo "  --update-nixpkgs    Update only nixpkgs input"
     echo "  -c, --commit        Commit and push changes after successful rebuild"
     echo "  -s, --skip-check    Skip flake validation"
     echo "  -b, --backup        Create backup before rebuilding"
@@ -258,11 +246,15 @@ show_help() {
     echo "Examples:"
     echo "  $0                  # Rebuild default configuration"
     echo "  $0 -uc              # Update, rebuild, and commit"
+    echo "  $0 -f               # Force rebuild"
+    echo "  $0 --update-nixpkgs # Update nixpkgs and rebuild"
     echo "  $0 nixos-desktop    # Rebuild NixOS system"
 }
 
 # Parse command line arguments
 UPDATE_FLAKE=false
+UPDATE_NIXPKGS=false
+FORCE_REBUILD=false
 COMMIT_CHANGES=false
 SKIP_CHECK=false
 CREATE_BACKUP=false
@@ -277,6 +269,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         -u|--update)
             UPDATE_FLAKE=true
+            shift
+            ;;
+        -f|--force)
+            FORCE_REBUILD=true
+            shift
+            ;;
+        --update-nixpkgs)
+            UPDATE_NIXPKGS=true
             shift
             ;;
         -c|--commit)
@@ -319,7 +319,7 @@ main() {
     echo "Rebuild started at $(date)" > "$LOG_FILE"
     
     # Check prerequisites
-    check_prerequisites
+    check_prerequisites "$TARGET"
     
     # Backup if requested
     if [[ "$CREATE_BACKUP" == true ]]; then
@@ -329,6 +329,11 @@ main() {
     # Update flake if requested
     if [[ "$UPDATE_FLAKE" == true ]]; then
         update_flake
+    fi
+    
+    # Update nixpkgs if requested
+    if [[ "$UPDATE_NIXPKGS" == true ]]; then
+        update_nixpkgs
     fi
     
     # Validate flake
@@ -355,5 +360,4 @@ main() {
 }
 
 # Run main function
-main "$@"
 main "$@"

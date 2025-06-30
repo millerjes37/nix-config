@@ -27,6 +27,7 @@ in
   #   or `./modules/linux/default.nix`) that were passed in via the `flake.nix` `mkHomeConfig` function.
   imports = [ 
     ./modules/common/default.nix  # Common modules for all platforms
+    ./applications/common/default.nix  # Applications (terminal, utilities, editors, etc.)
   ] ++ extraImports; # Platform-specific modules (macOS or Linux)
   
   # `fonts.fontconfig.enable`: Enables fontconfig, a library for font customization and discovery.
@@ -48,6 +49,9 @@ in
     # This is typically always true in a home-manager setup.
     home-manager.enable = true;
   };
+
+  # Disable Home Manager news notifications
+  news.display = "silent";
 
   # `xsession`: Configures the X session for Linux desktop environments.
   # `lib.mkIf isLinux { ... }`: This block is only applied if the system is Linux (`isLinux` is true).

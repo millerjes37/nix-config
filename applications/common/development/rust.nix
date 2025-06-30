@@ -6,17 +6,10 @@
 
   home.packages = with pkgs; [
     # Core Rust toolchain
-    rustc                           # Rust compiler
-    cargo                           # Rust package manager and build tool
-    rustfmt                         # Rust code formatter
-    clippy                          # Rust linter for catching common mistakes
-    rust-analyzer                   # Language server for Rust IDE support
-    
-    # Rust toolchain management
-    rustup                          # Rust toolchain installer and manager
+    rustup                          # Rust toolchain manager (will install Rust 1.85)
     
     # Development utilities
-    cargo-watch                     # Auto-rebuild on file changes
+    cargo-watch                     # Auto-rebuild on file changes (uses cargo via rustup)
     cargo-edit                      # Commands for editing Cargo.toml
     cargo-expand                    # Expand macros in Rust code
     cargo-udeps                     # Find unused dependencies
@@ -30,7 +23,6 @@
     cargo-make                      # Task runner and build tool
     cargo-generate                 # Generate projects from templates
     cargo-criterion                # Benchmarking tool integration
-    cargo-llvm-cov                  # Source-based code coverage
     cargo-tarpaulin                # Code coverage tool for Rust
     
     # WASM and web development
@@ -38,17 +30,34 @@
     wasmtime                        # WASM runtime
     dioxus-cli                      # Dioxus CLI for fullstack Rust web development
     trunk                           # WASM web application bundler
-    basic-http-server               # Simple HTTP server for development
+    http-server                     # Simple HTTP server for development (node-based)
     wasm-bindgen-cli                # WebAssembly bindings generator
     
     # Performance and debugging tools
     cargo-flamegraph                # Flamegraph profiling for Rust
-    valgrind                        # Memory debugging (Linux)
     
     # Cross-platform build tools
     cmake                           # Build system generator
     pkg-config                      # Helper for compiling applications
     openssl                         # SSL/TLS toolkit
+    
+    # Build cache for faster compilation
+    sccache                         # Shared compilation cache
+
+    # Additional useful tools
+    tokei                           # Count lines of code
+    hyperfine                       # Command-line benchmarking
+
+    # Protocol buffer support
+    protobuf                        # Protocol buffer compiler
+
+    # Database development
+    diesel-cli                      # Diesel ORM CLI
+    sqlx-cli                        # SQLx database toolkit CLI
+
+    # Network and crypto libraries commonly needed
+    curl                            # HTTP client library
+    wget                            # File download utility
     
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     # Linux-specific development tools
@@ -57,6 +66,7 @@
     binutils                        # Binary utilities
     gcc                             # GNU Compiler Collection
     gnumake                         # GNU Make
+    valgrind                        # Memory debugging
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     # macOS-specific development tools
     darwin.apple_sdk.frameworks.Security    # Security framework
@@ -71,6 +81,11 @@
     RUST_BACKTRACE = "1";                           # Enable backtraces
     RUST_LOG = "debug";                             # Set default log level
     RUSTC_WRAPPER = "sccache";                      # Use sccache for compilation caching
+    
+    # Pin Rust toolchain managed by rustup to LTS 1.85
+    RUSTUP_TOOLCHAIN = "1.85.0";
+    RUSTUP_DIST_SERVER = "https://static.rust-lang.org";
+    RUSTUP_UPDATE_ROOT = "https://static.rust-lang.org/rustup";
     
     # Cargo configuration
     CARGO_HOME = "${config.home.homeDirectory}/.cargo";
@@ -230,7 +245,7 @@
   # Shell aliases for Rust development
   programs.zsh.shellAliases = {
     # Cargo shortcuts
-    "c" = "cargo";
+    "cg" = "cargo";
     "cb" = "cargo build";
     "cr" = "cargo run";
     "ct" = "cargo test";
@@ -252,15 +267,12 @@
     "cdeny" = "cargo deny check";
     "cmachete" = "cargo machete";
     "cnextest" = "cargo nextest run";
-    "ccov" = "cargo llvm-cov";
     "ctarpaulin" = "cargo tarpaulin";
     "cflame" = "cargo flamegraph";
     
     # Rust-specific development
     "rustdoc" = "cargo doc --open";
     "rustbench" = "cargo bench";
-    "rustup-update" = "rustup update";
-    "rustup-show" = "rustup show";
     
     # WASM development
     "wasm-build" = "wasm-pack build";
@@ -276,29 +288,9 @@
     # Web development
     "trunk-serve" = "trunk serve";
     "trunk-build" = "trunk build";
-    "serve" = "basic-http-server";
   };
 
-  # Additional Rust development packages
-  home.packages = with pkgs; [
-    # Build cache for faster compilation
-    sccache                         # Shared compilation cache
-    
-    # Additional useful tools
-    tokei                           # Count lines of code
-    hyperfine                       # Command-line benchmarking
-    
-    # Protocol buffer support
-    protobuf                        # Protocol buffer compiler
-    
-    # Database development
-    diesel-cli                      # Diesel ORM CLI
-    sqlx-cli                        # SQLx database toolkit CLI
-    
-    # Network and crypto libraries commonly needed
-    curl                            # HTTP client library
-    wget                            # File download utility
-  ];
+
 
   # Configure development shell
   programs.direnv = {

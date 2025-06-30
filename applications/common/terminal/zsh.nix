@@ -115,10 +115,10 @@
         source "$(fzf-share)/completion.zsh"
       fi
 
-      # Initialize atuin for enhanced shell history
-      if command -v atuin >/dev/null; then
-        eval "$(atuin init zsh)"
-      fi
+      # Initialize atuin for enhanced shell history (disabled until properly installed)
+      # if command -v atuin >/dev/null; then
+      #   eval "$(atuin init zsh)"
+      # fi
 
       # Environment variables themed with nix-colors
       export BAT_THEME="${if config.colorScheme.variant == "dark" then "base16" else "base16-256"}"
@@ -237,13 +237,12 @@
     zsh-powerlevel10k # Powerlevel10k Zsh theme
     fzf # Command-line fuzzy finder
     jq # JSON processor
-    yq # YAML processor
     difftastic # Diff tool that understands syntax
     delta # Git diff viewer
     hyperfine # Command-line benchmarking tool
     gawk # GNU awk
     git # Version control system
-    atuin # Shell history manager
+    # atuin # Shell history manager - temporarily disabled
     just # Modern make alternative
     miniserve # Simple HTTP server
     ouch # Compression/decompression utility
@@ -254,8 +253,6 @@
 
     # Common development tools
     gnumake # Build automation tool
-    python3 # Python 3 interpreter
-    nodejs_20 # Node.js (LTS version 20)
     go # Go programming language
     openjdk17 # OpenJDK 17 (LTS version)
     cmake # Cross-platform build system generator

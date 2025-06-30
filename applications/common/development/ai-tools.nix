@@ -13,10 +13,9 @@
     python311Full                   # Full Python with all modules
     python311Packages.pip           # Python package installer
     python311Packages.virtualenv    # Virtual environment management
-    python311Packages.poetry        # Python dependency management
+    poetry                          # Python dependency management
     
-    # Node.js for AI tool installations
-    nodejs_20                       # Node.js LTS for npm-based AI tools
+    # Node.js for AI tool installations (use default version)
     nodePackages.npm                # Node package manager
     nodePackages.yarn               # Alternative package manager
     
@@ -127,11 +126,10 @@
   # VSCode configuration as backup editor
   programs.vscode = {
     enable = true;
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       # AI and productivity
       github.copilot                 # GitHub Copilot
       github.copilot-chat            # GitHub Copilot Chat
-      ms-vscode.vscode-ai            # VS Code AI tools
       
       # Rust development
       rust-lang.rust-analyzer        # Rust analyzer
@@ -140,13 +138,10 @@
       
       # Web development
       bradlc.vscode-tailwindcss      # Tailwind CSS
-      ms-vscode.vscode-typescript-next # TypeScript
       
       # General development
-      ms-vscode.vscode-json          # JSON support
       redhat.vscode-yaml             # YAML support
       ms-python.python               # Python support
-      ms-python.black-formatter      # Black formatter
       
       # Git and version control
       eamodio.gitlens                # Git lens
@@ -162,7 +157,7 @@
       streetsidesoftware.code-spell-checker # Spell checker
     ];
     
-    userSettings = {
+    profiles.default.userSettings = {
       # AI settings
       "github.copilot.enable" = true;
       "github.copilot.inlineSuggest.enable" = true;
@@ -203,18 +198,18 @@
         "editor.formatOnSave" = true;
       };
       
-      # Python
+      # Python - using built-in formatter
       "[python]" = {
-        "editor.defaultFormatter" = "ms-python.black-formatter";
+        "editor.defaultFormatter" = "ms-python.python";
         "editor.formatOnSave" = true;
       };
       
-      # TypeScript/JavaScript
+      # TypeScript/JavaScript - using built-in formatter
       "[typescript]" = {
-        "editor.defaultFormatter" = "ms-vscode.vscode-typescript-next";
+        "editor.defaultFormatter" = "vscode.typescript-language-features";
       };
       "[javascript]" = {
-        "editor.defaultFormatter" = "ms-vscode.vscode-typescript-next";
+        "editor.defaultFormatter" = "vscode.typescript-language-features";
       };
       
       # Performance
@@ -338,12 +333,12 @@
   # Environment variables for AI tools
   home.sessionVariables = {
     # Editor preferences
-    EDITOR = "helix";
+    EDITOR = lib.mkForce "helix";
     VISUAL = "code-cursor";
     AI_EDITOR = "code-cursor";
     
     # AI tool configurations
-    COPILOT_NODE_PATH = "${pkgs.nodejs_20}/bin/node";
+    COPILOT_NODE_PATH = "${pkgs.nodejs}/bin/node";
     
     # Python path for AI tools
     PYTHONPATH = "$HOME/.local/lib/python3.11/site-packages:$PYTHONPATH";
