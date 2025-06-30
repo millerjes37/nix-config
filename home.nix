@@ -73,7 +73,6 @@ in
   # These are often used for tasks that need to happen outside of normal package installation or file linking.
   home.activation = {
     # `reloadSystemdCustom`: A custom activation script specific to Linux systems using systemd.
-    # `lib.mkIf isLinux (...)`: This script only runs on Linux.
     # `lib.hm.dag.entryAfter ["writeBoundary"]`: Ensures this script runs after home-manager has finished writing files.
     # The script itself checks if `systemctl` is available and, if so, prints a message
     # indicating that systemd user services might need reloading.
