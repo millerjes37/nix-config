@@ -130,9 +130,9 @@ let
         mkdir -p "$HOME/.npm-global"
         
         # Install/update Claude Code CLI
-        npm install -g --prefix "$HOME/.npm-global" claude-code@latest || {
-          echo "Note: Claude Code CLI package may not be publicly available yet"
-          echo "Visit https://claude.ai/code for installation instructions"
+        npm install -g --prefix "$HOME/.npm-global" @anthropic-ai/claude-code@latest || {
+          echo "Failed to install Claude Code CLI"
+          echo "Visit https://github.com/anthropics/claude-code for installation instructions"
         }
         
         # Install/update ccusage
@@ -214,8 +214,7 @@ in
   # Shell aliases for Claude tools
   programs.zsh.shellAliases = {
     # Claude Code CLI aliases
-    "claude" = "claude-code";
-    "ccode" = "claude-code";  # Changed from 'cc' to avoid conflict with cargo check
+    "ccode" = "claude";  # Changed from 'cc' to avoid conflict with cargo check
     "ccu" = "ccusage";
     
     # Claude multiplexer
@@ -225,16 +224,16 @@ in
     "claude-update" = "update-claude-tools";
     
     # Quick commands
-    "claude-init" = "claude-code init";
-    "claude-chat" = "claude-code chat";
+    "claude-init" = "claude init";
+    "claude-chat" = "claude chat";
     "claude-usage" = "ccusage";
   };
 
   # Add shell completions if available
   programs.zsh.initContent = ''
     # Source Claude Code completions if available
-    if [ -f "$HOME/.npm-global/lib/node_modules/claude-code/completions/zsh/_claude-code" ]; then
-      fpath=("$HOME/.npm-global/lib/node_modules/claude-code/completions/zsh" $fpath)
+    if [ -f "$HOME/.npm-global/lib/node_modules/@anthropic-ai/claude-code/completions/zsh/_claude-code" ]; then
+      fpath=("$HOME/.npm-global/lib/node_modules/@anthropic-ai/claude-code/completions/zsh" $fpath)
     fi
     
     # Source ccusage completions if available

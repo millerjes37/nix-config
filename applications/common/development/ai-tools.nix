@@ -314,8 +314,7 @@
     "h" = "helix";
     
     # Claude Code CLI (when available)
-    "claude" = "claude-code";
-    "ai" = "claude-code";
+    "ai" = "claude";
     
     # Git with AI assistance
     "gai" = "gh copilot suggest";

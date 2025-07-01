@@ -75,6 +75,7 @@
 
       # Make sure we can run binaries from various locations
       path+=(
+        $HOME/.npm-global/bin
         $HOME/.cargo/bin
         $HOME/.nix-profile/bin
         /run/current-system/sw/bin
