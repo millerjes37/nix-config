@@ -6,6 +6,120 @@ let
     name = "nodejs-with-claude-tools";
     paths = [
       pkgs.nodejs_22  # Use latest stable Node.js
+      (pkgs.writeShellScriptBin "ccmultiplexer" ''
+        #!/usr/bin/env bash
+        # Launch multiple Claude Code instances in Zellij tabs
+        
+        # Create a temporary layout file with the current directory
+        CURRENT_DIR=$(pwd)
+        LAYOUT_FILE=$(mktemp)
+        LAYOUT_FILE="''${LAYOUT_FILE}.kdl"
+        
+        cat > "$LAYOUT_FILE" << 'EOL'
+        layout {
+            default_tab_template {
+                pane size=1 borderless=true {
+                    plugin location="zellij:tab-bar"
+                }
+                children
+                pane size=2 borderless=true {
+                    plugin location="zellij:status-bar"
+                }
+            }
+            
+            tab name="ccusage" focus=true {
+                pane cwd="''${CURRENT_DIR}" {
+                    command "npx"
+                    args "ccusage@latest" "blocks" "--live"
+                }
+            }
+            
+            tab name="claude-code-1" {
+                pane split_direction="vertical" {
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                }
+            }
+            
+            tab name="claude-code-2" {
+                pane split_direction="vertical" {
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                }
+            }
+            
+            tab name="claude-code-3" {
+                pane split_direction="vertical" {
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                    pane split_direction="horizontal" {
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                        pane cwd="''${CURRENT_DIR}" {
+                            command "claude"
+                            args "--dangerously-skip-permissions"
+                        }
+                    }
+                }
+            }
+        }
+        EOL
+        
+        # Replace the CURRENT_DIR placeholder with actual directory
+        sed -i "s|''${CURRENT_DIR}|$CURRENT_DIR|g" "$LAYOUT_FILE"
+        
+        # Launch zellij with the layout
+        ${pkgs.zellij}/bin/zellij --layout "$LAYOUT_FILE"
+        
+        # Clean up
+        rm "$LAYOUT_FILE"
+      '')
       (pkgs.writeShellScriptBin "update-claude-tools" ''
         #!/usr/bin/env bash
         set -euo pipefail
@@ -46,6 +160,7 @@ in
     jq                # JSON processor for API responses
     httpie            # User-friendly HTTP client for API testing
     websocat          # WebSocket client for real-time features
+    zellij            # Terminal multiplexer for ccmultiplexer
   ];
 
   # Configure npm to use a global directory in user's home
@@ -102,6 +217,9 @@ in
     "claude" = "claude-code";
     "ccode" = "claude-code";  # Changed from 'cc' to avoid conflict with cargo check
     "ccu" = "ccusage";
+    
+    # Claude multiplexer
+    "ccm" = "ccmultiplexer";
     
     # Update Claude tools
     "claude-update" = "update-claude-tools";
