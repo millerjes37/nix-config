@@ -6,6 +6,7 @@
     ./languages.nix
     ./rust.nix
     ./ai-tools.nix
+    ./claude-tools.nix
     ./containers.nix
     ./databases.nix
   ];

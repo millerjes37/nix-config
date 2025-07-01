@@ -15,9 +15,7 @@
     python311Packages.virtualenv    # Virtual environment management
     poetry                          # Python dependency management
     
-    # Node.js for AI tool installations (use default version)
-    nodePackages.npm                # Node package manager
-    nodePackages.yarn               # Alternative package manager
+    # Node.js moved to claude-tools.nix to avoid conflicts
     
     # Git and collaboration tools enhanced for AI workflows
     git-lfs                         # Git Large File Storage (for AI models)
@@ -26,13 +24,7 @@
     gh                              # GitHub CLI with Copilot integration
   ];
 
-  # Install Claude Code CLI via npm
-  home.activation.install-claude-code = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    if command -v npm >/dev/null 2>&1; then
-      echo "Installing Claude Code CLI via npm..."
-      $DRY_RUN_CMD npm install -g @anthropic-ai/claude-code-cli 2>/dev/null || echo "Claude Code CLI installation skipped (may not be available)"
-    fi
-  '';
+  # Claude Code CLI installation moved to claude-tools.nix for better management
 
   # Enhanced Cursor configuration
   home.file.".cursor/settings.json" = {
