@@ -28,7 +28,7 @@
     hyprshot                  # Screenshot tool
     
     # Terminal emulators
-    alacritty                 # GPU-accelerated terminal
+    # alacritty is provided by terminal/alacritty.nix
     kitty                     # Feature-rich terminal
     foot                      # Lightweight Wayland terminal
     

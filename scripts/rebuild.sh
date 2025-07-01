@@ -293,6 +293,7 @@ show_help() {
     echo "  -f, --force         Force rebuild even if no changes detected"
     echo "  --update-nixpkgs    Update only nixpkgs input"
     echo "  -c, --commit        Commit and push changes after successful rebuild"
+    echo "  -p, --push          Push to remote after successful rebuild (no commit)"
     echo "  -s, --skip-check    Skip flake validation"
     echo "  -b, --backup        Create backup before rebuilding"
     echo "  -v, --verbose       Enable verbose output"
@@ -308,8 +309,9 @@ show_help() {
     echo "    macbook-air       nix-darwin system configuration"
     echo ""
     echo "Examples:"
-    echo "  $0                  # Rebuild with remote check"
-    echo "  $0 -uc              # Update, rebuild, and commit"
+    echo "  $0                  # Rebuild with remote check, ask to push"
+    echo "  $0 -uc              # Update, rebuild, commit and push"
+    echo "  $0 -p               # Rebuild and push (no commit)"
     echo "  $0 -f               # Force rebuild"
     echo "  $0 --update-nixpkgs # Update nixpkgs and rebuild"
     echo "  $0 -o               # Rebuild offline (skip remote check)"
@@ -321,6 +323,7 @@ UPDATE_FLAKE=false
 UPDATE_NIXPKGS=false
 FORCE_REBUILD=false
 COMMIT_CHANGES=false
+PUSH_CHANGES=false
 SKIP_CHECK=false
 CREATE_BACKUP=false
 VERBOSE=false
@@ -347,6 +350,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--commit)
             COMMIT_CHANGES=true
+            shift
+            ;;
+        -p|--push)
+            PUSH_CHANGES=true
             shift
             ;;
         -s|--skip-check)
@@ -430,6 +437,45 @@ main() {
     # Commit and push if requested
     if [[ "$COMMIT_CHANGES" == true ]]; then
         commit_and_push
+    fi
+    
+    # Handle push functionality
+    if [[ "$PUSH_CHANGES" == true ]]; then
+        # Just push without committing
+        log "Pushing changes to remote repository..."
+        cd "$CONFIG_ROOT"
+        
+        local current_branch=$(git rev-parse --abbrev-ref HEAD)
+        if git push origin "$current_branch"; then
+            success "Successfully pushed changes to remote"
+        else
+            error "Failed to push changes to remote"
+            exit 1
+        fi
+    elif [[ "$COMMIT_CHANGES" != true && -t 0 ]]; then
+        # If not using -c or -p flags and running interactively, ask about pushing
+        cd "$CONFIG_ROOT"
+        
+        # Check if there are unpushed commits
+        local current_branch=$(git rev-parse --abbrev-ref HEAD)
+        local unpushed_commits=$(git rev-list --count "origin/$current_branch..HEAD" 2>/dev/null || echo "0")
+        
+        if [[ "$unpushed_commits" -gt 0 ]]; then
+            echo
+            warn "You have $unpushed_commits unpushed commit(s)"
+            read -p "Would you like to push these changes to remote? (y/N) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                log "Pushing changes to remote repository..."
+                if git push origin "$current_branch"; then
+                    success "Successfully pushed changes to remote"
+                else
+                    error "Failed to push changes to remote"
+                fi
+            else
+                log "Push deferred by user"
+            fi
+        fi
     fi
     
     success "Rebuild completed successfully!"

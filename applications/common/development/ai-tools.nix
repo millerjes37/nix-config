@@ -7,7 +7,7 @@
   # Core AI development packages
   home.packages = with pkgs; [
     # AI-powered editors
-    code-cursor                     # Cursor - AI-first code editor
+    # code-cursor is provided by platform-specific cursor.nix modules
     
     # Python AI/ML tools (for AI development and tooling)
     python311Full                   # Full Python with all modules
@@ -302,8 +302,8 @@
   # Shell aliases for AI tools
   programs.zsh.shellAliases = {
     # Cursor aliases
-    "cursor" = "code-cursor";
-    "c" = "code-cursor .";
+    # "cursor" is provided by platform-specific cursor.nix wrapper
+    "c" = "cursor .";
     
     # VSCode aliases
     "code" = "code";
@@ -326,8 +326,8 @@
   home.sessionVariables = {
     # Editor preferences
     EDITOR = lib.mkForce "helix";
-    VISUAL = "code-cursor";
-    AI_EDITOR = "code-cursor";
+    VISUAL = "cursor";
+    AI_EDITOR = "cursor";
     
     # AI tool configurations
     COPILOT_NODE_PATH = "${pkgs.nodejs}/bin/node";
