@@ -79,13 +79,13 @@ done
 if [[ "$PLATFORM" == "darwin" ]]; then
   REQUIRED_FILES=(
     "modules/darwin/default.nix"
-    "modules/darwin/skhd.nix"
-    "modules/darwin/yabai.nix"
+    "modules/darwin/window-management/skhd.nix"
+    "modules/darwin/window-management/yabai.nix"
   )
 else
   REQUIRED_FILES=(
     "modules/linux/default.nix"
-    "modules/linux/i3.nix"
+    "modules/linux/window-management/i3.nix"
     "modules/linux/gtk.nix"
   )
 fi
@@ -93,8 +93,8 @@ fi
 # Add common files to the required files list
 REQUIRED_FILES+=(
   "modules/common/default.nix"
-  "modules/common/zsh.nix"
-  "modules/common/alacritty.nix"
+  "applications/common/terminal/zsh.nix"
+  "applications/common/terminal/alacritty.nix"
   "scripts/rebuild.sh"
 )
 

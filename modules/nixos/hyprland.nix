@@ -42,7 +42,7 @@
     libnotify                # Notification library
     
     # File managers
-    thunar                   # GTK file manager
+    (pkgs.xfce.thunar)       # GTK file manager
     nemo                     # Cinnamon file manager
     ranger                   # Terminal file manager
     
@@ -79,9 +79,7 @@
     gtk4                     # GTK4 theming
     adwaita-icon-theme       # Icon theme
     
-    # Fonts
-    (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Iosevka" ]; })
-    font-awesome
+    # Fonts are now managed in modules/common/fonts.nix via Home-Manager.
     
     # Development tools
     git
@@ -97,9 +95,7 @@
     
     # System utilities
     polkit_gnome             # Authentication agent
-    gnome.gnome-keyring      # Keyring
-    
-    # Bluetooth
+    gnome-keyring            # Keyring
     bluez
     bluez-tools
     blueman
@@ -126,6 +122,9 @@
       pulse.enable = true;
       jack.enable = true;
     };
+    
+    # Explicitly disable legacy PulseAudio server (using PipeWire)
+    pulseaudio.enable = false;
     
     # Bluetooth
     blueman.enable = true;
@@ -170,26 +169,14 @@
     };
     
     # PulseAudio (disabled in favor of PipeWire)
-    pulseaudio.enable = false;
+    # Deprecated location moved to services namespace
+    # pulseaudio.enable was previously in hardware.*
+    # We'll disable via services.pulseaudio.
   };
 
   # Networking configuration
   networking = {
     networkmanager.enable = true;
-  };
-
-  # Fonts
-  fonts = {
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      liberation_ttf
-      fira-code
-      fira-code-symbols
-      jetbrains-mono
-      (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" "Iosevka" ]; })
-    ];
   };
 
   # Environment variables
@@ -765,7 +752,7 @@
       };
       iconTheme = {
         name = "Adwaita";
-        package = pkgs.gnome.adwaita-icon-theme;
+        package = pkgs.adwaita-icon-theme;
       };
     };
 

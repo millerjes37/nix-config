@@ -109,6 +109,69 @@ check_git_status() {
     return 0
 }
 
+check_remote_commits() {
+    log "Checking for newer commits on remote repository..."
+    
+    cd "$CONFIG_ROOT"
+    
+    # Get current branch name
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)
+    
+    # Fetch latest remote info without merging
+    log "Fetching latest remote information..."
+    if ! git fetch origin "$current_branch" --quiet 2>&1; then
+        warn "Failed to fetch from remote repository. Continuing without remote check."
+        return 0
+    fi
+    
+    # Compare local and remote commits
+    local local_commit=$(git rev-parse HEAD)
+    local remote_commit=$(git rev-parse "origin/$current_branch" 2>/dev/null || echo "")
+    
+    if [[ -z "$remote_commit" ]]; then
+        warn "Could not determine remote commit. Branch may not exist on remote."
+        return 0
+    fi
+    
+    if [[ "$local_commit" == "$remote_commit" ]]; then
+        success "Local repository is up to date with remote"
+        return 0
+    fi
+    
+    # Check if remote is ahead
+    local commits_behind=$(git rev-list --count "HEAD..origin/$current_branch" 2>/dev/null || echo "0")
+    local commits_ahead=$(git rev-list --count "origin/$current_branch..HEAD" 2>/dev/null || echo "0")
+    
+    if [[ "$commits_behind" -gt 0 ]]; then
+        warn "Remote has $commits_behind newer commit(s). Consider pulling before rebuilding:"
+        git log --oneline "HEAD..origin/$current_branch" | head -5
+        
+        # Ask user if they want to pull
+        if [[ -t 0 ]]; then  # Check if running interactively
+            read -p "Do you want to pull these changes now? (y/N) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                log "Pulling changes from remote..."
+                if git pull origin "$current_branch"; then
+                    success "Successfully pulled remote changes"
+                    warn "Configuration files have been updated. Continuing with rebuild..."
+                else
+                    error "Failed to pull changes"
+                    exit 1
+                fi
+            else
+                warn "Proceeding without pulling remote changes"
+            fi
+        else
+            warn "Non-interactive mode: proceeding without pulling remote changes"
+        fi
+    elif [[ "$commits_ahead" -gt 0 ]]; then
+        log "Local repository is $commits_ahead commit(s) ahead of remote"
+    fi
+    
+    return 0
+}
+
 commit_and_push() {
     log "Skipping git commit and push (git sync disabled)"
     return 0
@@ -222,7 +285,7 @@ update_nixpkgs() {
 show_help() {
     echo "Usage: $0 [OPTIONS] [TARGET]"
     echo ""
-    echo "Enhanced Nix configuration rebuild script"
+    echo "Enhanced Nix configuration rebuild script with Git integration"
     echo ""
     echo "OPTIONS:"
     echo "  -h, --help          Show this help message"
@@ -233,6 +296,7 @@ show_help() {
     echo "  -s, --skip-check    Skip flake validation"
     echo "  -b, --backup        Create backup before rebuilding"
     echo "  -v, --verbose       Enable verbose output"
+    echo "  -o, --offline       Skip remote repository checks"
     echo ""
     echo "TARGETS:"
     echo "  Linux:"
@@ -244,10 +308,11 @@ show_help() {
     echo "    macbook-air       nix-darwin system configuration"
     echo ""
     echo "Examples:"
-    echo "  $0                  # Rebuild default configuration"
+    echo "  $0                  # Rebuild with remote check"
     echo "  $0 -uc              # Update, rebuild, and commit"
     echo "  $0 -f               # Force rebuild"
     echo "  $0 --update-nixpkgs # Update nixpkgs and rebuild"
+    echo "  $0 -o               # Rebuild offline (skip remote check)"
     echo "  $0 nixos-desktop    # Rebuild NixOS system"
 }
 
@@ -259,6 +324,7 @@ COMMIT_CHANGES=false
 SKIP_CHECK=false
 CREATE_BACKUP=false
 VERBOSE=false
+OFFLINE_MODE=false
 TARGET=""
 
 while [[ $# -gt 0 ]]; do
@@ -296,6 +362,10 @@ while [[ $# -gt 0 ]]; do
             set -x
             shift
             ;;
+        -o|--offline)
+            OFFLINE_MODE=true
+            shift
+            ;;
         -*)
             error "Unknown option $1"
             show_help
@@ -320,6 +390,13 @@ main() {
     
     # Check prerequisites
     check_prerequisites "$TARGET"
+    
+    # Check for remote updates first (unless offline mode)
+    if [[ "$OFFLINE_MODE" != true ]]; then
+        check_remote_commits
+    else
+        log "Offline mode: skipping remote repository check"
+    fi
     
     # Backup if requested
     if [[ "$CREATE_BACKUP" == true ]]; then

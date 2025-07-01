@@ -32,7 +32,7 @@
     # nixGL wrapper packages and overlay
     nixgl.url = "github:guibou/nixGL";
 
-    # nix-colors: Declarative color theming for Nix
+    # nix-colors: large collection of colorschemes for use across the system
     nix-colors.url = "github:misterio77/nix-colors";
   };
 

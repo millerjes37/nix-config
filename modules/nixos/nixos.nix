@@ -12,6 +12,19 @@
     initialPassword = "JEM"; # Set an initial password
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+
+  # ---------------------------------------------------------------------------
+  # Minimal disk configuration (placeholder)
+  # These values make the flake evaluation pass.  Adjust for real hardware.
+  # ---------------------------------------------------------------------------
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";  # Placeholder device
+    fsType = "ext4";
+  };
+
+  # Basic boot loader configuration (required by NixOS assertions)
+  boot.loader.grub = {
+    enable = true;
+    devices = [ "/dev/sda" ];  # Placeholder; replace with actual disk
+  };
 }

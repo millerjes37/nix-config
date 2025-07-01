@@ -47,7 +47,4 @@
 
   # XDG configuration
   xdg.enable = true;
-  
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 }
