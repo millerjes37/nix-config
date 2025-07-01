@@ -8,10 +8,7 @@
   home.packages = with pkgs;
     [ syncthing ]                                   # Core CLI tool
     ++ lib.optionals pkgs.stdenv.isLinux [
-      syncthing-gtk                                 # GTK GUI (Linux only)
-    ]
-    ++ lib.optionals pkgs.stdenv.isDarwin [
-      syncthing-macos                               # macOS menu-bar wrapper
+      qsyncthingtray                                # Qt-based GUI tray app (Linux)
     ];
 
   # Syncthing service configuration

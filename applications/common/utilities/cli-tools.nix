@@ -109,7 +109,7 @@
     btop                # resource monitor (C++)
     iotop               # I/O monitor
     nethogs             # network bandwidth per process
-    psensor             # hardware temperature monitor
+    resources           # hardware monitoring (replacement for psensor)
     
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     # macOS-specific tools
