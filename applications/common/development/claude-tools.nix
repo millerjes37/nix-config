@@ -144,6 +144,12 @@ let
           }
         }
         
+        # Install/update Taskmaster AI
+        npm install -g --prefix "$HOME/.npm-global" task-master-ai@latest || {
+          echo "Failed to install Taskmaster AI"
+          echo "Visit https://github.com/eyaltoledano/claude-task-master for installation instructions"
+        }
+        
         echo "Claude tools update complete!"
         echo "Installed packages:"
         npm list -g --prefix "$HOME/.npm-global" --depth=0 2>/dev/null || true
@@ -227,6 +233,14 @@ in
     "claude-init" = "claude init";
     "claude-chat" = "claude chat";
     "claude-usage" = "ccusage";
+    
+    # Taskmaster AI aliases
+    "tm" = "task-master";
+    "tmi" = "task-master init";
+    "tml" = "task-master list";
+    "tmn" = "task-master next";
+    "tmg" = "task-master generate";
+    "tmp" = "task-master parse-prd";
   };
 
   # Add shell completions if available

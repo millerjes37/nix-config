@@ -6,5 +6,6 @@
     ./zsh.nix
     ./starship.nix
     ./multiplexers.nix
+    ./zellij.nix
   ];
 } 

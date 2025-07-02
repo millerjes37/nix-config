@@ -33,7 +33,7 @@ let
         tab name="Help" {
             pane {
                 command "echo"
-                args "Claude Code Multiplexer Help" "" "Commands:" "  ccm - Start Claude Code Multiplexer" "  Ctrl+h - Toggle this help" "  Ctrl+t - New tab" "  Ctrl+n - Next tab" "  Ctrl+p - Previous tab" "  Ctrl+q - Quit" "" "Inside CCM:" "  Use arrow keys to select instance" "  Enter to connect" "  q to quit"
+                args "Claude Code Multiplexer Help" "" "Commands:" "  ccm - Start Claude Code Multiplexer" "  Ctrl+g - Enter resize mode" "  Ctrl+o - Session manager" "  Ctrl+q - Quit Zellij" "" "Tab Navigation:" "  Alt+[1-9] - Switch to tab" "  Alt+h/l - Previous/Next tab" "" "Inside CCM:" "  Use arrow keys to select instance" "  Enter to connect" "  q to quit"
             }
         }
     }
@@ -89,7 +89,7 @@ let
         tab name="Help" {
             pane {
                 command "echo"
-                args "Development Layout Help" "" "Pane Navigation:" "  Ctrl+h/j/k/l - Move between panes" "  Ctrl+[ ] - Resize panes" "" "Tab Navigation:" "  Ctrl+t - New tab" "  Ctrl+n - Next tab" "  Ctrl+p - Previous tab" "  Ctrl+1-9 - Go to tab number" "" "Pane Management:" "  Ctrl+d - Split down" "  Ctrl+r - Split right" "  Ctrl+w - Close pane" "  Ctrl+f - Toggle fullscreen" "" "Session:" "  Ctrl+s - Save session" "  Ctrl+o - Session manager" "  Ctrl+q - Quit Zellij"
+                args "Development Layout Help" "" "Pane Navigation:" "  Alt+h/j/k/l - Move between panes" "  Ctrl+g then h/j/k/l - Resize panes" "" "Tab Navigation:" "  Alt+[1-9] - Go to tab number" "  Alt+h/l - Previous/Next tab" "" "Pane Management:" "  Ctrl+p then d - Split down" "  Ctrl+p then r - Split right" "  Ctrl+p then x - Close pane" "  Ctrl+p then f - Toggle fullscreen" "" "Session:" "  Ctrl+o - Session manager" "  Ctrl+q - Quit Zellij"
             }
         }
     }
@@ -148,7 +148,7 @@ let
         tab name="Help" {
             pane {
                 command "echo"
-                args "Monitoring Layout Help" "" "This layout provides system monitoring tools" "" "System Tab:" "  - htop: Process viewer" "  - df: Disk usage" "  - ss: Network connections" "  - journalctl: System logs" "" "Docker Tab:" "  - lazydocker: Docker TUI" "  - Docker logs pane" "" "Navigation:" "  Ctrl+h - Toggle this help" "  Ctrl+n/p - Next/Previous tab"
+                args "Monitoring Layout Help" "" "This layout provides system monitoring tools" "" "System Tab:" "  - htop: Process viewer" "  - df: Disk usage" "  - ss: Network connections" "  - journalctl: System logs" "" "Docker Tab:" "  - lazydocker: Docker TUI" "  - Docker logs pane" "" "Navigation:" "  Alt+[1-9] - Switch to tab" "  Alt+h/l - Previous/Next tab"
             }
         }
     }
@@ -174,7 +174,7 @@ let
         tab name="Help" {
             pane {
                 command "echo"
-                args "Zellij Help" "" "Basic Commands:" "  Ctrl+h - Toggle help" "  Ctrl+q - Quit" "  Ctrl+t - New tab" "  Ctrl+n - Next tab" "  Ctrl+p - Previous tab" "" "Layouts:" "  zellij -l ccm - Claude Code Multiplexer" "  zellij -l dev - Development layout" "  zellij -l monitor - System monitoring" "  zellij -l simple - Simple layout (default)"
+                args "Zellij Help" "" "Basic Commands:" "  Ctrl+q - Quit" "  Ctrl+o - Session manager" "  Alt+[1-9] - Switch to tab" "  Alt+h/l - Previous/Next tab" "" "Layouts:" "  zjccm - Claude Code Multiplexer" "  zjdev - Development layout" "  zjmon - System monitoring" "  zj - Simple layout (default)"
             }
         }
     }
@@ -183,8 +183,8 @@ in
 {
   programs.zellij = {
     enable = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
+    enableBashIntegration = false;
+    enableZshIntegration = false;
     
     settings = {
       # Theme
@@ -207,25 +207,6 @@ in
       
       # Session management
       session_serialization = true;
-      
-      # Keybinds configuration
-      keybinds = {
-        normal = {
-          # Help toggle
-          "bind \"Ctrl h\"" = {
-            SwitchToMode = "Tab";
-            TabNameInput = "Help";
-          };
-          
-          # Quick layout switches
-          "bind \"Alt c\"" = {
-            Run = {
-              cmd = "zellij";
-              args = [ "run" "-f" "-n" "ccm" "--" "ccm" ];
-            };
-          };
-        };
-      };
     };
   };
   

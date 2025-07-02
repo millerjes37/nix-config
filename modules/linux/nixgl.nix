@@ -10,7 +10,6 @@ in
     # Make the wrappers available on the system.
     home.packages = [
       nixGLIntel
-      # Alacritty wrapper removed - alacritty is provided by terminal/alacritty.nix
     ];
     
     # Environment variables to help with GL applications

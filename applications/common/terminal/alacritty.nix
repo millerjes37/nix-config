@@ -6,13 +6,20 @@ let
   
   # Use "Command" on macOS, "Control" on Linux
   modKey = if isDarwin then "Command" else "Control";
+  
+  # Wrap alacritty with nixGL on Linux for proper GL support
+  alacrittyPackage = if isLinux then
+    (pkgs.writeShellScriptBin "alacritty" ''
+      exec ${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.alacritty}/bin/alacritty "$@"
+    '')
+  else
+    pkgs.alacritty;
 in
 {
     # Use home-manager's built-in Alacritty module with minimal settings
   programs.alacritty = ({
     enable = true;
-    # On Linux, we don't install the package here since the Linux module provides a wrapped version
-    # On Darwin, use the default package
+    package = alacrittyPackage;
     
     settings = {
       # Simple window settings
