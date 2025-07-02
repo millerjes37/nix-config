@@ -1,2 +1,4 @@
 **/.claude/settings.local.json
 old-configs-linux/
+.env
+claude-tools-secrets.nix

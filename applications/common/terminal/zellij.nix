@@ -179,6 +179,113 @@ let
         }
     }
   '';
+  
+  # CCUsage Layout with gitui and htop
+  ccusageLayout = ''
+    layout {
+        default_tab_template {
+            pane size=1 borderless=true {
+                plugin location="zellij:tab-bar"
+            }
+            children
+            pane size=2 borderless=true {
+                plugin location="zellij:status-bar"
+            }
+        }
+        
+        tab name="ccusage" focus=true {
+            pane split_direction="horizontal" {
+                pane size="50%" {
+                    command "npx"
+                    args "ccusage@latest" "blocks" "--live"
+                }
+                pane split_direction="vertical" {
+                    pane {
+                        command "gitui"
+                    }
+                    pane {
+                        command "htop"
+                    }
+                }
+            }
+        }
+        
+        tab name="claude-code-1" {
+            pane split_direction="vertical" {
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+            }
+        }
+        
+        tab name="claude-code-2" {
+            pane split_direction="vertical" {
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+            }
+        }
+        
+        tab name="claude-code-3" {
+            pane split_direction="vertical" {
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+                pane split_direction="horizontal" {
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                    pane {
+                        command "env"
+                        args "CLAUBBIT=1" "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1" "ENABLE_BACKGROUND_TASKS=1" "claude" "--dangerously-skip-permissions"
+                    }
+                }
+            }
+        }
+    }
+  '';
 in
 {
   programs.zellij = {
@@ -216,6 +323,7 @@ in
     ".config/zellij/layouts/dev.kdl".text = devLayout;
     ".config/zellij/layouts/monitor.kdl".text = monitoringLayout;
     ".config/zellij/layouts/simple.kdl".text = simpleLayout;
+    ".config/zellij/layouts/ccusage.kdl".text = ccusageLayout;
   };
   
   # Shell aliases for quick access
@@ -225,6 +333,7 @@ in
     "zjccm" = "zellij -l ccm";
     "zjdev" = "zellij -l dev";
     "zjmon" = "zellij -l monitor";
+    "zjccu" = "zellij -l ccusage";
     
     # Session management
     "zjls" = "zellij list-sessions";
@@ -239,5 +348,6 @@ in
     lazydocker
     htop
     lf  # Terminal file manager
+    gitui  # Terminal UI for git
   ];
 }
